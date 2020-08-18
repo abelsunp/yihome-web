@@ -1,0 +1,13 @@
+{
+  "links": {
+    "home": "Accueil"
+  },
+  "home": {
+    "title": "Bienvenue",
+    "introduction": "Ceci est un texte d'introduction en Français."
+  },
+  "about": {
+    "title": "À propos",
+    "introduction": "..."
+  }
+}

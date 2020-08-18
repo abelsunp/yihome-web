@@ -1,0 +1,246 @@
+<template>
+	<section>
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="login_form">
+			<el-form-item required>
+				<el-col :span="8">
+					<el-form-item prop="phoneArea">
+						<el-select v-model="ruleForm.phoneArea" placeholder="国家或地区" >
+							<el-option
+								v-for="item in phoneData"
+								:key="item.value"
+								:label="item.value"
+								:value="item.value">
+								<span style="float: left;margin-right: 10px;"><img :src="item.img" alt="国家/地区 图片"></span>
+								<span style="float: left">{{ item.label }}</span>
+								<span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col class="line" :span="1">&nbsp;</el-col>
+				<el-col :span="15">
+					<el-form-item prop="phone">
+						<el-input v-model="ruleForm.phone" placeholder="请输入您的手机号" clearable maxlength="11" @keyup.native="phoneMethod"></el-input>
+					</el-form-item>
+				</el-col>
+			</el-form-item>
+			<el-form-item required>
+				
+				<el-col :span="15">
+					<el-form-item prop="password">
+						<el-input v-model="ruleForm.password" placeholder="请输入验证码" maxlength="10" clearable></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col class="line" :span="1">&nbsp;</el-col>
+				<el-col :span="8">
+					<el-form-item>
+						<el-button v-if="!sendMsgDisabled" :loading="sendStatus"  class="sendCode" @click.prevent="sendCode()">发送验证码</el-button>
+						<el-button v-if="sendMsgDisabled" disabled class="sendCode">{{time+'s 后重新发送'}}</el-button>
+					</el-form-item>
+				</el-col>
+				
+				
+				
+			</el-form-item>
+			<el-form-item>
+				<nuxt-link to="/">忘记密码</nuxt-link>
+			</el-form-item>
+			<el-form-item>
+				<el-button :loading="loadingStatus" class="login_btn" type="primary" @click="loginmethod('ruleForm')">登录</el-button>
+			</el-form-item> 
+		</el-form>
+	</section>
+</template>
+
+<script>
+	export default {
+		data() {
+			
+			var validatePhone = (rule, value, callback) => {
+				if (value.trim() == '') {
+					callback(new Error('请输入您的手机号'));
+				} else if(value.length<=6){
+					callback(new Error('请输入正确的手机号码'));
+				}else{
+					callback();
+				}
+			};
+			return {
+				loadingStatus:false,
+				time:90,
+				sendMsgDisabled:false,
+				sendStatus:false,
+				phoneData:[
+					{
+						img:'https://www.inyihome.com/newStatic/flags/cn.png',
+						value: '+86',
+						label: '中国'
+					},
+					{
+						img:'https://www.inyihome.com/newStatic/flags/hk.png',
+						value: '+852',
+						label: '中国香港'
+					},
+					{
+						img:'https://www.inyihome.com/newStatic/flags/mo.png',
+						value: '+853',
+						label: '中国澳门'
+					},
+					{
+						img:'https://www.inyihome.com/newStatic/flags/tw.png',
+						value: '+886',
+						label: '中国台湾'
+					},
+					{
+						img:'https://www.inyihome.com/newStatic/flags/gb.png',
+						value: '+44',
+						label: '英国'
+					},
+					{
+						img:'https://www.inyihome.com/newStatic/flags/au.png',
+						value: '+61',
+						label: '澳大利亚'
+					}
+				],
+				ruleForm: {
+					phoneArea: '+86',
+					phone: '',
+					password: ''
+				},
+				rules: {
+					phoneArea: [{
+						required: true,
+						message: '请选择',
+						trigger: 'change'
+					}],
+					phone: [{
+							validator: validatePhone,
+							trigger: 'blur'
+						},
+					],
+					password: [
+						{ required: true, message: '请输入验证码',trigger: 'blur'},
+					]
+				}
+			}
+		},
+		created() {
+			
+		},
+		methods:{
+			sendCode(){
+				if(this.ruleForm.phone==""){
+					this.$message.error('请输入手机号');
+					return false;
+				}else if(this.ruleForm.phone<=6){
+					this.$message.error('请输入正确的手机号码');
+					return false;
+				}else{
+					this.sendStatus = true;
+					var ParmasData={
+						account:this.ruleForm.phone,
+						type:"login",
+					}
+					this.$request.sandcode(ParmasData).then(res=>{
+						this.sendStatus = false;
+						if(res.status){
+							this.$message({
+								message: '验证码发送成功',
+								type: 'success',
+							});
+							
+							this.sendMsgDisabled = true;
+							let interval = window.setInterval(()=> {
+								if ((this.time--) <= 0) {
+									this.time = 90;
+									this.sendMsgDisabled = false;
+									window.clearInterval(interval);
+								}
+							}, 1000);
+						}else{
+							this.$message.error(res.msg);
+						}
+					}).catch(e=>{
+						this.sendStatus = false;
+						this.$message.error('网络错误，验证码发送失败');
+					})
+				}
+			},
+			phoneMethod(){
+				console.log(11111)
+				this.ruleForm.phone=this.ruleForm.phone.replace(/[^\.\d]/g,'');
+				this.ruleForm.phone=this.ruleForm.phone.replace('.','');
+			},
+			loginmethod(formName){
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.loadingStatus = true;
+						this.$Spin.show();
+						setTimeout(()=>{
+							this.$request.loginin({'account':this.ruleForm.phone,'code':this.ruleForm.password}).then(res=>{
+								this.$Spin.hide();
+								this.loadingStatus = false;
+								if(res.status){
+									localStorage.setItem('userid',res.data.id);
+									localStorage.setItem('checklicense',res.data.license);
+									
+									let backurl = localStorage.getItem('backurl')
+									if(backurl){
+										location.href = location.origin+backurl;
+									}else{
+										this.$router.push({path:'/profile'});
+										
+									}
+									
+									return;
+								}else{
+									this.$message.error(res.msg);
+								}
+							}).catch(e=>{
+								this.$message.error('网络错误');
+								this.$Spin.hide();
+								this.loadingStatus = false;
+							})
+						},1000)
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			}
+		}
+	}
+</script>
+
+<style scoped="scoped">
+	.login_form{
+		max-width: 450px;
+	}
+	.login_btn{
+		background-color: #3B44AC;
+		border-color: #3B44AC;
+		outline: none;
+		width: 100%;
+	}
+	.sendCode{
+		outline: none;
+		width: 100%;
+	}
+	.sendCode:hover{
+		background-color: #3B44AC;
+		color: #fff;
+		border-color: #3B44AC;
+	}
+	.sendCode:active,.sendCode:focus{
+		border-color: #3B44AC;
+		color: #3B44AC;
+	}
+	.sendCode:focus:hover{
+		color: #fff;
+	}
+</style>
+<style>
+	.el-select-dropdown__item.selected{
+		color: #3B44AC;
+	}
+</style>
