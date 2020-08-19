@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="login_form">
-			<el-form-item required>
+			<el-form-item class="form-bottom" required>
 				<el-col :span="8">
 					<el-form-item prop="phoneArea">
 						<el-select v-model="ruleForm.phoneArea" placeholder="国家或地区" >
@@ -24,8 +24,7 @@
 					</el-form-item>
 				</el-col>
 			</el-form-item>
-			<el-form-item required>
-				
+			<el-form-item class="form-bottom" required>
 				<el-col :span="15">
 					<el-form-item prop="password">
 						<el-input v-model="ruleForm.password" placeholder="请输入验证码" maxlength="10" clearable></el-input>
@@ -38,11 +37,8 @@
 						<el-button v-if="sendMsgDisabled" disabled class="sendCode">{{time+'s 后重新发送'}}</el-button>
 					</el-form-item>
 				</el-col>
-				
-				
-				
 			</el-form-item>
-			<el-form-item>
+			<el-form-item class="form-pwd">
 				<nuxt-link to="/">忘记密码</nuxt-link>
 			</el-form-item>
 			<el-form-item>
@@ -237,6 +233,15 @@
 	}
 	.sendCode:focus:hover{
 		color: #fff;
+	}
+	section form .el-form-item{
+		margin-bottom: 26px;
+	}
+	section form .form-bottom .el-form-item{
+		margin-bottom: 0px;
+	}
+	section form .form-pwd{
+		margin: -18px 0 8px;
 	}
 </style>
 <style>

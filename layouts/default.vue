@@ -341,6 +341,7 @@
 		justify-content:space-between;
 		align-items:center;
 		padding: 0 30px;
+		min-width: 1000px;
 	}
 	.el-menu--horizontal>.el-menu-item.is-active{
 		border-bottom: none;

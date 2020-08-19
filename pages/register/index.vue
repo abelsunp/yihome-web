@@ -2,7 +2,7 @@
 	<section>
 		<phone-register v-if="currentStatus=='tophone'"  @on-result-change="onResultChange"></phone-register>
 		<email-register v-else  @on-result-change="onResultChange"></email-register>
-		<i class="el-icon-circle-close back" @click="goback"></i>
+<!--		<i class="el-icon-circle-close back" @click="goback"></i>-->
 	</section>
 </template>
 
@@ -44,5 +44,8 @@
 		right: 20px;
 		top: 20px;
 		cursor: pointer;
+	}
+	/deep/ #nb_icon_wrap{
+		display: none;
 	}
 </style>

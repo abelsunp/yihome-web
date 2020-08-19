@@ -69,7 +69,7 @@
 					<!-- 当前所有的房间类型 -->
 					<div>
 						<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
-						<el-tooltip v-for="(item,$ii) in roomType" class="item" effect="dark" :content="item.remark" placement="top"
+						<el-tooltip v-for="(item,$ii) in roomType" :key="$ii" class="item" effect="dark" :content="item.remark" placement="top"
 						 @click.native="chooseHouseType(item.id)">
 							<el-button>{{item.name}}</el-button>
 						</el-tooltip>

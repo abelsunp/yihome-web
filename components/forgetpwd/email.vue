@@ -7,50 +7,25 @@
 					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
 						<h1 class="title">注册忆家 YIHOME</h1>
 						<p class="subtitle">海外留学生活，有忆家</p>
+						<el-form-item  prop="email">
+							<el-input v-model="ruleForm.email" placeholder="请输入邮箱" prefix-icon="el-icon-user" clearable></el-input>
+						</el-form-item>
 
-						<el-form-item class="form-bottom">
-							<el-col :span="8">
-								<el-form-item prop="phoneArea">
-									<el-select v-model="ruleForm.phoneArea" placeholder="国家或地区" >
-										<el-option
-												v-for="item in phoneData"
-												:key="item.value"
-												:label="item.value"
-												:value="item.value">
-											<span style="float: left;margin-right: 10px;"><img :src="item.img" alt="国家/地区 图片"></span>
-											<span style="float: left">{{ item.label }}</span>
-											<span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-										</el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col class="line" :span="1">&nbsp;</el-col>
-							<el-col :span="15">
-								<el-form-item prop="email">
-									<el-input v-model="ruleForm.email" placeholder="请输入手机号" prefix-icon="el-icon-user" clearable></el-input>
-								</el-form-item>
-							</el-col>
-						</el-form-item>
-						<el-form-item  prop="password">
-							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
-						</el-form-item>
 						<el-form-item  prop="code">
 							<div style="width: 66%;display: inline-block;">
 								<el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-mobile-phone"></el-input>
 							</div>
 							<el-button v-if="!sendMsgDisabled" style="width: 148px;" @click.prevent="sendCode()">获取验证码</el-button>
 							<el-button v-if="sendMsgDisabled" disabled style="width: 148px;">{{time+'s 后重新发送'}}</el-button>
-
-							<!-- <div class="send_code"  v-if="sendMsgDisabled" >{{time+'s'}}</div>
-							<div class="send_code" v-if="!sendMsgDisabled" @click="sendCode()">获取验证码</div> -->
 						</el-form-item>
-<!--						<el-form-item  prop="remarks">-->
-<!--							<el-input v-model="ruleForm.remarks" placeholder="请输入微信号方便帮您选房" prefix-icon="el-icon-chat-line-round" clearable></el-input>-->
-<!--						</el-form-item>-->
+						<el-form-item  prop="password">
+							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
+						</el-form-item>
+						<el-form-item  prop="respassword">
+							<el-input v-model="ruleForm.respassword" placeholder="请重新输入密码" prefix-icon="el-icon-lock" show-password></el-input>
+						</el-form-item>
 						<el-form-item style="margin-bottom: 20px;">
-							<!-- <el-button class="registerBtn" type="primary" @click="submitForm('ruleForm')">立即注册</el-button> -->
-							<el-button :loading="loadingStatus" class="registerBtn panpay_LoginBtn" type="primary" >立即注册</el-button>
-							<!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+							<el-button :loading="loadingStatus" class="registerBtn panpay_LoginBtn" type="primary" >确定</el-button>
 						</el-form-item>
 						<el-form-item style="margin-bottom: 6px;">
 							<p>已有账号? <nuxt-link to="/login">直接登录</nuxt-link></p>
@@ -61,14 +36,14 @@
 							</div>
 						</el-form-item>
 						<el-form-item class="usePhoneLogin">
-							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">
-							<p>邮箱注册</p>
+							<img src="~assets/images/loginRegister/phone.svg" alt="" @click="phonelLoginMode">
+							<p>手机号找回</p>
 						</el-form-item>
 					</el-form>
 				</div>
 			</b-col>
 		</b-row>
-	</b-container>
+		</b-container>
 </template>
 
 <script>
@@ -83,8 +58,11 @@
 			var REGPassworld = /^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,18}$/;
 			var validateEmail = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('手机号码不能为空'));
+					callback(new Error('邮箱号码不能为空'));
 				} else {
+					if(!REGEmail.test(value)) {
+						callback(new Error('请输入正确的邮箱地址'));
+					}
 					
 					callback();
 				}
@@ -110,46 +88,23 @@
 					callback();
 				}
 			};
+			var checkPwd = (rule, value, callBack) => {
+				if (!value) {
+					callBack('请重新输入密码')
+				} else if (value != this.ruleForm.password) {
+					callBack('两次输入密码不一致')
+				} else {
+					callBack()
+				}
+			};
 			return {
 				loadingStatus:false,
 				time:90,
 				sendMsgDisabled:false,
-				phoneData:[
-					{
-						img:'https://www.inyihome.com/newStatic/flags/cn.png',
-						value: '+86',
-						label: '中国'
-					},
-					{
-						img:'https://www.inyihome.com/newStatic/flags/hk.png',
-						value: '+852',
-						label: '中国香港'
-					},
-					{
-						img:'https://www.inyihome.com/newStatic/flags/mo.png',
-						value: '+853',
-						label: '中国澳门'
-					},
-					{
-						img:'https://www.inyihome.com/newStatic/flags/tw.png',
-						value: '+886',
-						label: '中国台湾'
-					},
-					{
-						img:'https://www.inyihome.com/newStatic/flags/gb.png',
-						value: '+44',
-						label: '英国'
-					},
-					{
-						img:'https://www.inyihome.com/newStatic/flags/au.png',
-						value: '+61',
-						label: '澳大利亚'
-					}
-				],
 				ruleForm: {
-					phoneArea: '+86',
 					email: '',
 					code:'',
+					respassword: '',
 					password:'',
 					remarks:''
 				},
@@ -163,6 +118,9 @@
 					],
 					password: [
 						{validator: validatePass,trigger: 'blur'},
+					],
+					respassword: [
+						{validator: checkPwd,trigger: 'blur'},
 					],
 					remarks: [
 						{ required: true, message: '请输入您的微信号', trigger: 'blur' },
@@ -178,7 +136,7 @@
 		},
 		methods: {
 			phonelLoginMode(){
-				this.$emit("on-result-change",'toemail')
+				this.$emit("on-result-change",'tophone')
 			},
 			sendCode(){//获取验证码
 				if(this.ruleForm.email==""){
@@ -229,8 +187,7 @@
 							product: "bind", // 产品形式，包括：float，popup	
 							width: "300px"	,// 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/		
 						}, function(captchaObj){
-							captchaObj.onReady(function() {  
-								
+							captchaObj.onReady(function() {   
 								$(".panpay_LoginBtn").click(function() {
 									that.$refs['ruleForm'].validate((valid) => {
 										if(valid) {	
@@ -242,8 +199,6 @@
 										}							
 									});                     
 								});
-								
-								
 							}).onSuccess(function() {
 								var result = captchaObj.getValidate();	  
 								if(!result) {	 
@@ -276,6 +231,7 @@
 					});
 				})
 			},
+			
 			userLoginFun(){
 				this.$request.register({'account':this.ruleForm.email,'password':this.ruleForm.password,'code':this.ruleForm.code,'remarks':this.ruleForm.remarks}).then(res=>{
 					this.loadingStatus = false;
@@ -291,6 +247,7 @@
 					this.loadingStatus = false;
 				})
 			}
+			
 		}
 		
 	}
@@ -324,7 +281,7 @@
 		/*height: 100%;*/
 		/*margin-left: 480px;*/
 		/*transition: all .5s;*/
-		
+
 	}
 	.main_content{
 		height: 100%;
@@ -379,7 +336,7 @@
 		display: block;
 		height: 1px;
 		width: 100%;
-		background-color: #D3D3D3;/*颜色需与主题大背景色一致*/ 
+		background-color: #D3D3D3;/*颜色需与主题大背景色一致*/
 		position: relative;
 		top: 10px;/*调节线高*/
 		left: 0;
@@ -428,5 +385,5 @@
 			border-radius: 4px;
 		}
 	}
-	
+
 </style>

@@ -1,10 +1,9 @@
 <template>
-	<section>
-		<b-container fluid class="registerWrapper">
-			<div class="side"></div>
-			<div class="main-wraper">
+	<b-container class="registerWrapper">
+		<b-row class="main_content">
+			<b-col class="side" md="3"></b-col>
+			<b-col class="main-wraper" md="9">
 				<div class="main-content">
-					
 					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
 						<h1 class="title">注册忆家 YIHOME</h1>
 						<p class="subtitle">海外留学生活，有忆家</p>
@@ -21,13 +20,10 @@
 							<el-button v-if="!sendMsgDisabled" style="width: 148px;" @click.prevent="sendCode()">获取验证码</el-button>
 							<el-button v-if="sendMsgDisabled" disabled style="width: 148px;">{{time+'s 后重新发送'}}</el-button>
 						</el-form-item>
-						<el-form-item  prop="remarks">
-							<el-input v-model="ruleForm.remarks" placeholder="请输入微信号方便帮您选房" prefix-icon="el-icon-chat-line-round" clearable></el-input>
-						</el-form-item>
-						<el-form-item>
+						<el-form-item style="margin-bottom: 20px;">
 							<el-button :loading="loadingStatus" class="registerBtn panpay_LoginBtn" type="primary" >立即注册</el-button>
 						</el-form-item>
-						<el-form-item>
+						<el-form-item style="margin-bottom: 6px;">
 							<p>已有账号? <nuxt-link to="/login">直接登录</nuxt-link></p>
 						</el-form-item>
 						<el-form-item class="loginType">
@@ -41,9 +37,9 @@
 						</el-form-item>
 					</el-form>
 				</div>
-			</div>
+			</b-col>
+		</b-row>
 		</b-container>
-	</section>
 </template>
 
 <script>
@@ -241,19 +237,14 @@
 </script>
 
 <style scoped="scoped">
-	section{
-		height: 100%;
-	}
 	.registerWrapper{
+		width: 100%;
 		height: 100%;
+		max-width: 100%;
+		padding: 0;
 	}
 	.registerWrapper .side{
-		position: fixed;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 480px;
-		float: left;
+		position: relative;
 		overflow: hidden;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -262,20 +253,25 @@
 		transition: all .5s;
 	}
 	.main-wraper{
-		position: relative;
-		height: 100%;
-		margin-left: 480px;
-		transition: all .5s;
-		
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		padding-top: 30px;
+		padding-bottom: 30px;
+
+		/*position: relative;*/
+		/*height: 100%;*/
+		/*margin-left: 480px;*/
+		/*transition: all .5s;*/
+
 	}
-	.main-content{
-		/* max-width: 450px;
-		margin: 0 auto; */
-		position: absolute;
-		padding-bottom: 10px;
-		top: 50%;
+	.main_content{
+		height: 100%;
 		width: 100%;
-		transform: translateY(-50%);
+		background: #FFFFFF;
+		box-shadow: 0 0 50px 0 rgba(59,68,172,0.20);
+		margin: 0;
 	}
 	.main-content form{
 		width: 450px;
@@ -283,30 +279,36 @@
 		transition: all .5s;
 	}
 	.main-content form .el-form-item{
-		margin-bottom: 30px;
+		margin-bottom: 26px;
 		text-align: center;
+	}
+	.main-content form .form-bottom .el-form-item{
+		margin-bottom: 0px;
 	}
 	.title{
 		font-family: PingFangSC-Bold;
-		font-size: 40px;
+		font-size: 30px;
 		color: #000000;
 		letter-spacing: 2px;
-		line-height: 56px;
+		line-height: 40px;
 		margin-bottom: 16px;
+		width: 100%;
 	}
 	.subtitle{
 		font-family: PingFangSC-Regular;
-		font-size: 25px;
+		font-size: 20px;
 		color: #333333;
 		letter-spacing: 1.25px;
 		line-height: 36px;
-		margin-bottom: 58px;
+		margin-bottom: 30px;
+		text-align: left;
+		width: 100%;
 	}
 	.registerBtn{
 		width: 100%;
 		background-color: #3B44AC;
 		border-color: #3B44AC;
-		margin-top: 24px;
+		margin-top: 16px;
 	}
 	.registerBtn:focus{
 		background-color: #3B44AC;
@@ -317,7 +319,7 @@
 		display: block;
 		height: 1px;
 		width: 100%;
-		background-color: #D3D3D3;/*颜色需与主题大背景色一致*/ 
+		background-color: #D3D3D3;/*颜色需与主题大背景色一致*/
 		position: relative;
 		top: 10px;/*调节线高*/
 		left: 0;
@@ -339,12 +341,12 @@
 	}
 	/* 当屏幕小于1000px */
 	@media (max-width: 1000px){
-		.registerWrapper .side{
-			width: 240px;
-		}
-		.main-wraper{
-			margin-left: 240px;
-		}
+		/*.registerWrapper .side{*/
+		/*	width: 240px;*/
+		/*}*/
+		/*.main-wraper{*/
+		/*	margin-left: 240px;*/
+		/*}*/
 	}
 	@media (max-width: 798px){
 		.registerWrapper .side{
@@ -366,5 +368,5 @@
 			border-radius: 4px;
 		}
 	}
-	
+
 </style>

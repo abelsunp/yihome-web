@@ -31,9 +31,7 @@
 								</el-form-item>
 							</el-col>
 						</el-form-item>
-						<el-form-item  prop="password">
-							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
-						</el-form-item>
+
 						<el-form-item  prop="code">
 							<div style="width: 66%;display: inline-block;">
 								<el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-mobile-phone"></el-input>
@@ -44,12 +42,15 @@
 							<!-- <div class="send_code"  v-if="sendMsgDisabled" >{{time+'s'}}</div>
 							<div class="send_code" v-if="!sendMsgDisabled" @click="sendCode()">获取验证码</div> -->
 						</el-form-item>
-<!--						<el-form-item  prop="remarks">-->
-<!--							<el-input v-model="ruleForm.remarks" placeholder="请输入微信号方便帮您选房" prefix-icon="el-icon-chat-line-round" clearable></el-input>-->
-<!--						</el-form-item>-->
+						<el-form-item  prop="password">
+							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
+						</el-form-item>
+						<el-form-item  prop="respassword">
+							<el-input v-model="ruleForm.respassword" placeholder="请重新输入密码" prefix-icon="el-icon-lock" show-password></el-input>
+						</el-form-item>
 						<el-form-item style="margin-bottom: 20px;">
 							<!-- <el-button class="registerBtn" type="primary" @click="submitForm('ruleForm')">立即注册</el-button> -->
-							<el-button :loading="loadingStatus" class="registerBtn panpay_LoginBtn" type="primary" >立即注册</el-button>
+							<el-button :loading="loadingStatus" class="registerBtn panpay_LoginBtn" type="primary" >确定</el-button>
 							<!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
 						</el-form-item>
 						<el-form-item style="margin-bottom: 6px;">
@@ -62,7 +63,7 @@
 						</el-form-item>
 						<el-form-item class="usePhoneLogin">
 							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">
-							<p>邮箱注册</p>
+							<p>邮箱找回</p>
 						</el-form-item>
 					</el-form>
 				</div>
@@ -110,6 +111,15 @@
 					callback();
 				}
 			};
+			var checkPwd = (rule, value, callBack) => {
+				if (!value) {
+					callBack('请重新输入密码')
+				} else if (value != this.ruleForm.password) {
+					callBack('两次输入密码不一致')
+				} else {
+					callBack()
+				}
+			};
 			return {
 				loadingStatus:false,
 				time:90,
@@ -150,6 +160,7 @@
 					phoneArea: '+86',
 					email: '',
 					code:'',
+					respassword: '',
 					password:'',
 					remarks:''
 				},
@@ -163,6 +174,9 @@
 					],
 					password: [
 						{validator: validatePass,trigger: 'blur'},
+					],
+					respassword: [
+						{validator: checkPwd,trigger: 'blur'},
 					],
 					remarks: [
 						{ required: true, message: '请输入您的微信号', trigger: 'blur' },
