@@ -2,24 +2,14 @@
 	<b-container id="footer">
 		<b-row>
 			<b-col md="8">
-				<b-row>
-					<b-col md="3">
-						<dl>
-							<dt>企业简介</dt>
-							<dd><a href="/about">关于我们</a></dd>
-							<dd><a href="/contact">联系我们</a></dd>
-							<dd><a href="/Join-us">加入我们</a></dd>
-						</dl>
-					</b-col>
-					<b-col md="9">
-						<dl>
-							<dt>YIHOME忆家</dt>
-							<dd>客服电话：17602106152</dd>
-							<dd>企业邮箱：service@inyihome.com</dd>
-							<dd>企业地址：上海市 宝山区 呼兰西路19号 上海智力产业园北区2号楼201室</dd>
-						</dl>
-					</b-col>
-				</b-row>
+				<div class="footer-left-item">
+					客服电话：17602106152 <span style="margin-left: 140px">企业邮箱：service@inyihome.com</span>
+				</div>
+				<div class="footer-left-item">企业地址：上海市 宝山区 呼兰西路19号 上海智力产业园北区2号楼201室</div>
+				<div class="footer-left-item">热门城市</div>
+				<div class="footer-left-city">
+					<div class="footer-left-city-item" v-for="(item,index) in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]" :key="index">哈萨克斯坦</div>
+				</div>
 			</b-col>
 			<b-col md="4">
 				<b-row>
@@ -50,6 +40,21 @@
 	}
 	#footer{
 		padding-top: 30px;
+	}
+	.footer-left-item{
+		line-height: 44px;
+		font-size: 14px;
+	}
+	.footer-left-city{
+		width: 100%;
+		/*display: flex;*/
+		/*flex-direction: column-reverse;*/
+	}
+	.footer-left-city-item{
+		width: calc(100% / 7);
+		display: inline-block;
+		line-height: 30px;
+		/*font-weight: 500;*/
 	}
 	dl dt{
 		font-family: PingFangSC-Medium;

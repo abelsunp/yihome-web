@@ -60,8 +60,6 @@
             <mdr-ibe locales="de" lang="de"  time-step="5" sublink="true" external="true"></mdr-ibe>
         </div> -->
 
-
-
 		<b-container fluid class="todaySpecial">
 			<b-container>
 				<h1 class="title">精选热门房源</h1>
@@ -212,62 +210,53 @@
 		<!-- 中部banner end -->
 
 		<!-- 租房保障 -->
-		<b-container fluid class="story">
+		<b-container fluid class="promise">
 			<b-container>
 				<h1 class="title">亿家租房保障</h1>
 				<p class="info">一个故事，一段人生，一个成就每一次独特的海外留学租房体验</p>
 				<b-row>
-					<b-col md="6" sm="6" lg="4" class="listitem">
-						<div class="img">
-							<div class="el-image">
-								<img src="@/assets/images/home1.jpg" class="el-image__inner" style="object-fit: cover;">
-							</div>
+					<b-col md="4" sm="6" lg="3" class="promise-item">
+						<div class="promise-item-img">
+							<img src="@/assets/images/home1.jpg" style="object-fit: cover;">
 						</div>
-						<div class="content">
+						<div class="promise-item-content">
 							<h5>100%真实房源</h5>
 							<p>实地勘察安心入住</p>
 						</div>
 					</b-col>
-					<b-col md="6" sm="6" lg="4" class="listitem">
-						<div class="img">
-							<div class="el-image">
-								<img src="@/assets/images/home2.jpg" class="el-image__inner" style="object-fit: cover;">
-							</div>
+					<b-col md="4" sm="6" lg="3" class="promise-item">
+						<div class="promise-item-img">
+							<img src="@/assets/images/home2.jpg" style="object-fit: cover;">
 						</div>
-						<div class="content">
+						<div class="promise-item-content">
 							<h5>100%专业顾问</h5>
 							<p>具备海外留学经历</p>
 						</div>
 					</b-col>
-					<b-col md="6" sm="6" lg="4" class="listitem">
-						<div class="img">
-							<div class="el-image">
-								<img src="@/assets/images/home3.jpg" class="el-image__inner" style="object-fit: cover;">
-							</div>
+					<b-col md="4" sm="6" lg="3" class="promise-item">
+						<div class="promise-item-img">
+							<img src="@/assets/images/home3.jpg" style="object-fit: cover;">
 						</div>
-						<div class="content">
+						<div class="promise-item-content">
 							<h5>1对1全程服务</h5>
 							<p>保障您的租房体验</p>
 						</div>
 					</b-col>
-					<b-col md="6" sm="6" lg="4" class="listitem">
-						<div class="img">
-							<div class="el-image">
-								<img src="@/assets/images/home4.jpg" class="el-image__inner" style="object-fit: cover;">
-							</div>
+					<b-col md="4" sm="6" lg="3" class="promise-item">
+						<div class="promise-item-img">
+							<img src="@/assets/images/home4.jpg" style="object-fit: cover;">
 						</div>
-						<div class="content">
+						<div class="promise-item-content">
 							<h5>全天候客服在线</h5>
 							<p>随时等候您的咨询</p>
 						</div>
 					</b-col>
-
 				</b-row>
 			</b-container>
 		</b-container>
 
 		<!-- 精选故事 -->
-		<b-container fluid class="story">
+		<b-container fluid v-if="1 == 2" class="story">
 			<b-container>
 				<h1 class="title">精选故事<span style="float: right;"><nuxt-link target="_blank" to="/stories" class="readMore">查看更多<i class="el-icon-arrow-right"></i></nuxt-link></span></h1>
 				<p class="info">在忆家，发现更精彩的留学生涯</p>
@@ -315,10 +304,9 @@
 		</b-container>
 		<!-- 集体活动 end -->
 		<!-- 合作伙伴 -->
-		<b-container fluid class="partent">
+		<b-container fluid v-if="1 == 2" class="partent">
 			<b-container>
 				<h1>合作伙伴</h1>
-				<!-- <p class="info">精选当前最热门的品牌公寓</p> -->
 				<b-row>
 					<b-col md="2">
 						<a target="_blank" href="https://www.qhiwi.com">
@@ -648,13 +636,13 @@
 
 <style scoped="scoped">
 
-	/*.el-image__inner{*/
-	/*	transition: all 0.3s linear;*/
-	/*	transform-origin: center center;*/
-	/*}*/
-	/*.el-image__inner:hover{*/
-	/*	transform: scale(1.6);*/
-	/*}*/
+	.el-image__inner{
+		transition: all 0.3s linear;
+		transform-origin: center center;
+	}
+	.el-image__inner:hover{
+		transform: scale(1.6);
+	}
 
 	.banner{
 		padding: 0;
@@ -812,11 +800,12 @@
 		margin: 0 auto;
 		padding: 0 15px 0 20px;
 		cursor: pointer;
+		background: rgba(59,68,172, 0);
+		transition: all .5s linear;
 	}
 	.todaySpecial .listitem .buttonWrap:hover{
 		color: #fff;
-		/*background-color: #3B44AC;*/
-		background:linear-gradient(to right,#3B44AC,#3B44AC,#3B44AC);
+		background: rgba(59,68,172,1);
 		border-color: #3B44AC;
 		transition: all .5s;
 	}
@@ -903,7 +892,7 @@
     .brandInfo  a:hover{
       text-decoration: none;
     } */
-	.story{
+	.story, .promise{
 		background: #FBFBFB;
 		padding: 70px 0 40px;
 	}
@@ -917,14 +906,14 @@
 	.story .listitem{
 		margin-bottom: 30px;
 	}
-	.story .title{
+	.story .title, .promise .title{
 		font-family: PingFangSC-Medium;
 		font-size: 26px;
 		color: #333333;
 		letter-spacing: 2.27px;
 		margin-bottom: 10px;
 	}
-	.story .info{
+	.story .info, .promise .info{
 		font-family: PingFangSC-Regular;
 		font-size: 14px;
 		color: #484848;
@@ -975,6 +964,23 @@
 		-webkit-box-direction: normal;
 		flex-direction: column;
 		text-align: center;
+	}
+
+	.promise-item-img{
+		display: flex;
+		align-content: center;
+	}
+	.promise-item-img img{
+		margin: 0 auto;
+		width: 80%;
+	}
+	.promise-item-content{
+		text-align: center;
+	}
+	.promise-item-content h5{
+		line-height: 30px;
+		margin: 20px 0 5px;
+		font-size: 20px;
 	}
 	.activity{
 		padding: 66px 0 40px;
