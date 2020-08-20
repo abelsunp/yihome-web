@@ -1,12 +1,12 @@
 <template>
 	<section style="border-bottom: 1px solid #E6E6E6;padding-bottom: 40px;">
-		<b-container fluid class="findBanner">
-			<!-- <img src="@/assets/images/findhouse_back.png" alt=""> -->
-			<!-- <h1>租房预定，送你免费机票+旅游套餐</h1>
-			<p>1月23日前提交咨询，抽5000元机票+1888元旅游套餐+300元现金</p>
-			<a href="/helptickets" target="_blank">立即咨询</a> -->
-			<a href="/helptickets?act=2" target="_blank" style="display: block;width: 100%;height: 100%;"></a>
-		</b-container>
+<!--		<b-container fluid class="findBanner">-->
+<!--			&lt;!&ndash; <img src="@/assets/images/findhouse_back.png" alt=""> &ndash;&gt;-->
+<!--			&lt;!&ndash; <h1>租房预定，送你免费机票+旅游套餐</h1>-->
+<!--			<p>1月23日前提交咨询，抽5000元机票+1888元旅游套餐+300元现金</p>-->
+<!--			<a href="/helptickets" target="_blank">立即咨询</a> &ndash;&gt;-->
+<!--			<a href="/helptickets?act=2" target="_blank" style="display: block;width: 100%;height: 100%;"></a>-->
+<!--		</b-container>-->
 		<b-container>
 			<div class="searchContent" style="padding-left: 0;" v-if="!$route.query.search">
 				<div class="selectCity listitem" style="margin-left: 0;">
@@ -120,6 +120,29 @@
 		<b-container>
 			
 			<div class="houseContent">
+				<b-row v-if="hasHouse" v-for="(item,$index) in houseArray" :key="$index">
+					<b-col md="4" class="listitem" >
+						<div class="pic-box">
+							<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
+							<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" :alt="item.housename">
+							<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
+						</div>
+					</b-col>
+					<b-col md="8" class="listitem" >
+						<div class="info-box">
+
+							<h5 class="title">{{item.housename}}</h5>
+							<h6 class="price">{{item.currencysymbol}}{{item.price}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
+							<div class="location"> <i class="iconfont">&#xe62c;</i> {{item.address}} </div>
+							<div class="location"> <i class="iconfont">&#xe62c;</i> {{item.address}} </div>
+							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
+							<div class="info-box-other"> <span>房租包含：</span>水费、电费、网费 </div>
+							<div class="tag">
+								<span v-for="(list,$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$index" :style="{ 'background-color':list.color,}">{{list.name}}</span>
+							</div>
+						</div>
+					</b-col>
+				</b-row>
 				<b-row v-if="hasHouse">
 					<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in houseArray" :key="$index">
 						<a :href="'/housedetail?houseid='+item.id" target="_blank">
@@ -582,24 +605,25 @@
 		border-top-right-radius: 5px;
 	}
 	.houseContent .listitem .info-box{
-		border: 1px solid #E0E0E0;
+		/*border: 1px solid #E0E0E0;*/
 		border-top: none;
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
 		padding: 0 15px;
 		position: relative;
-		height: 160px;
+		/*height: 160px;*/
 		overflow: hidden;
 		padding-bottom: 20px;
+		position: relative;
 	}
 	
 	.houseContent .listitem .info-box h5{
 		font-family: PingFangSC-Bold;
-		font-size: 16px;
+		font-size: 26px;
 		color: #333333;
 		letter-spacing: 1.13px;
 		line-height: 22px;
-		margin: 14px 0 3px;
+		margin: 16px 0 25px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
@@ -609,9 +633,12 @@
 		
 	}
 	.houseContent .listitem .info-box .price{
+		position: absolute;
+		right: 0;
+		top: 25px;
 		font-family: PingFangSC-Bold;
-		font-size: 18px;
-		color: #3B44AC;
+		font-size: 26px;
+		color: rgb(241,110,116);
 		letter-spacing: 1.27px;
 		line-height: 25px;
 		margin-bottom: 3px;
@@ -629,11 +656,15 @@
 		font-size: 12px;
 		color: #4C4C4C;
 		letter-spacing: 0.85px;
-		margin-bottom: 10px;
 		position: relative;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
+		line-height: 28px;
+	}
+	.info-box-other{
+		line-height: 28px;
+		margin-top: 5px;
 	}
 	.houseContent .listitem .info-box .tag{
 		-margin-top: 16px;

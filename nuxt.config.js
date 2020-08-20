@@ -46,6 +46,7 @@ export default {
   css: [
     'element-ui/lib/theme-chalk/index.css',
 	"swiper/css/swiper.css",
+	"assets/style/iconfont.css",
   ],
   /*
   ** Plugins to load before mounting the App

@@ -62,7 +62,10 @@
 			<div style="width: 727px;">
 				<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
 					<h1 class="inforTitle">房源概括</h1>
-					<div v-html="housedetails.housedesc" style="color: #333;"></div>
+					<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="housedetails.housedesc" style="color: #333;"></div>
+
+					<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>
+					<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>
 				</div>
 				<div :id="'houseManagement?houseid='+fullPath">
 					<h1 class="inforTitle">房间管理</h1>
@@ -267,16 +270,16 @@
 						<el-option label="女" value="女"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="邮箱" prop="email">
-					<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
-				</el-form-item>
 				<el-form-item label="微信" prop="Wechat">
 					<el-input v-model="reserveForm.WeChat" autocomplete="off"></el-input>
 				</el-form-item>
-
+				<el-form-item label="邮箱" prop="email">
+					<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
+				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>
+<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
+				<el-button @click="reserveStatus = false">取消</el-button>
 				<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
 			</div>
 		</el-dialog>
@@ -337,6 +340,7 @@
 		},
 		data() {
 			return {
+				descClose: true,
 				viewFullimgWrapper: false,
 				videohouse: false,
 				iscollect: false,
@@ -1114,7 +1118,38 @@
 
 	/* 房源概括 */
 	.houseIntroduce {
-		-padding-top: 30px;
+		padding-top: 30px;
+		position: relative;
+	}
+
+	.houseIntroduce-desc{
+		transition: all .4s linear;
+		max-height: 134px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.houseIntroduce-show{
+		max-height: 1000px;
+	}
+
+	.houseIntroduce-close{
+
+	}
+	.houseIntroduce-desc-close{
+		position: absolute;
+		bottom: 0px;
+		left: -57px;
+		color: #3B44AC;
+		cursor: pointer;
+		transition: all .3s linear;
+	}
+	.houseIntroduce-desc-close:hover, .houseIntroduce-desc-more:hover{
+		color: #0091ff;
+	}
+	.houseIntroduce-desc-more{
+		color: rgb(59, 68, 172);
+		cursor: pointer;
 	}
 
 	.inforTitle {
