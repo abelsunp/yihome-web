@@ -73,7 +73,7 @@
 										<div class="move">
 											<div class="imgWrap">
 												<div class="el-image">
-													<img :src="yihomeGlobalVariable+listItem.imgurl| imgStrClac('x')" class="el-image__inner" style="object-fit: cover;">
+													<img :src="yihomeGlobalVariable+listItem.imgurl| imgStrClac('x')" class="april-img" style="object-fit: cover;">
 												</div>
 											</div>
 											<div class="contentWrap">
@@ -103,7 +103,7 @@
                                         <div class="move">
                                             <div class="imgWrap">
                                                 <div class="el-image">
-                                                    <img :src="'https://www.inyihome.com'+listItem.imgurl" class="el-image__inner" style="object-fit: cover;">
+                                                    <img :src="'https://www.inyihome.com'+listItem.imgurl" class="april-img" style="object-fit: cover;">
                                                 </div>
                                             </div>
                                             <div class="contentWrap">
@@ -265,7 +265,7 @@
 						<a :href="'/storydetails?id='+item.id" target="_blank">
 							<div class="img">
 								<div class="el-image">
-									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="el-image__inner" style="object-fit: cover;">
+									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="april-img" style="object-fit: cover;">
 								</div>
 							</div>
 							<div class="content">
@@ -289,7 +289,7 @@
 						<a :href="'/storydetails?id='+item.id" target="_blank">
 							<div class="imgWrap">
 								<div class="el-image">
-									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="el-image__inner" style="object-fit: cover;">
+									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="april-img" style="object-fit: cover;">
 								</div>
 							</div>
 							<div class="contentWrap">

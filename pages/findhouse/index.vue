@@ -120,15 +120,15 @@
 		<b-container>
 			
 			<div class="houseContent">
-				<b-row v-if="hasHouse" v-for="(item,$index) in houseArray" :key="$index">
-					<b-col md="4" class="listitem" >
+				<b-row v-if="hasHouse" class="houseContent-item" v-for="(item,$index) in houseArray" :key="$index">
+					<b-col md="3" class="listitem" >
 						<div class="pic-box">
 							<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
 							<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" :alt="item.housename">
 							<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
 						</div>
 					</b-col>
-					<b-col md="8" class="listitem" >
+					<b-col md="9" class="listitem" >
 						<div class="info-box">
 
 							<h5 class="title">{{item.housename}}</h5>
@@ -137,38 +137,42 @@
 							<div class="location"> <i class="iconfont">&#xe62c;</i> {{item.address}} </div>
 							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
 							<div class="info-box-other"> <span>房租包含：</span>水费、电费、网费 </div>
-							<div class="tag">
-								<span v-for="(list,$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$index" :style="{ 'background-color':list.color,}">{{list.name}}</span>
-							</div>
+							<a :href="'/housedetail?houseid='+item.id" target="_blank">
+								<el-button class="info-box-see" type="primary">查看房源</el-button>
+							</a>
+<!--							<div class="tag">-->
+<!--								<span v-for="(list,$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$index" :style="{ 'background-color':list.color,}">{{list.name}}</span>-->
+<!--							</div>-->
 						</div>
-					</b-col>
-				</b-row>
-				<b-row v-if="hasHouse">
-					<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in houseArray" :key="$index">
-						<a :href="'/housedetail?houseid='+item.id" target="_blank">
-							<div class="pic-box">
-								<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
-								<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" :alt="item.housename">
-								<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
-							</div>
-							<div class="info-box">
-								<h5 class="title">{{item.housename}}</h5>
-								<h6 class="price">{{item.currencysymbol}}{{item.price}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
-								<div class="location">
-									<i class="el-icon-location-outline"></i>
-									{{item.address}}
-								</div>
-								<div class="tag">
-									<span v-for="(list,$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$index" :style="{ 'background-color':list.color,}">{{list.name}}</span>
-								</div>
-							</div>
-						</a>
 					</b-col>
 				</b-row>
 				<div v-else style="text-align: center;">
 					<img src="@/assets/images/nohouse.png" alt="" style="margin: 30px auto;">
 					<p>未搜到对应房源，换个搜索条件试试</p>
 				</div>
+<!--				<b-row v-if="hasHouse">-->
+<!--					<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in houseArray" :key="$index">-->
+<!--						<a :href="'/housedetail?houseid='+item.id" target="_blank">-->
+<!--							<div class="pic-box">-->
+<!--								<div v-if="item.housestatus!='168'" class="saleouthouse"></div>-->
+<!--								<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" :alt="item.housename">-->
+<!--								<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>-->
+<!--							</div>-->
+<!--							<div class="info-box">-->
+<!--								<h5 class="title">{{item.housename}}</h5>-->
+<!--								<h6 class="price">{{item.currencysymbol}}{{item.price}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>-->
+<!--								<div class="location">-->
+<!--									<i class="el-icon-location-outline"></i>-->
+<!--									{{item.address}}-->
+<!--								</div>-->
+<!--								<div class="tag">-->
+<!--									<span v-for="(list,$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$index" :style="{ 'background-color':list.color,}">{{list.name}}</span>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</a>-->
+<!--					</b-col>-->
+<!--				</b-row>-->
+
 			</div>
 			
 			<div class="pageWrapper" v-if="paginationStatus">
@@ -461,7 +465,7 @@
 	}
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
 	.saleouthouse{
 		position: absolute;
 		background-size:50% 50%;
@@ -500,19 +504,6 @@
 		letter-spacing: 0.68px;
 		line-height: 25px;
 		margin-bottom: 18px;
-	}
-	.findBanner a{
-		/* display: block;
-		width: 134px;
-		height: 46px;
-		background: #3B44AC;
-		border-radius: 2px;
-		font-family: PingFangSC-Regular;
-		font-size: 16px;
-		color: #FFFFFF;
-		letter-spacing: 0.61px;
-		line-height: 46px;
-		text-align: center; */
 	}
 	.searchContent{
 		width: 100%;
@@ -563,19 +554,27 @@
 		margin-right: 15px;
 		min-width: 75px;
 	}
+	.houseContent-item{
+		border-bottom: 1px solid #d8d8d8;
+		padding: 20px 0;
+		&:last-child{
+			border: none;
+		}
+	}
 	.houseContent .listitem {
-		margin-bottom: 20px;
+		padding: 0;
+		/*margin-bottom: 20px;*/
 	}
 	.houseContent .listitem a{
 		display: block;
 	}
 	.houseContent .listitem:hover a{
-		box-shadow: 0 0 10px 0 rgba(0,0,0,0.10)
+		/*box-shadow: 0 0 10px 0 rgba(0,0,0,0.10)*/
 	}
 	.houseContent .listitem .pic-box{
 		position: relative;
 		width: 100%;
-		height: 270px;
+		height: 210px;
 		border: 1px solid #E0E0E0;
 		border-bottom: 0;
 		border-top-left-radius: 5px;
@@ -605,16 +604,7 @@
 		border-top-right-radius: 5px;
 	}
 	.houseContent .listitem .info-box{
-		/*border: 1px solid #E0E0E0;*/
-		border-top: none;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		padding: 0 15px;
-		position: relative;
-		/*height: 160px;*/
-		overflow: hidden;
-		padding-bottom: 20px;
-		position: relative;
+
 	}
 	
 	.houseContent .listitem .info-box h5{
@@ -623,7 +613,7 @@
 		color: #333333;
 		letter-spacing: 1.13px;
 		line-height: 22px;
-		margin: 16px 0 25px;
+		margin: 20px 0 25px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
@@ -653,7 +643,7 @@
 	}
 	.houseContent .listitem .info-box .location{
 		font-family: PingFangSC-Regular;
-		font-size: 12px;
+		font-size: 14px;
 		color: #4C4C4C;
 		letter-spacing: 0.85px;
 		position: relative;
@@ -662,10 +652,35 @@
 		overflow: hidden;
 		line-height: 28px;
 	}
-	.info-box-other{
-		line-height: 28px;
-		margin-top: 5px;
+	.info-box{
+		border-top: none;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding: 0 15px 0 40px;
+		position: relative;
+		overflow: hidden;
+		position: relative;
+		&-other {
+			line-height: 28px;
+			margin-top: 15px;
+
+			span {
+				font-weight: 600;
+			}
+		}
+		&-see{
+			background: #3B44AC;
+			border-radius: 6px;
+			width: 150px;
+			margin-top: 23px;
+			border-color: #3B44AC;
+			outline: none;
+			position: absolute;
+			right: 0;
+			bottom: 3px;
+		}
 	}
+
 	.houseContent .listitem .info-box .tag{
 		-margin-top: 16px;
 	}

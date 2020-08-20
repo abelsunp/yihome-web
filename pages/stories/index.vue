@@ -9,7 +9,7 @@
 					<a :href="'/storydetails?id='+item.id" target="_blank">
 						<div class="img">
 							<div  class="el-image">
-								<img :src="yihomeGlobalVariable+item.titleimg | imgStrClac('l')"  class="el-image__inner" style="object-fit: cover;">
+								<img :src="yihomeGlobalVariable+item.titleimg | imgStrClac('l')"  class="april-img" style="object-fit: cover;">
 							</div>
 						</div>
 						<div class="content">
