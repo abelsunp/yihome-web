@@ -165,7 +165,7 @@
 
 					</el-collapse-item>
 
-					<el-collapse-item title="申请公寓信息" name="2">
+					<el-collapse-item title="申请公寓信息" name="5">
 						<b-row>
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="付款周期（分期付/全额付）" prop="payPeriod">
@@ -183,16 +183,21 @@
 									</el-select>
 								</el-form-item>
 							</b-col>
-							<p>偏好需求（如果有特殊订房需求，请在这里告诉我们）</p>
-							<b-col md="6" sm="12" lg="6">
+							<p style="text-indent: 16px;margin-bottom: 21px;">偏好需求（如果有特殊订房需求，请在这里告诉我们）</p>
+							<b-col md="6" sm="12" lg="12">
 								<el-form-item label="">
-									<vue-ueditor-wrap v-model="addRoomForm.remark" :config="myConfig" :key="788"></vue-ueditor-wrap>
+									<el-input
+											type="textarea"
+											:rows="2"
+											placeholder="请输入内容"
+											v-model="ruleForm.remark">
+									</el-input>
 								</el-form-item>
 							</b-col>
 						</b-row>
 					</el-collapse-item>
 
-					<el-collapse-item title="证件信息" name="5">
+					<el-collapse-item v-if="1==2" title="证件信息" name="5">
 						<b-row>
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="请上传护照信息页照片" prop="passportimg">
@@ -281,32 +286,32 @@
 				activeNames: ['1', '2', '3'],
 				ruleForm: {
 					// users: {
-						owner:"1",
-						nameCh:"姓名（中文）",
-						nameEn:"姓名（如中文名为“李明”请输入“Ming Li”）",
-						phone:"19901708693",
-						sex:"男",
-						birthday:"2020-08-26",
-						uemail:"123@123.com",
-						passport:"19901708693",
-						addressich:"国内家庭住址（中文）",
-						addressien:"国内家庭住址（英文）",
-						city:"家庭信息城市",
-						pname:"担保人(紧急联系人)姓名",
-						prelation:"父亲",
-						pbirthday:"2020-08-25",
-						psex:"男",
-						pphone:"15538535392",
-						pemail:"15538535392@163.com",
-						address:"留学城市",
-						abroadschoolen:"留学学校（英文）",
-						grade:"1",
-						course:"预科",
-						disciplineen:"留学专业（英文）",
-						gradeyear:"2",
-						payPeriod:"1",
-						payType:"1",
-						remark:"remark",
+						owner:"",
+						nameCh:"",
+						nameEn:"",
+						phone:"",
+						sex:"",
+						birthday:"",
+						uemail:"",
+						passport:"",
+						addressich:"",
+						addressien:"",
+						city:"",
+						pname:"",
+						prelation:"",
+						pbirthday:"",
+						psex:"",
+						pphone:"",
+						pemail:"",
+						address:"",
+						abroadschoolen:"",
+						grade:"",
+						course:"",
+						disciplineen:"",
+						gradeyear:"",
+						payPeriod:"",
+						payType:"",
+						remark:"",
 					// },
 					// usersGuarantee: {
 						// name:"担保人(紧急联系人)姓名",
@@ -315,12 +320,12 @@
 						// email:"15538535392@163.com",
 						// birthday:"2020-08-25",
 						// sex:"男",
-						guaranteeName:"担保人(紧急联系人)姓名",
-						guaranteeRelation:"父亲",
-						guaranteePhone:"15538535392",
-						guaranteeEmail:"15538535392@163.com",
-						guaranteeBirthday:"2020-08-25",
-						guaranteeSex:"男"
+						guaranteeName:"",
+						guaranteeRelation:"",
+						guaranteePhone:"",
+						guaranteeEmail:"",
+						guaranteeBirthday:"",
+						guaranteeSex:""
 					// }
 				},
 				rules: {
@@ -410,7 +415,7 @@
 					this.currentUrl = 'http://www.inyihome.com:10045';
 				}
 			}
-			// this.getUserInfo();
+			this.getUserInfo();
 		},
 		methods: {
 			beforeAvatarUpload(file){
@@ -520,11 +525,15 @@
 			},
 			getUserInfo(){
 				if(process.browser){
-					let userid = localStorage.getItem('userid');
-					console.log(userid)
-					this.$request.getUserInfo({userid:userid,page:1}).then(res=>{
-						console.log(res)
-						this.ruleForm = res.user;
+					this.$request.getUserInfo().then(res=>{
+						this.ruleForm = {...res.data.user,...{
+								guaranteeName:res.data.guarantee.name || '',
+								guaranteeRelation:res.data.guarantee.relation || '',
+								guaranteePhone:res.data.guarantee.phone || '',
+								guaranteeEmail:res.data.guarantee.email || '',
+								guaranteeBirthday:res.data.guarantee.birthday || '',
+								guaranteeSex:res.data.guarantee.sex || ''
+							}};
 					}).catch(e=>{
 						this.$message.error('网络错误');
 					})
@@ -535,18 +544,28 @@
 					let parmasData = this.ruleForm;
 					console.log('valid', valid)
 					if (valid) {
-						alert('submit!');
-						// this.$request.saveuserInfo(parmasData).then(res => {
-						// 	console.log(res)
-						// 	if(res){
-						// 		this.$router.go();
-						// 		//$("html,body").animate({ scrollTop: 10 }, 500);
-						// 	}else{
-						//
-						// 	}
-						// }).catch(e => {
-						// 	this.$message.error('网络错误，数据提交失败');
-						// })
+						const params = {
+							user: this.ruleForm,
+							guarantee: {
+								name: this.ruleForm.guaranteeName,
+								relation: this.ruleForm.guaranteeRelation,
+								phone: this.ruleForm.guaranteePhone,
+								email: this.ruleForm.guaranteeEmail,
+								birthday: this.ruleForm.guaranteeBirthday,
+								sex: this.ruleForm.guaranteeSex,
+							}
+						}
+						this.$request.saveuserInfo(params).then(res => {
+							console.log(res)
+							if(res.code === 200){
+								this.$router.go();
+								//$("html,body").animate({ scrollTop: 10 }, 500);
+							}else{
+
+							}
+						}).catch(e => {
+							this.$message.error('网络错误，数据提交失败');
+						})
 					} else {
 						console.log('error submit!!');
 						return false;

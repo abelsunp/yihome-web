@@ -2,7 +2,7 @@
 	<section class="house-cont" v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
 		<b-container class="house-cont-detail" style="margin-top: 20px;">
 			<div class="house-cont-detail-left">
-				<div v-if="1==3" class="top-main-box">
+				<div class="top-main-box">
 					<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
 						<div style="position: absolute;top: 10px;right: 10px;z-index: 999;">
 							<div @click="delcollect" v-if="iscollect" style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
@@ -37,7 +37,7 @@
 							<!-- 房间显示 -->
 							<ul class="roomListWrapper">
 								<li v-for="(item,$$index) in houseRoome" :key="$$index">
-									<template>
+									<template v-if="item.room.status != 1 && item.room.status != 5">
 										<div class="top">
 											<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
 												<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
@@ -49,57 +49,27 @@
 													<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
 													<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
 												</p>
-												<div>更多详情</div>
+												<div class="show-more">更多详情</div>
 											</div>
 
 										</div>
-										<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
-										<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
-										<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
-										<div class="zuqi-right">
-											<div class="zuqi-right-money"><span class="zuqi-right-money-symble">{{val.rent}}</span><span>/{{val.leaseType | filterLeaseType}}</span></div>
-											<div class="zuqi-right-btn">申请-{{val.leaseType}}</div>
-										</div>
-									</div>
+										<section>
+											<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
+												<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
+												<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
+												<div class="zuqi-right">
+													<div class="zuqi-right-money"><span class="zuqi-right-money-symble">{{val.rent}}</span><span>/{{val.leaseType | filterLeaseType}}</span></div>
+													<div class="zuqi-right-btn" :class="{'zuqi-right-btn-disable': item.room.status != 2}" @click="item.room.status == 2 && apply(val)">{{item.room.status == 2 ? '申请' : '已租罄'}}</div>
+												</div>
+											</div>
+										</section>
 									</template>
-									<!-- 如果 房间单间状态 rentstatus   182 代表上架中  非182代表已经售罄 -->
 <!--									<div v-else>-->
 <!--										<p style="text-align: center;padding: 20px;">该房间已租罄</p>-->
 <!--									</div>-->
 								</li>
 							</ul>
 						</div>
-					</div>
-					<div :id="'houseSetting?houseid='+fullPath" class="houseSetting">
-						<h1 class="inforTitle">设施保障</h1>
-						<div class="housefacility">
-							<p class="housefacilityTitle">配套设施</p>
-							<ul>
-								<li v-for="listItem in userCheckLabel1">
-									<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
-									<p>{{listItem.labelDetalName}}</p>
-								</li>
-							</ul>
-						</div>
-						<div class="housefacility">
-							<p class="housefacilityTitle">安全保障</p>
-							<ul>
-								<li v-for="listItem in userCheckLabel2">
-									<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
-									<p>{{listItem.labelDetalName}}</p>
-								</li>
-							</ul>
-						</div>
-						<div class="housefacility">
-							<p class="housefacilityTitle">房源标签</p>
-							<ul style="padding-left: 40px;">
-								<li style="width: auto" v-for="listItem in userCheckLabel3">
-									<!--								<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>-->
-									<span class="tag" :style="{'background-color':'rgb(121, 137, 248)'}">{{listItem.labelDetalName}}</span>
-								</li>
-							</ul>
-						</div>
-
 					</div>
 				</div>
 			</div>
@@ -197,7 +167,9 @@
 				</div>
 
 			</div> -->
-			<b-container>
+
+			<!--	周边房源		-->
+			<b-container v-if="1==2">
 				<div :id="'houseNotice?houseid='+fullPath">
 					<h1 class="inforTitle">住房租房须知</h1>
 
@@ -327,7 +299,7 @@
 				descClose: true,
 				viewFullimgWrapper: false,
 				videohouse: false,
-				iscollect: false,
+
 				activeName: '',
 				status: false,
 				fullPath: '',
@@ -389,6 +361,11 @@
 
 				houseDetailsData:{},//房源的详情信息
 
+				/**
+				 * 收藏
+				 */
+				collectList: [],
+				iscollect: false,
 
 				/**
 				 * 房源信息
@@ -487,66 +464,7 @@
 					document.getElementById("myVideo").play();
 				}, 400)
 			},
-			collect() {
-				if (process.browser) {
-					let userid = localStorage.getItem('userid');
-					let license = localStorage.getItem('checklicense');
-					this.$request.checklogin({
-						loginid: userid,
-						license: license
-					}).then(res => {
-						if (res.status) {
-							let houseid = this.housedetails.id;
-							this.$request.insertfavorite({
-								userid: userid,
-								houseid: houseid
-							}).then(res => {
-								if (res == 'success') {
-									this.iscollect = true;
-								}
-							}).catch(e => {
 
-							})
-						} else {
-							localStorage.setItem('backurl', this.$route.fullPath);
-							this.$router.push({
-								path: '/login'
-							})
-						}
-					}).catch(e => {
-						localStorage.setItem('backurl', this.$route.fullPath);
-						this.$router.push({
-							path: '/login'
-						})
-					})
-				}
-			},
-			delcollect() {
-				if (process.browser) {
-					let userid = localStorage.getItem('userid');
-					let houseid = this.housedetails.id;
-					this.$confirm('是否取消收藏此房间', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-						type: 'warning'
-					}).then(() => {
-						this.$request.deletefavorite({
-							userid: userid,
-							houseid: houseid
-						}).then(res => {
-							if (res == 'success') {
-								this.iscollect = false;
-							}
-						}).catch(e => {
-
-						})
-
-					}).catch(() => {
-
-					});
-
-				}
-			},
 			checkCollect() {
 				if (process.browser) {
 					let userid = localStorage.getItem('userid');
@@ -635,152 +553,7 @@
 					this.status = false;
 				}
 			},
-			getCurrentHouseDetails(number) {
-				const houseloading = this.$loading({
-					lock: true,
-					text: '正在加载',
-					spinner: 'el-icon-loading',
-					background: 'rgba(0, 0, 0, 0.7)'
-				});
-				this.$request.findhousedetail({
-					houseId: number
-				}).then(res => {
-					console.log('getCurrentHouseDetails', res)
-					houseloading.close();
-					if (Object.keys(res.data).length == 0) {
-						this.$confirm('当前房屋信息不存在', '提示', {
-							confirmButtonText: '确定',
-							cancelButtonText: '取消',
-							type: 'warning'
-						}).then(() => {
-							this.$router.push({
-								path: '/'
-							})
-						}).catch(() => {
-							this.$router.push({
-								path: '/'
-							})
-						});
-						return
-					} else {
-						this.housedetails = res.data;
-						this.houseInfo = res.data.house;
-						this.houseRoome = res.data.rooms;
-						for(let item of this.houseRoome){
-							item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
-						}
 
-						console.log("this.houseRoome", this.houseRoome)
-
-
-						//*********** 卫浴，在rooms 里的lables  labelTypeId === 16
-						// console.log("this.houseRoome.lables", res.data)
-						// this.weiyuList = this.houseRoome.lables.filter(ele => ele.labelTypeId === 16)
-						// console.log("this.houseRoome.lables", this.houseRoome.lables, this.weiyuList)
-						//获取选中的label  分类  1.标签  2.学校 3.学校
-
-						const checkAll = res.data.lables;
-						checkAll.forEach(el=>{
-							if(el.type==1){
-								this.userCheckLabel.push(el)
-							}
-							// if(el.type==2){
-							// 	this.schoolCheckLabel.push(el)
-							// }
-							if(el.type==3){
-								this.addressCheckLabel.push(el)
-							}
-						});
-
-
-
-						this.schoolCheckLabel = res.data.schools;
-						console.log("this.housedetails.schools", this.housedetails.schools)
-
-						res.data.infos.forEach(el=>{
-							if(el.type==1){
-								this.houseInfoDescCh = el
-							}
-							if(el.type==2){
-								this.houseInfoDescEn = el
-							}
-							if(el.type==3){
-								this.houseInfoTuigai = el
-							}
-							if(el.type==4){
-								this.houseInfoXuzhi = el
-							}
-						});
-
-						console.log('标签', this.userCheckLabel)
-						console.log('学校',this.schoolCheckLabel)
-						console.log('地址',this.addressCheckLabel)
-
-						//再次循环this.userCheckLabel
-						this.userCheckLabel.forEach(el=>{
-							if(el.labelTypeId==2){//配套设施
-								this.userCheckLabel1.push(el)
-							}
-							if(el.labelTypeId==3){//安全保障
-								this.userCheckLabel2.push(el)
-							}
-							if(el.labelTypeId==15){//房源标签
-								this.userCheckLabel3.push(el)
-							}
-						});
-						console.log('配套设施',this.userCheckLabel1)
-						console.log('安全保障',this.userCheckLabel2)
-						console.log('房源标签',this.userCheckLabel3)
-
-
-						res.data.urls.forEach(el=>{
-							if(el.type==1){
-								this.userCheckUrl.push(el)
-							}
-							if(el.type==2){
-								this.userCheckUrl2.push(el)
-							}
-						});
-
-
-						this.myaddress = res.address;
-						//this.dropMap(res.address);
-						//周边房源
-						// this.getAroundHouse(res.cityid);
-
-						this.addressData = res.addresses;
-						if(res.school){
-							// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
-
-							res.school.forEach((item,index)=>{
-								console.log(item,111)
-								item['addressdetail'] = item['address']
-								item['addressname'] = item['schoolname']
-							})
-							this.addressData = res.addresses.concat(res.school);
-						}
-
-
-						//this.endAddress = this.addressData[0].addressdetail;
-						/* 当前房源的房间类型 */
-						this.roomType = res.housetag;
-						/* 所有房间 */
-						this.allRoom = res.room;
-						this.oldAllRoom = res.room;
-
-						this.currencysymbol = res.country.currencysymbol;
-
-
-						/* 检查是否收藏房间 */
-						this.checkCollect();
-
-					}
-				}).catch(e => {
-					houseloading.close();
-					this.$message.error('网络错误');
-					console.log(e,88888888)
-				})
-			},
 			getApiRoomType(){
 				this.$request.getApiRoomType().then(res => {
 					this.roomlist = res.data
@@ -929,6 +702,7 @@
 					})
 				}
 			},
+
 			//房间咨询
 			handleConsultation(item, currentitem) {
 				/* this.$request.checklogin().then(res=>{
@@ -1015,7 +789,235 @@
 
 				console.log(item.roomimg)
 
-			}
+			},
+
+
+
+			getCurrentHouseDetails(number) {
+				const houseloading = this.$loading({
+					lock: true,
+					text: '正在加载',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
+				this.$request.findhousedetail({
+					houseId: number
+				}).then(res => {
+					console.log('getCurrentHouseDetails', res)
+					houseloading.close();
+					if (Object.keys(res.data).length == 0) {
+						this.$confirm('当前房屋信息不存在', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+							type: 'warning'
+						}).then(() => {
+							this.$router.push({
+								path: '/'
+							})
+						}).catch(() => {
+							this.$router.push({
+								path: '/'
+							})
+						});
+						return
+					} else {
+						this.housedetails = res.data;
+						this.houseInfo = res.data.house;
+						this.houseRoome = res.data.rooms;
+						for(let item of this.houseRoome){
+							item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
+						}
+
+						console.log("this.houseRoome", this.houseRoome)
+
+
+						//*********** 卫浴，在rooms 里的lables  labelTypeId === 16
+						// console.log("this.houseRoome.lables", res.data)
+						// this.weiyuList = this.houseRoome.lables.filter(ele => ele.labelTypeId === 16)
+						// console.log("this.houseRoome.lables", this.houseRoome.lables, this.weiyuList)
+						//获取选中的label  分类  1.标签  2.学校 3.学校
+
+						const checkAll = res.data.lables;
+						checkAll.forEach(el=>{
+							if(el.type==1){
+								this.userCheckLabel.push(el)
+							}
+							// if(el.type==2){
+							// 	this.schoolCheckLabel.push(el)
+							// }
+							if(el.type==3){
+								this.addressCheckLabel.push(el)
+							}
+						});
+
+
+
+						this.schoolCheckLabel = res.data.schools;
+						console.log("this.housedetails.schools", this.housedetails.schools)
+
+						res.data.infos.forEach(el=>{
+							if(el.type==1){
+								this.houseInfoDescCh = el
+							}
+							if(el.type==2){
+								this.houseInfoDescEn = el
+							}
+							if(el.type==3){
+								this.houseInfoTuigai = el
+							}
+							if(el.type==4){
+								this.houseInfoXuzhi = el
+							}
+						});
+
+						console.log('标签', this.userCheckLabel)
+						console.log('学校',this.schoolCheckLabel)
+						console.log('地址',this.addressCheckLabel)
+
+						//再次循环this.userCheckLabel
+						this.userCheckLabel.forEach(el=>{
+							if(el.labelTypeId==2){//配套设施
+								this.userCheckLabel1.push(el)
+							}
+							if(el.labelTypeId==3){//安全保障
+								this.userCheckLabel2.push(el)
+							}
+							if(el.labelTypeId==15){//房源标签
+								this.userCheckLabel3.push(el)
+							}
+						});
+						console.log('配套设施',this.userCheckLabel1)
+						console.log('安全保障',this.userCheckLabel2)
+						console.log('房源标签',this.userCheckLabel3)
+
+
+						res.data.urls.forEach(el=>{
+							if(el.type==1){
+								this.userCheckUrl.push(el)
+							}
+							if(el.type==2){
+								this.userCheckUrl2.push(el)
+							}
+						});
+
+
+						this.myaddress = res.address;
+						//this.dropMap(res.address);
+						//周边房源
+						// this.getAroundHouse(res.cityid);
+
+						this.addressData = res.addresses;
+						if(res.school){
+							// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
+
+							res.school.forEach((item,index)=>{
+								console.log(item,111)
+								item['addressdetail'] = item['address']
+								item['addressname'] = item['schoolname']
+							})
+							this.addressData = res.addresses.concat(res.school);
+						}
+
+
+						//this.endAddress = this.addressData[0].addressdetail;
+						/* 当前房源的房间类型 */
+						this.roomType = res.housetag;
+						/* 所有房间 */
+						this.allRoom = res.room;
+						this.oldAllRoom = res.room;
+
+						this.currencysymbol = res.country.currencysymbol;
+
+
+						/* 检查是否收藏房间 */
+						this.checkCollect();
+
+					}
+				}).catch(e => {
+					houseloading.close();
+					this.$message.error('网络错误');
+					console.log(e,88888888)
+				})
+			},
+			apply(data){
+				this.fullscreenLoading = true;
+				this.$request.houseapply({usersLeaseperiodId: data.id}).then(res => {
+					this.fullscreenLoading = false;
+					if (res.code === 200) {
+						this.$message({
+							message: '数据提交成功，客服稍后会和您联系',
+							type: 'success'
+						});
+						this.reserveStatus = false;
+						window._agl && window._agl.push(['track', ['success', {t: 3}]])
+					} else {
+						this.$message.error(res.msg);
+					}
+				}).catch(e => {
+					this.fullscreenLoading = false;
+					this.$message.error('网络错误');
+				})
+			},
+			getCollectList(){
+				if(localStorage.getItem('token')){
+					this.$request.getCollectList({usersLeaseperiodId: data.id}).then(res => {
+						if (res.code === 200) {
+							this.collectList = data
+						} else {
+							this.$message.error(res.msg);
+						}
+					}).catch(e => {
+						this.fullscreenLoading = false;
+						this.$message.error('网络错误');
+					})
+
+				}
+			},
+			collect() {
+				if(localStorage.getItem('token')){
+					this.$request.insertfavorite({
+						houseId: this.houseInfo.id
+					}).then(res => {
+						if (res.code == 200) {
+							this.iscollect = true;
+						}
+					}).catch(e => {
+
+					})
+				}else{
+					localStorage.setItem('backurl', this.$route.fullPath);
+					this.$router.push({
+						path: '/login'
+					})
+				}
+			},
+			delcollect() {
+				if(localStorage.getItem('token')){
+					this.$confirm('是否取消收藏此房间', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						this.$request.deletefavorite({
+							id: this.houseInfo.id
+						}).then(res => {
+							if (res.code == 200) {
+								this.iscollect = false;
+							}
+						}).catch(e => {
+
+						})
+
+					}).catch(() => {
+
+					});
+				}else{
+					localStorage.setItem('backurl', this.$route.fullPath);
+					this.$router.push({
+						path: '/login'
+					})
+				}
+			},
 
 		},
 		destroyed() {
@@ -1124,10 +1126,19 @@
 		}
 		&-html{}
 	}
+	.show-more{
+		color: rgb(47,60,159);
+		cursor: pointer;
+	}
 	.zuqi{
+		margin-top: 15px;
 		position: relative;
-		padding: 10px 0;
+		padding: 10px 0 15px;
+		border-top: 1px solid #E6E6E6;
 		border-bottom: 1px solid #E6E6E6;
+		&:last-child{
+			border-bottom: none;
+		}
 		&-date{
 			line-height: 30px;
 			font-size: 14px;
@@ -1143,6 +1154,7 @@
 			line-height: 30px;
 			font-size: 15px;
 			font-weight: 600;
+			margin-top: 2px;
 		}
 		&-right{
 			position: absolute;
@@ -1150,8 +1162,11 @@
 			top: 10px;
 			&-money{
 				position: absolute;
-				right: 160px;
+				right: 155px;
 				font-size: 14px;
+				width: 150px;
+				text-align: right;
+				top: 30px;
 				&-symble{
 					color: rgb(255,86,89);
 				}
@@ -1167,6 +1182,11 @@
 				text-align: center;
 				line-height: 40px;
 				color: #fff;
+				top: 19px;
+				cursor: pointer;
+			}
+			&-btn-disable{
+				background-color: rgb(178, 178, 178);
 			}
 		}
 	}

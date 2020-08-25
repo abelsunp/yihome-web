@@ -3,7 +3,7 @@
 		<!-- <h1>个人设置</h1> -->
 		<el-tabs v-model="activeName" @tab-click="handleClick" class="setting-tab">
 		    <el-tab-pane label="修改昵称" name="first">
-				
+
 				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 					<el-form-item label="昵称" prop="netname">
 						<el-input v-model="ruleForm.netname" placeholder="请输入昵称"></el-input>
@@ -11,11 +11,11 @@
 					<el-form-item>
 						<el-button style="width: 330px;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 					</el-form-item>
-					
+
 				</el-form>
 			</el-tab-pane>
 		    <!-- <el-tab-pane label="修改密码" name="second">配置管理</el-tab-pane> -->
-		    
+
 		</el-tabs>
 	</section>
 </template>
@@ -37,7 +37,7 @@
 			}
 		},
 		created() {
-			
+
 		},
 		methods:{
 			handleClick(tab, event) {
@@ -48,22 +48,22 @@
 				  if (valid) {
 						this.resetName();
 				  } else {
-					console.log('error submit!!');
 					return false;
 				  }
 				});
 			},
 			resetName(){
 				if(process.browser){
-					let userid = localStorage.getItem('userid');
-					this.$request.resetNetName({userid:userid,netname:this.ruleForm.netname}).then(res=>{
-						
+					this.$request.resetNetName({name:this.ruleForm.netname}).then(res=>{
+						if(res.code === 200){
+							this.$message.success('修改成功');
+						}else this.$message.error(res.msg);
 					}).catch(e=>{
-						
+
 					})
-					
+
 				}
-				
+
 			}
 		}
 	}

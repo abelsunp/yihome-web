@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-
 const _6ffbd88e = () => interopDefault(import('../pages/about/index.vue' /* webpackChunkName: "pages/about/index" */))
 const _5ea1e736 = () => interopDefault(import('../pages/abroad/index.vue' /* webpackChunkName: "pages/abroad/index" */))
 const _26a28be1 = () => interopDefault(import('../pages/contact/index.vue' /* webpackChunkName: "pages/contact/index" */))
@@ -27,6 +26,7 @@ const _4c1907d0 = () => interopDefault(import('../pages/reset/index.vue' /* webp
 const _1dd06454 = () => interopDefault(import('../pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */))
 const _f6f1a4bc = () => interopDefault(import('../pages/storydetails/index.vue' /* webpackChunkName: "pages/storydetails/index" */))
 const _53427433 = () => interopDefault(import('../pages/testStep/index.vue' /* webpackChunkName: "pages/testStep/index" */))
+const _54e00f07 = () => interopDefault(import('../pages/housedetail/indexCopy.vue' /* webpackChunkName: "pages/housedetail/indexCopy" */))
 const _17eabaca = () => interopDefault(import('../pages/stories/storydetails.vue' /* webpackChunkName: "pages/stories/storydetails" */))
 const _5e245110 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -140,7 +140,7 @@ export const routerOptions = {
     name: "testStep"
   }, {
     path: "/housedetail/indexCopy",
-    component: _fb0a1a2e,
+    component: _54e00f07,
     name: "housedetail-indexCopy"
   }, {
     path: "/stories/storydetails",

@@ -91,20 +91,20 @@ const request = {
   },
   /* 故事详情 */
   getStorydetails:(postData) => fetch('/front/findnewsdetail',postData),
-  
-  
+
+
   /* 注册 */
   //验证邮箱是否注册
   verificationEmail:(postData) => fetch('/front/valemail',postData),
   sendvalcodem:(postData) => fetch('/front/sendvalcode',postData),
   valvalcode:(postData) => fetch('/front/valvalcode',postData),
-  
+
   /* 登录 */
   loginval:(postData) => fetch('/front/loginval',postData),
-  
-  
+
+
   /* 找回密码 */
-  
+
   /* 房源搜索 */
   // findHouseSearchAll:(postData) => fetch('/front/findHouseSearchAll',postData),
   findHouseSearchAll: (params) => {
@@ -138,7 +138,7 @@ const request = {
 
   /* 查找房源 */
   getfindhouse:(postData) => fetch('/front/getfindhouse',postData),
-  
+
   /* 房间详情 */
   // findhousedetail:(postData) => fetch('/front/findhousedetailnew',postData),
 
@@ -150,7 +150,7 @@ const request = {
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
   },
-  
+
   /* 新的登录注册找回密码 */
   //发送验证码
   // sandcode:(postData) => fetch('/front/sandcode',postData), //findpass 忘记密码     register 注册   login 登录
@@ -204,27 +204,82 @@ const request = {
 
   newfindhouse:(postData) => fetch('/front/newfindhouse',postData),
 
-  getUserInfo:(postData) => fetch('/front/findpersonal',postData),
+  // getUserInfo:(postData) => fetch('/front/findpersonal',postData),
+  getUserInfo:() => {
+    let config = {
+      url: `/yihome-admin/api/user/users/getLinkUser`,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //保存用户信息
-  saveuserInfo:(postData) => fetch('/user/saveuser',postData),
-
+  // saveuserInfo:(postData) => fetch('/user/saveuser',postData),
+  saveuserInfo:(data) => {
+    let config = {
+      url: `/yihome-admin/api/user/users/linkAdd`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //个人中心取消收藏
 
   //房间收藏
-  insertfavorite:(postData) => fetch('/front/insertfavorite',postData),//userid houseid
+  // insertfavorite:(postData) => fetch('/front/insertfavorite',postData),//userid houseid
+  insertfavorite:(data) => {
+    let config = {
+      url: `/yihome-admin/api/home/house/userApiCollect`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //检查是否收藏
   valfavorite:(postData) => fetch('/front/valfavorite',postData),//userid houseid
   //删除收藏
-  deletefavorite:(postData) => fetch('/front/deletefavorite',postData),//userid houseid
+  // deletefavorite:(postData) => fetch('/front/deletefavorite',postData),//userid houseid
+  deletefavorite:(data) => {
+    let config = {
+      url: `/yihome-admin/api/home/house/userApiCollect`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
+
+  getCollectList: (data) => {
+    let config = {
+      url: `/yihome-admin/api/user/users/myApiCollect`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //修改昵称
-  resetNetName:(postData) => fetch('/front/reset',postData),
+  // resetNetName:(postData) => fetch('/front/reset',postData),
+  resetNetName: (data) => {
+    let config = {
+      url: `/yihome-admin/api/user/users/updateNickname?${qs.stringify(data)}`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //房间 提交咨询
-  houseapply:(postData) => fetch('/front/houseapply',postData),
+  // houseapply:(postData) => fetch('/front/houseapply',postData),
+  houseapply: (data) => {
+    let config = {
+      url: `/yihome-admin/api/home/house/userApiApply?${qs.stringify(data)}`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //生成初始订单
   findorder:(postData) => fetch('/front/findorder',postData),
@@ -234,6 +289,13 @@ const request = {
 
   //订单详情
   findUserBillDtl:(postData) => fetch('/front/findUserBillDtl',postData),
+  getOrderList: () => {
+    let config = {
+      url: `/yihome-admin/api/user/users/myApiOrder`,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   //homepage 精品房型提交信息type=1    helptickets提交信息type=0
   savehelptickets:(postData) => fetch('/front/savehelptickets',postData),

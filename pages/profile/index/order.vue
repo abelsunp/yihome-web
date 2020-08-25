@@ -174,16 +174,17 @@
 
 		},
 		mounted() {
-			this.getUserOrder();
+			this.getOrderList();
 		},
 		methods:{
-			getUserOrder(){
+			getOrderList(){
 				this.spinShow = true;
 				if(process.browser){
-					let userid = localStorage.getItem('userid');
-					this.$request.getUserInfo({userid:userid,page:2}).then(res=>{
+					this.$request.getOrderList().then(res=>{
 						this.spinShow = false;
-						this.orderList = res.order;
+						if(res.code === 200){
+							this.orderList = res.order;
+						}else this.$message.error(res.msg);
 					}).catch(e=>{
 						this.spinShow = false;
 						this.$message.error('网络错误');
