@@ -45,7 +45,7 @@
 			}
 		},
 		created() {
-			this.checklogin()
+			// this.checklogin()
 		},
 		methods:{
 			checklogin(){

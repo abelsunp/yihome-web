@@ -29,10 +29,10 @@
 								<img src="~assets/images/loginRegister/phone.svg" alt="" @click="LoginMode('phone')">
 								<p>手机号登录</p>
 							</b-col>
-							<b-col v-if="currentMode!='email'">
-								<img src="~assets/images/loginRegister/email.svg" alt="" @click="LoginMode('email')">
-								<p>邮箱登录</p>
-							</b-col>
+<!--							<b-col v-if="currentMode!='email'">-->
+<!--								<img src="~assets/images/loginRegister/email.svg" alt="" @click="LoginMode('email')">-->
+<!--								<p>邮箱登录</p>-->
+<!--							</b-col>-->
 						</b-row>
 
 					</div>

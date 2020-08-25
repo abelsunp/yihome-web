@@ -10,12 +10,11 @@
 		<b-container>
 			<div class="searchContent" style="padding-left: 0;" v-if="!$route.query.search">
 				<div class="selectCity listitem" style="margin-left: 0;">
-					
 					<el-select v-model="cityvalue" placeholder="请选择城市" @change="cityChange">
 					    <el-option
 					      v-for="item in citylist"
 					      :key="item.id"
-					      :label="item.cityname"
+					      :label="item.id"
 					      :value="item.id">
 					    </el-option>
 					</el-select>
@@ -26,7 +25,7 @@
 					    <el-option
 					      v-for="item in schoollist"
 					      :key="item.id"
-					      :label="item.schoolname"
+					      :label="item.name"
 					      :value="item.id">
 					    </el-option>
 					</el-select>
@@ -99,8 +98,8 @@
 									</div>
 									<div class="searchSubContent">
 										<el-radio v-model="bathroomid" label="">不限</el-radio>
-										<el-radio v-model="bathroomid" label="6">共享卫浴</el-radio>
-										<el-radio v-model="bathroomid" label="7">独立卫浴</el-radio>
+										<el-radio v-model="bathroomid" label="133">共享卫浴</el-radio>
+										<el-radio v-model="bathroomid" label="134">独立卫浴</el-radio>
 									</div>
 								</li>
 							</ul>
@@ -124,17 +123,16 @@
 					<b-col md="3" class="listitem" >
 						<div class="pic-box">
 							<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
-							<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" :alt="item.housename">
+							<img :src="yihomeGlobalVariable+item.houseUrl| imgStrClac('x')" :alt="item.housename">
 							<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
 						</div>
 					</b-col>
 					<b-col md="9" class="listitem" >
 						<div class="info-box">
-
-							<h5 class="title">{{item.housename}}</h5>
-							<h6 class="price">{{item.currencysymbol}}{{item.price}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
-							<div class="location"> <i class="iconfont">&#xe62c;</i> {{item.address}} </div>
-							<div class="location"> <i class="iconfont">&#xe62c;</i> {{item.address}} </div>
+							<h5 class="title">{{item.name}}</h5>
+							<h6 class="price">{{item.countryId | fliterSymble}}{{item.minPrice}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
+							<div class="location" v-if="item.schoolName"> <i class="iconfont">&#xe62c;</i> {{item.schoolName}} </div>
+							<div class="location"> </div>
 							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
 							<div class="info-box-other"> <span>房租包含：</span>水费、电费、网费 </div>
 							<a :href="'/housedetail?houseid='+item.id" target="_blank">
@@ -230,9 +228,12 @@
 				],
 				orderlist:[
 					{id:'',name:'综合'},
-					{id:'updatetime desc',name:'最近更新'},
-					{id:'price desc',name:'价格从高到低'},
-					{id:'price asc',name:'价格从低到高'}
+					// {id:'updatetime desc',name:'最近更新'},
+					// {id:'price desc',name:'价格从高到低'},
+					// {id:'price asc',name:'价格从低到高'},
+					{id:1,name:'最近更新'},
+					{id:2,name:'价格从高到低'},
+					{id:3,name:'价格从低到高'}
 				],
 				
 				
@@ -281,8 +282,13 @@
 				return;
 			}
 			 */
-			this.findcityschool();
-			
+
+			this.countryid = this.$route.query.countryId;
+			this.cityid = this.$route.query.cityId;
+			this.schoolid = this.$route.query.schoolId || '';
+
+			this.getAllCity();
+			this.findcityschool(this.cityid);
 			this.findhouseList(this.countryid,this.cityid,this.schoolid,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'',this.pageNum,this.pageSize,this.search)
 			
 		},
@@ -299,7 +305,6 @@
 				this.pageSize = val;
 				this.pageNum = 1;
 				console.log(val,111)
-				debugger
 				this.findhouseList(this.countryid,this.cityid,this.schoolid,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'',this.pageNum,val,this.search)
 				$("html,body").animate({ scrollTop: 0 }, 500);//100为滚动条的位置，1000为滚动的时延
 			},
@@ -309,31 +314,41 @@
 				this.findhouseList(this.countryid,this.cityid,this.schoolid,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'',val,this.pageSize,this.search)
 				$("html,body").animate({ scrollTop: 0 }, 500);//100为滚动条的位置，1000为滚动的时延
 			},
-			findcityschool(){
-				this.$request.findcityschool().then(res=>{
-					res.forEach((item,index)=>{
-						if(this.$route.query.countryid == item.id){
-							this.citylist = item.city;
-							item.city.forEach((item2,index2)=>{
-								if(this.$route.query.cityid ==item2.id ){
-									this.cityvalue = item2.id;
-									this.schoollist = item2.school;
-									item2.school.forEach((item3,index3)=>{
-										if(this.$route.query.schoolid ==item3.id ){
-											this.schoolvalue = item3.id;
-											return;
-										}
-									})
-									
-								}
-							})
-							
-						}
-					})
+			getAllCity(){
+				this.$request.getAllCity().then(res=>{
+					this.citylist = res.data[this.$route.query.countryId];
+					const Index = this.citylist.findIndex(ele => ele.id == this.$route.query.cityId);
+					this.cityvalue = this.citylist[Index].name;
+
+					// res.forEach((item,index)=>{
+					// 	if(this.$route.query.countryid == item.id){
+					// 		this.citylist = item.city;
+					// 		item.city.forEach((item2,index2)=>{
+					// 			if(this.$route.query.cityid ==item2.id ){
+					// 				this.cityvalue = item2.id;
+					// 				this.schoollist = item2.school;
+					// 				item2.school.forEach((item3,index3)=>{
+					// 					if(this.$route.query.schoolid ==item3.id ){
+					// 						this.schoolvalue = item3.id;
+					// 						return;
+					// 					}
+					// 				})
+					//
+					// 			}
+					// 		})
+					// 	}
+					// })
 				}).catch(e=>{
 					
 				})
 			},
+			findcityschool(cityId){
+				this.$request.findcityschool({cityId}).then(res=>{
+					this.schoollist = res.data;
+					console.log('findcityschool', cityId, this.schoollist)
+				}).catch(e=>{})
+			},
+
 			cityChange(val){
 				this.citylist.forEach((item,index)=>{
 					if(val == item.id){
@@ -353,7 +368,7 @@
 				this.order = 'updatetime desc';
 				this.cityid = val;
 				this.cityvalue = val;
-				console.log(val)
+				this.findcityschool(val);
 				this.findhouseList(this.countryid,val,this.schoolvalue,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'cityChange',this.pageNum,this.pageSize,this.search)
 				
 			},
@@ -395,7 +410,7 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$request.newfindhouse(
+				this.$request.searHouse(
 					{
 						countryid: countryid,
 						cityid: cityid,
@@ -412,26 +427,28 @@
 					}
 				).then(res=>{
 					houseloading.close()
-					if(res.data.length){
+					if(res.data.list.length){
 						this.hasHouse = true;
-						if(res.count>6){
+						if(res.total>6){
 							this.paginationStatus = true;
 						}else{
 							this.paginationStatus = false;
 						}
-						this.totalCount = res.count;
+						this.totalCount = res.total;
 						
-						this.houseArray = res.data;
+						this.houseArray = res.data.list;
+
+						console.log("this.houseArray", this.houseArray)
 						
 						if(statusChange=='cityChange'){
-											window.open('/findhouse?countryid='+this.$route.query.countryid+'&cityid='+this.cityvalue+'','_self')
+											window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'','_self')
 											// this.$router.push({ path: 'findhouse/',query:{
 											// 	countryid:this.$route.query.countryid,
 											// 	cityid:this.cityvalue,
 											// }}); 
 										}else if(statusChange=='schoolChange'){
 											
-						window.open('/findhouse?countryid='+this.$route.query.countryid+'&cityid='+this.cityvalue+'&schoolid='+this.schoolvalue+'','_self')
+						window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'&schoolId='+this.schoolvalue+'','_self')
 											// this.$router.push({ path: 'findhouse/',query:{
 											// 	countryid:this.$route.query.countryid,
 											// 	cityid:this.cityvalue,

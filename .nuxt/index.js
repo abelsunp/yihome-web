@@ -15,6 +15,7 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 import nuxt_plugin_bootstrapvue_6077969b from 'nuxt_plugin_bootstrapvue_6077969b' // Source: ./bootstrap-vue.js (mode: 'all')
 import nuxt_plugin_axios_e7b83728 from 'nuxt_plugin_axios_e7b83728' // Source: ./axios.js (mode: 'all')
 import nuxt_plugin_index_5e7689d9 from 'nuxt_plugin_index_5e7689d9' // Source: ../plugins/index.js (mode: 'client')
+import nuxt_plugin_filters_14a52510 from 'nuxt_plugin_filters_14a52510' // Source: ../plugins/filters.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ../plugins/element-ui (mode: 'all')
 import nuxt_plugin_bootstrap_29b38afa from 'nuxt_plugin_bootstrap_29b38afa' // Source: ../plugins/bootstrap (mode: 'all')
 import nuxt_plugin_api_caeae0b4 from 'nuxt_plugin_api_caeae0b4' // Source: ../plugins/api (mode: 'client')
@@ -184,6 +185,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (process.client && typeof nuxt_plugin_index_5e7689d9 === 'function') {
     await nuxt_plugin_index_5e7689d9(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_filters_14a52510 === 'function') {
+    await nuxt_plugin_filters_14a52510(app.context, inject)
   }
 
   if (typeof nuxt_plugin_elementui_d905880e === 'function') {

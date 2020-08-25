@@ -173,12 +173,18 @@
 						this.loadingStatus = true;
 						this.$Spin.show();
 						setTimeout(()=>{
-							this.$request.loginin({'account':this.ruleForm.phone,'code':this.ruleForm.password}).then(res=>{
+
+							this.$request.loginin({
+								"type": "2",
+								'phone':this.ruleForm.phone,
+								'code':this.ruleForm.password
+							}).then(res=>{
 								this.$Spin.hide();
 								this.loadingStatus = false;
-								if(res.status){
-									localStorage.setItem('userid',res.data.id);
-									localStorage.setItem('checklicense',res.data.license);
+								if(res.code === 200){
+									localStorage.setItem('token',res.data.token);
+									// localStorage.setItem('userid',res.data.id);
+									// localStorage.setItem('checklicense',res.data.license);
 									
 									let backurl = localStorage.getItem('backurl')
 									if(backurl){

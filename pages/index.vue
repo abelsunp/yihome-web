@@ -65,23 +65,23 @@
 				<h1 class="title">精选热门房源</h1>
 				<p class="subtitle">精选当前最热门的品牌公寓</p>
 				<div class="hothouseTab">
-					<el-tabs type="border-card" class="el-discount">
-						<el-tab-pane :label="item.cityname" v-for="(item,$index) in discounthouse" :key="$index">
+					<el-tabs type="border-card" class="el-discount" @tab-click="handleClickCity">
+						<el-tab-pane :label="item.name" v-for="(item,$index) in hotecityList" :key="$index" v-if="$index < 6">
 							<b-row>
-								<b-col md="6" sm="6" lg="4" class="listitem" v-for="(listItem,$$index) in item.house" :key="$$index">
+								<b-col md="6" sm="6" lg="4" class="listitem" v-for="(listItem,$$index) in houseList" :key="$$index">
 									<a target="_blank" :href="'/housedetail?houseid='+listItem.id">
 										<div class="move">
 											<div class="imgWrap">
 												<div class="el-image">
-													<img :src="yihomeGlobalVariable+listItem.imgurl| imgStrClac('x')" class="april-img" style="object-fit: cover;">
+													<img :src="yihomeGlobalVariable+listItem.houseUrl| imgStrClac('x')" class="april-img" style="object-fit: cover;">
 												</div>
 											</div>
 											<div class="contentWrap">
-												<h3>{{listItem.housename}}</h3>
-												<p class="price"><b>{{listItem.currencysymbol}}{{listItem.price}}</b><span>起/周</span></p>
-												<p class="country">近{{listItem.school}}</p>
+												<h3>{{listItem.name}}</h3>
+												<p class="price"><b>{{listItem.countryId | fliterSymble}}{{listItem.minPrice}}</b><span>起/周</span></p>
+												<p class="country">近{{listItem.address}}</p>
 												<div class="buttonWrap">
-													<a target="_blank" :href="'/housedetail?houseid='+listItem.id" style="display: flex;justify-content: space-between;width: 100%;">
+													<a :href="'/housedetail?houseid='+listItem.id" style="display: flex;justify-content: space-between;width: 100%;">
 														<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
 													</a>
 												</div>
@@ -410,6 +410,10 @@
 				storyData:[],
 				studentData:[],
 				discounthouse:[],//特惠房源
+
+				hotecityList: [],
+				houseList: [],
+
 				appointmentForm:{
 					roomtype:"单人套房",
 					name: '',
@@ -466,7 +470,8 @@
 
 			this.getStory();
 			this.genActivity();
-			this.finddiscounthouse();
+			this.findhotecity();
+
 
 			// $.ajax({
 			// 	url:'https://api.myjson.com/bins/1bl46q',
@@ -485,8 +490,12 @@
 		},
 		methods: {
 			handleClick(tab, event){
-				console.log(tab.label)
 				this.appointmentForm.roomtype = tab.label
+			},
+			handleClickCity(tab){
+				const { hotecityList } = this;
+				const findItem = hotecityList.filter(ele => ele.name === tab.label);
+				findItem.length > 0 && this.finddiscounthouse(findItem[0].id);
 			},
 			phoneMethod(){
 				console.log(11111)
@@ -618,11 +627,26 @@
 				let routeData = this.$router.resolve({ path: '/storydetails', query: {  id: idnum } });
 				window.open(routeData.href, '_blank');
 			},
-			finddiscounthouse(){
-				this.$request.homeHothouse().then(res=>{
-					if(res.status){
 
-						this.discounthouse = res.data;
+			// 热门城市
+			findhotecity(){
+				this.$request.getDiscountsCity().then(res=>{
+					if(res.code === 200){
+						this.hotecityList = res.data;
+						this.finddiscounthouse(res.data[0].id);
+					}else{
+						this.$message.error(res.msg);
+					}
+				}).catch(e=>{
+					this.$message.error('网络错误');
+				})
+			},
+
+			finddiscounthouse(id){
+				// this.$request.getDiscountsCity({cityId: id}).then(res=>{
+				this.$request.searHouse({cityId: 161}).then(res=>{
+					if(res.code === 200){
+						this.houseList = res.data.list;
 					}else{
 						this.$message.error(res.msg);
 					}

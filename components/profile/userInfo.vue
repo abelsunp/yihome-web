@@ -1,30 +1,20 @@
 <template>
 	<section id="applyHouse"  v-loading.fullscreen.lock="fullscreenLoading">
 		<b-container class="applyWrapper">
-			<el-form :model="ruleForm" ref="ruleForm" class="apply-ruleForm" label-position="top">
+			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="apply-ruleForm" label-position="top">
 				<!-- :rules="rules" -->
 				<el-collapse v-model="activeNames">
 					<el-collapse-item title="个人信息" name="1">
 						<!--个人信息填写-->
 						<b-row>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="姓名（中文）" prop="namech">
-									<el-input v-model="ruleForm.namech" placeholder="请输入个人中文姓名" clearable></el-input>
+								<el-form-item label="姓名（中文）" prop="nameCh">
+									<el-input v-model="ruleForm.nameCh" placeholder="请输入个人中文姓名" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="姓名（拼音：以护照信息为准）" prop="namem">
-									<el-input v-model="ruleForm.namem" placeholder="请输入个人英文姓名" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国内联系电话" prop="personphone">
-									<el-input v-model="ruleForm.personphone" placeholder="请输入国内联系电话" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国外联系电话" prop="phoneo">
-									<el-input v-model="ruleForm.phoneo" placeholder="请输入国外联系电话" clearable></el-input>
+								<el-form-item label="姓名（如中文名为“李明”请输入“Ming Li”）" prop="nameEn">
+									<el-input v-model="ruleForm.nameEn" placeholder="请输入个人英文姓名" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
@@ -36,80 +26,106 @@
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="出生日期" prop="birthday">
-									<el-date-picker v-model="ruleForm.birthday" type="date" :editable="false" placeholder="请选择出生日期" value-format="yyyy-MM-dd"
-									 clearable style="width: 100%;"></el-date-picker>
+								<el-form-item label="国内手机号" prop="phone">
+									<el-input v-model="ruleForm.phone" placeholder="请输入国内手机号" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="常用邮箱" prop="uemail">
+								<el-form-item label="出生日期" prop="birthday">
+									<el-date-picker v-model="ruleForm.birthday" type="date" :editable="false" placeholder="请选择出生日期" value-format="yyyy-MM-dd"
+													clearable style="width: 100%;"></el-date-picker>
+								</el-form-item>
+							</b-col>
+							<b-col md="6" sm="12" lg="6">
+								<el-form-item label="邮箱" prop="uemail">
 									<el-input v-model="ruleForm.uemail" placeholder="请输入个人常用邮箱" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="护照号" prop="passport">
-									<el-input v-model="ruleForm.passport" placeholder="请输入护照号" clearable></el-input>
+								<el-form-item label="护照号码" prop="passport">
+									<el-input v-model="ruleForm.passport" placeholder="请输入护照号码" clearable></el-input>
+								</el-form-item>
+							</b-col>
+						</b-row>
+
+					</el-collapse-item>
+
+					<el-collapse-item title="家庭信息" name="2">
+						<b-row>
+							<b-col md="6" sm="12" lg="6">
+								<el-form-item label="国内家庭住址（中文）" prop="addressich">
+									<el-input v-model="ruleForm.addressich" placeholder="请输入国内家庭住址(中文)" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国籍" prop="nationality">
-									<el-input v-model="ruleForm.nationality" placeholder="请输入国籍" clearable></el-input>
+								<el-form-item label="国内家庭住址（英文）" prop="addressien">
+									<el-input v-model="ruleForm.addressien" placeholder="请输入国内家庭住址(英文)" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="微信号" prop="remarks">
-									<el-input v-model="ruleForm.remarks" placeholder="请输入个人微信号" clearable></el-input>
+								<el-form-item label="城市" prop="city">
+									<el-input v-model="ruleForm.city" placeholder="请输入城市" clearable></el-input>
 								</el-form-item>
 							</b-col>
-							
+						</b-row>
+					</el-collapse-item>
+
+					<el-collapse-item title="担保人/紧急联系人信息" name="3">
+						<b-row>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="目前就读年级" prop="grade">
-									<el-select v-model="ruleForm.grade" placeholder="请选择" clearable style="width: 100%;">
-										<el-option label="1" value="1"></el-option>
-										<el-option label="2" value="2"></el-option>
-										<el-option label="3" value="3"></el-option>
-										<el-option label="4" value="4"></el-option>
+								<el-form-item label="担保人(紧急联系人)姓名" prop="guaranteeName">
+									<el-input v-model="ruleForm.guaranteeName" placeholder="请输入担保人(紧急联系人)姓名" clearable></el-input>
+								</el-form-item>
+							</b-col>
+							<b-col md="6" sm="12" lg="6">
+								<el-form-item label="与担保人(紧急联系人)的关系" prop="guaranteeRelation">
+									<el-select v-model="ruleForm.guaranteeRelation" placeholder="请选择与担保人(紧急联系人)的关系" clearable style="width: 100%;">
+										<el-option label="父亲" value="父亲"></el-option>
+										<el-option label="母亲" value="母亲"></el-option>
+										<el-option label="其他" value="其他"></el-option>
 									</el-select>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="学年制" prop="gradeyear">
-									<el-select v-model="ruleForm.gradeyear" placeholder="请选择" clearable style="width: 100%;">
-										<el-option label="1" value="1"></el-option>
-										<el-option label="2" value="2"></el-option>
-										<el-option label="3" value="3"></el-option>
-										<el-option label="4" value="4"></el-option>
+								<el-form-item label="性别" prop="guaranteeSex">
+									<el-select v-model="ruleForm.guaranteeSex" placeholder="请选择性别" clearable style="width: 100%;">
+										<el-option label="男" value="Male"></el-option>
+										<el-option label="女" value="Female"></el-option>
 									</el-select>
 								</el-form-item>
 							</b-col>
-							
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="就读专业(中文)" prop="disciplinech">
-									<el-input v-model="ruleForm.disciplinech" placeholder="请输入就读专业" clearable></el-input>
+								<el-form-item label="担保人(紧急联系人)生日日期" prop="guaranteeBirthday">
+									<el-date-picker v-model="ruleForm.guaranteeBirthday" type="date" :editable="false" placeholder="请选择担保人(紧急联系人)生日日期" value-format="yyyy-MM-dd"
+													clearable style="width: 100%;"></el-date-picker>
+								</el-form-item>
+							</b-col>
+
+							<b-col md="6" sm="12" lg="6">
+								<el-form-item label="手机号" prop="guaranteePhone">
+									<el-input v-model="ruleForm.guaranteePhone" placeholder="请输入担保人(紧急联系人)手机号" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="就读专业(英文)" prop="disciplineen">
-									<el-input v-model="ruleForm.disciplineen" placeholder="请输入就读专业" clearable></el-input>
+								<el-form-item label="邮箱" prop="guaranteeEmail">
+									<el-input v-model="ruleForm.guaranteeEmail" placeholder="请输入担保人(紧急联系人)邮箱" clearable></el-input>
+								</el-form-item>
+							</b-col>
+						</b-row>
+					</el-collapse-item>
+
+					<el-collapse-item title="留学学校信息" name="4">
+						<b-row>
+							<b-col md="6" sm="12" lg="6">
+								<el-form-item label="留学城市" prop="address">
+									<el-input v-model="ruleForm.address" placeholder="请输入留学城市" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="校区(英文)" prop="campus">
-									<el-input v-model="ruleForm.campus" placeholder="请输入校区" clearable></el-input>
+								<el-form-item label="留学学校（英文）" prop="abroadschoolen">
+									<el-input v-model="ruleForm.abroadschoolen" placeholder="请输入留学学校(英文)" clearable></el-input>
 								</el-form-item>
 							</b-col>
-							
-							
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="是否全日制" prop="allday">
-									<el-select v-model="ruleForm.allday" placeholder="请选择" clearable style="width: 100%;">
-										<el-option label="是" value="Yes"></el-option>
-										<el-option label="否" value="No"></el-option>
-									</el-select>
-								</el-form-item>
-							</b-col>
-							
-							
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="就读课程" prop="course">
 									<el-select v-model="ruleForm.course" placeholder="请选择就读课程" clearable style="width: 100%;">
@@ -121,120 +137,80 @@
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="留学城市现居地邮编" prop="zipcode">
-									<el-input v-model="ruleForm.zipcode" placeholder="请输入留学城市现居地邮编" clearable></el-input>
+								<el-form-item label="留学年级" prop="grade">
+									<el-select v-model="ruleForm.grade" placeholder="请选择留学年级" clearable style="width: 100%;">
+										<el-option label="1" value="1"></el-option>
+										<el-option label="2" value="2"></el-option>
+										<el-option label="3" value="3"></el-option>
+										<el-option label="4" value="4"></el-option>
+									</el-select>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="留学城市现居地地址 " prop="address">
-									<el-input v-model="ruleForm.address" placeholder="请输入留学城市现居地地址" clearable></el-input>
+								<el-form-item label="留学专业（英文）" prop="disciplineen">
+									<el-input v-model="ruleForm.disciplineen" placeholder="请输入留学专业(英文)" clearable></el-input>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="留学学校(中文)" prop="abroadschoolch">
-									<el-input v-model="ruleForm.abroadschoolch" placeholder="请输入留学学校(中文)" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="留学学校(英文)" prop="abroadschoolen">
-									<el-input v-model="ruleForm.abroadschoolen" placeholder="请输入留学学校(英文)" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国内城市现居地邮编" prop="izipcode">
-									<el-input v-model="ruleForm.izipcode" placeholder="请输入国内城市现居地邮编" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国内固定地址（中文）" prop="addressich">
-									<el-input v-model="ruleForm.addressich" placeholder="请输入国内固定地址（中文）" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="国内固定地址（英文）" prop="addressien">
-									<el-input v-model="ruleForm.addressien" placeholder="请输入国内固定地址（英文）" clearable></el-input>
+								<el-form-item label="学年制" prop="gradeyear">
+									<el-select v-model="ruleForm.gradeyear" placeholder="请选择学年制" clearable style="width: 100%;">
+										<el-option label="1" value="1"></el-option>
+										<el-option label="2" value="2"></el-option>
+										<el-option label="3" value="3"></el-option>
+										<el-option label="4" value="4"></el-option>
+									</el-select>
 								</el-form-item>
 							</b-col>
 						</b-row>
 
 					</el-collapse-item>
-					<el-collapse-item title="担保人/紧急联系人信息" name="2">
+
+					<el-collapse-item title="申请公寓信息" name="2">
 						<b-row>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="担保人(紧急联系人)姓名" prop="pnamech">
-									<el-input v-model="ruleForm.pnamech" placeholder="请输入担保人(紧急联系人)姓名" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="与担保人(紧急联系人)的关系" prop="relation">
-									<el-select v-model="ruleForm.relation" placeholder="请选择与担保人(紧急联系人)的关系" clearable style="width: 100%;">
-										<el-option label="父亲" value="Father"></el-option>
-										<el-option label="母亲" value="Mother"></el-option>
-										<el-option label="其他" value="Other"></el-option>
+								<el-form-item label="付款周期（分期付/全额付）" prop="payPeriod">
+									<el-select v-model="ruleForm.payPeriod" placeholder="请选择付款周期(分期付/全额付)" clearable style="width: 100%;">
+										<el-option label="分期" value="1"></el-option>
+										<el-option label="全款" value="2"></el-option>
 									</el-select>
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="联系电话" prop="pphone">
-									<el-input v-model="ruleForm.pphone" placeholder="请输入担保人(紧急联系人)电话" clearable></el-input>
+								<el-form-item label="付款方式（银行转帐/信用卡）" prop="payType">
+									<el-select v-model="ruleForm.payType" placeholder="请选择付款方式(银行转帐/信用卡)" clearable style="width: 100%;">
+										<el-option label="银行转帐" value="1"></el-option>
+										<el-option label="信用卡" value="2"></el-option>
+									</el-select>
 								</el-form-item>
 							</b-col>
+							<p>偏好需求（如果有特殊订房需求，请在这里告诉我们）</p>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="邮箱" prop="pemail">
-									<el-input v-model="ruleForm.pemail" placeholder="请输入担保人(紧急联系人)邮箱" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="城市" prop="pcity">
-									<el-input v-model="ruleForm.pcity" placeholder="请输入担保人(紧急联系人)城市" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="联系地址(中文)" prop="paddressch">
-									<el-input v-model="ruleForm.paddressch" placeholder="请输入担保人(紧急联系人)联系地址" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="联系地址(英文)" prop="paddressen">
-									<el-input v-model="ruleForm.paddressen" placeholder="请输入担保人(紧急联系人)联系地址" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="邮编" prop="pzipcode">
-									<el-input v-model="ruleForm.pzipcode" placeholder="请输入担保人(紧急联系人)所在地址邮编" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="职业(中文)" prop="professionch">
-									<el-input v-model="ruleForm.professionch" placeholder="请输入担保人(紧急联系人)职业" clearable></el-input>
-								</el-form-item>
-							</b-col>
-							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="职业(英文)" prop="professionen">
-									<el-input v-model="ruleForm.professionen" placeholder="请输入担保人(紧急联系人)职业" clearable></el-input>
+								<el-form-item label="">
+									<vue-ueditor-wrap v-model="addRoomForm.remark" :config="myConfig" :key="788"></vue-ueditor-wrap>
 								</el-form-item>
 							</b-col>
 						</b-row>
 					</el-collapse-item>
-					<el-collapse-item title="证件信息" name="3">
+
+					<el-collapse-item title="证件信息" name="5">
 						<b-row>
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="请上传护照信息页照片" prop="passportimg">
 									<el-upload
-										class="avatar-uploader"
-										:action="actionUrl"
-										:show-file-list="false"
-										:on-success="handleAvatarSuccess"
-										:on-error="handleAvatarError"
-										:before-upload="beforeAvatarUpload">
-										
+											class="avatar-uploader"
+											:action="actionUrl"
+											:show-file-list="false"
+											:on-success="handleAvatarSuccess"
+											:on-error="handleAvatarError"
+											:before-upload="beforeAvatarUpload">
+
 										<div v-if="ruleForm.passportimg">
 											<img v-if="ruleForm.passportimg.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg" class="avatar">
 											<img v-else :src="currentUrl+ruleForm.passportimg.split(',')[0]" class="avatar">
 										</div>
 										<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-										
-										
+
+
 									</el-upload>
 									<div class="el-upload__tip">请上传png、jpg、bmp及jpeg格式图片或者pdf格式文件</div>
 								</el-form-item>
@@ -242,12 +218,12 @@
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="请上传学生签证pdf文件" prop="cardimga">
 									<el-upload
-										class="avatar-uploader"
-										:action="actionUrl"
-										:show-file-list="false"
-										:on-success="handleAvatarSuccess2"
-										:on-error="handleAvatarError2"
-										:before-upload="beforeAvatarUpload2">
+											class="avatar-uploader"
+											:action="actionUrl"
+											:show-file-list="false"
+											:on-success="handleAvatarSuccess2"
+											:on-error="handleAvatarError2"
+											:before-upload="beforeAvatarUpload2">
 										<div v-if="ruleForm.cardimga">
 											<img v-if="ruleForm.cardimga.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg" class="avatar">
 											<img v-else :src="currentUrl+ruleForm.cardimga.split(',')[0]" class="avatar">
@@ -260,19 +236,19 @@
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="请上传录取证明（offer/coe/cas/学生卡照片）" prop="cardimgb">
 									<el-upload
-										class="avatar-uploader"
-										:action="actionUrl"
-										:show-file-list="false"
-										:on-success="handleAvatarSuccess3"
-										:on-error="handleAvatarError3"
-										:before-upload="beforeAvatarUpload3">
-										
+											class="avatar-uploader"
+											:action="actionUrl"
+											:show-file-list="false"
+											:on-success="handleAvatarSuccess3"
+											:on-error="handleAvatarError3"
+											:before-upload="beforeAvatarUpload3">
+
 										<div v-if="ruleForm.cardimgb">
 											<img v-if="ruleForm.cardimgb.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg" class="avatar">
 											<img v-else :src="currentUrl+ruleForm.cardimgb.split(',')[0]" class="avatar">
 										</div>
 										<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-										
+
 									</el-upload>
 									<div class="el-upload__tip">请上传png、jpg、bmp及jpeg格式图片或者pdf格式文件</div>
 								</el-form-item>
@@ -304,15 +280,122 @@
 				buttonStatus: false,
 				activeNames: ['1', '2', '3'],
 				ruleForm: {
-					namech:'',namem:'',personphone:'',phoneo:'', sex:'', birthday:'', uemail:'', passport:'', nationality:'', 
-					remarks:'', grade:'', gradeyear:'', disciplinech:'', disciplineen:'',
-					campus:'', allday:'', course:'', zipcode:'', address:'', abroadschoolch:'', abroadschoolen:'',
-					izipcode:'', addressich:'', addressien:'',
-					pnamech:'', prelation:'',  pphone:'',  pemail:'',  pcity:'', paddressch:'', 
-					paddressen:'', pzipcode:'',  professionch:'', professionen:'',
-					passportimg:'',
-					cardimga:'',
-					cardimgb:''
+					// users: {
+						owner:"1",
+						nameCh:"姓名（中文）",
+						nameEn:"姓名（如中文名为“李明”请输入“Ming Li”）",
+						phone:"19901708693",
+						sex:"男",
+						birthday:"2020-08-26",
+						uemail:"123@123.com",
+						passport:"19901708693",
+						addressich:"国内家庭住址（中文）",
+						addressien:"国内家庭住址（英文）",
+						city:"家庭信息城市",
+						pname:"担保人(紧急联系人)姓名",
+						prelation:"父亲",
+						pbirthday:"2020-08-25",
+						psex:"男",
+						pphone:"15538535392",
+						pemail:"15538535392@163.com",
+						address:"留学城市",
+						abroadschoolen:"留学学校（英文）",
+						grade:"1",
+						course:"预科",
+						disciplineen:"留学专业（英文）",
+						gradeyear:"2",
+						payPeriod:"1",
+						payType:"1",
+						remark:"remark",
+					// },
+					// usersGuarantee: {
+						// name:"担保人(紧急联系人)姓名",
+						// relation:"父亲",
+						// phone:"15538535392",
+						// email:"15538535392@163.com",
+						// birthday:"2020-08-25",
+						// sex:"男",
+						guaranteeName:"担保人(紧急联系人)姓名",
+						guaranteeRelation:"父亲",
+						guaranteePhone:"15538535392",
+						guaranteeEmail:"15538535392@163.com",
+						guaranteeBirthday:"2020-08-25",
+						guaranteeSex:"男"
+					// }
+				},
+				rules: {
+					nameCh: [
+						{ required: true, message: '请输入个人中文姓名', trigger: 'blur' }
+					],
+					nameEn: [
+						{ required: true, message: '请输入个人英文姓名', trigger: 'blur' }
+					],
+					sex: [
+						{ required: true, message: '请输入活动名称', trigger: 'blur' }
+					],
+					phone: [
+						{ required: true, message: '请输入国内手机号', trigger: 'blur' }
+					],
+					birthday: [
+						{ required: true, message: '请选择出生日期', trigger: 'blur' }
+					],
+					uemail: [
+						{ required: true, message: '请输入个人常用邮箱', trigger: 'blur' }
+					],
+					passport: [
+						{ required: true, message: '请输入护照号码', trigger: 'blur' }
+					],
+					addressich: [
+						{ required: true, message: '请输入国内家庭住址(中文)', trigger: 'blur' }
+					],
+					addressien: [
+						{ required: true, message: '请输入国内家庭住址(英文)', trigger: 'blur' }
+					],
+					city: [
+						{ required: true, message: '请输入城市', trigger: 'blur' }
+					],
+					address: [
+						{ required: true, message: '请输入留学城市', trigger: 'blur' }
+					],
+					abroadschoolen: [
+						{ required: true, message: '请输入留学学校(英文)', trigger: 'blur' }
+					],
+					course: [
+						{ required: true, message: '请选择就读课程', trigger: 'blur' }
+					],
+					grade: [
+						{ required: true, message: '请选择留学年级', trigger: 'blur' }
+					],
+					disciplineen: [
+						{ required: true, message: '请输入留学专业(英文)', trigger: 'blur' }
+					],
+					gradeyear: [
+						{ required: true, message: '请选择学年制', trigger: 'blur' }
+					],
+					guaranteeName: [
+						{ required: true, message: '请输入担保人(紧急联系人)姓名', trigger: 'blur' }
+					],
+					guaranteeRelation: [
+						{ required: true, message: '请选择与担保人(紧急联系人)的关系', trigger: 'blur' }
+					],
+					guaranteeSex: [
+						{ required: true, message: '请选择性别', trigger: 'blur' }
+					],
+					guaranteeBirthday: [
+						{ required: true, message: '请选择担保人(紧急联系人)生日日期', trigger: 'blur' }
+					],
+					guaranteePhone: [
+						{ required: true, message: '请输入担保人(紧急联系人)手机号', trigger: 'blur' }
+					],
+					guaranteeEmail: [
+						{ required: true, message: '请输入担保人(紧急联系人)邮箱', trigger: 'blur' }
+					],
+					payPeriod: [
+						{ required: true, message: '请选择付款周期(分期付/全额付)', trigger: 'blur' }
+					],
+					payType: [
+						{ required: true, message: '请选择付款方式(银行转帐/信用卡)', trigger: 'blur' }
+					]
 				}
 			}
 		},
@@ -327,7 +410,7 @@
 					this.currentUrl = 'http://www.inyihome.com:10045';
 				}
 			}
-			this.getUserInfo();
+			// this.getUserInfo();
 		},
 		methods: {
 			beforeAvatarUpload(file){
@@ -337,7 +420,7 @@
 				const isaccept4 = file.type.toLowerCase() === 'image/bmp';
 				const isaccept5 = file.type.toLowerCase() === 'application/pdf';
 				const isLt2M 	= file.size / 1024 / 1024 < 20;
-				
+
 				if (!isaccept && !isaccept2 && !isaccept3 && !isaccept4 && !isaccept5) {
 					this.$message.error('请上传png、jpg、bmp、jpeg格式图片或者PDF格式文件');
 					return false;
@@ -368,7 +451,7 @@
 			beforeAvatarUpload2(file){
 				const isaccept = file.type.toLowerCase() === 'application/pdf';
 				const isLt2M 	= file.size / 1024 / 1024 < 20;
-				
+
 				if (!isaccept) {
 					this.$message.error('请上传PDF格式文件');
 					return false;
@@ -396,10 +479,10 @@
 				this.$message.error('文件上传失败');
 				this.ruleForm.cardimga = '';
 			},
-			
-			
-			
-			
+
+
+
+
 			beforeAvatarUpload3(file){
 				const isaccept 	= file.type.toLowerCase() === 'image/jpeg';
 				const isaccept2 = file.type.toLowerCase() === 'image/jpg';
@@ -407,7 +490,7 @@
 				const isaccept4 = file.type.toLowerCase() === 'image/bmp';
 				const isaccept5 = file.type.toLowerCase() === 'application/pdf';
 				const isLt2M 	= file.size / 1024 / 1024 < 20;
-				
+
 				if (!isaccept && !isaccept2 && !isaccept3 && !isaccept4 && !isaccept5) {
 					this.$message.error('请上传png、jpg、bmp、jpeg格式图片或者PDF格式文件');
 					return false;
@@ -448,18 +531,28 @@
 				}
 			},
 			dataSubmit() {
-				let parmasData = this.ruleForm;
-				this.$request.saveuserInfo(parmasData).then(res => {
-					console.log(res)
-					if(res){
-						this.$router.go();
-						//$("html,body").animate({ scrollTop: 10 }, 500);
-					}else{
-						
+				this.$refs.ruleForm.validate((valid) => {
+					let parmasData = this.ruleForm;
+					console.log('valid', valid)
+					if (valid) {
+						alert('submit!');
+						// this.$request.saveuserInfo(parmasData).then(res => {
+						// 	console.log(res)
+						// 	if(res){
+						// 		this.$router.go();
+						// 		//$("html,body").animate({ scrollTop: 10 }, 500);
+						// 	}else{
+						//
+						// 	}
+						// }).catch(e => {
+						// 	this.$message.error('网络错误，数据提交失败');
+						// })
+					} else {
+						console.log('error submit!!');
+						return false;
 					}
-				}).catch(e => {
-					this.$message.error('网络错误，数据提交失败');
-				})
+				});
+
 			}
 		}
 	}
@@ -574,3 +667,110 @@
 
 	}
 </style>
+<!--<template>-->
+<!--<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->
+<!--	<el-form-item label="活动名称" prop="name">-->
+<!--		<el-input v-model="ruleForm.name"></el-input>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="活动区域" prop="region">-->
+<!--		<el-select v-model="ruleForm.region" placeholder="请选择活动区域">-->
+<!--			<el-option label="区域一" value="shanghai"></el-option>-->
+<!--			<el-option label="区域二" value="beijing"></el-option>-->
+<!--		</el-select>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="活动时间" required>-->
+<!--		<el-col :span="11">-->
+<!--			<el-form-item prop="date1">-->
+<!--				<el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>-->
+<!--			</el-form-item>-->
+<!--		</el-col>-->
+<!--		<el-col class="line" :span="2">-</el-col>-->
+<!--		<el-col :span="11">-->
+<!--			<el-form-item prop="date2">-->
+<!--				<el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>-->
+<!--			</el-form-item>-->
+<!--		</el-col>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="即时配送" prop="delivery">-->
+<!--		<el-switch v-model="ruleForm.delivery"></el-switch>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="活动性质" prop="type">-->
+<!--		<el-checkbox-group v-model="ruleForm.type">-->
+<!--			<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>-->
+<!--			<el-checkbox label="地推活动" name="type"></el-checkbox>-->
+<!--			<el-checkbox label="线下主题活动" name="type"></el-checkbox>-->
+<!--			<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>-->
+<!--		</el-checkbox-group>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="特殊资源" prop="resource">-->
+<!--		<el-radio-group v-model="ruleForm.resource">-->
+<!--			<el-radio label="线上品牌商赞助"></el-radio>-->
+<!--			<el-radio label="线下场地免费"></el-radio>-->
+<!--		</el-radio-group>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item label="活动形式" prop="desc">-->
+<!--		<el-input type="textarea" v-model="ruleForm.desc"></el-input>-->
+<!--	</el-form-item>-->
+<!--	<el-form-item>-->
+<!--		<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>-->
+<!--		<el-button @click="resetForm('ruleForm')">重置</el-button>-->
+<!--	</el-form-item>-->
+<!--</el-form>-->
+<!--</template>-->
+<!--<script>-->
+<!--	export default {-->
+<!--		data() {-->
+<!--			return {-->
+<!--				ruleForm: {-->
+<!--					name: '',-->
+<!--					region: '',-->
+<!--					date1: '',-->
+<!--					date2: '',-->
+<!--					delivery: false,-->
+<!--					type: [],-->
+<!--					resource: '',-->
+<!--					desc: ''-->
+<!--				},-->
+<!--				rules: {-->
+<!--					name: [-->
+<!--						{ required: true, message: '请输入活动名称', trigger: 'blur' },-->
+<!--						{ min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }-->
+<!--					],-->
+<!--					region: [-->
+<!--						{ required: true, message: '请选择活动区域', trigger: 'change' }-->
+<!--					],-->
+<!--					date1: [-->
+<!--						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }-->
+<!--					],-->
+<!--					date2: [-->
+<!--						{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }-->
+<!--					],-->
+<!--					type: [-->
+<!--						{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }-->
+<!--					],-->
+<!--					resource: [-->
+<!--						{ required: true, message: '请选择活动资源', trigger: 'change' }-->
+<!--					],-->
+<!--					desc: [-->
+<!--						{ required: true, message: '请填写活动形式', trigger: 'blur' }-->
+<!--					]-->
+<!--				}-->
+<!--			};-->
+<!--		},-->
+<!--		methods: {-->
+<!--			submitForm(formName) {-->
+<!--				this.$refs[formName].validate((valid) => {-->
+<!--					if (valid) {-->
+<!--						alert('submit!');-->
+<!--					} else {-->
+<!--						console.log('error submit!!');-->
+<!--						return false;-->
+<!--					}-->
+<!--				});-->
+<!--			},-->
+<!--			resetForm(formName) {-->
+<!--				this.$refs[formName].resetFields();-->
+<!--			}-->
+<!--		}-->
+<!--	}-->
+<!--</script>-->

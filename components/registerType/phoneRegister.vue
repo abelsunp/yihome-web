@@ -31,9 +31,6 @@
 								</el-form-item>
 							</el-col>
 						</el-form-item>
-						<el-form-item  prop="password">
-							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
-						</el-form-item>
 						<el-form-item  prop="code">
 							<div style="width: 66%;display: inline-block;">
 								<el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-mobile-phone"></el-input>
@@ -44,6 +41,10 @@
 							<!-- <div class="send_code"  v-if="sendMsgDisabled" >{{time+'s'}}</div>
 							<div class="send_code" v-if="!sendMsgDisabled" @click="sendCode()">获取验证码</div> -->
 						</el-form-item>
+						<el-form-item  prop="password">
+							<el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="el-icon-lock" show-password></el-input>
+						</el-form-item>
+
 <!--						<el-form-item  prop="remarks">-->
 <!--							<el-input v-model="ruleForm.remarks" placeholder="请输入微信号方便帮您选房" prefix-icon="el-icon-chat-line-round" clearable></el-input>-->
 <!--						</el-form-item>-->
@@ -55,15 +56,15 @@
 						<el-form-item style="margin-bottom: 6px;">
 							<p>已有账号? <nuxt-link to="/login">直接登录</nuxt-link></p>
 						</el-form-item>
-						<el-form-item class="loginType">
-							<div class="sigma-middle-line">
-								<span class="sigma-line-text">其他注册方式</span>
-							</div>
-						</el-form-item>
-						<el-form-item class="usePhoneLogin">
-							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">
-							<p>邮箱注册</p>
-						</el-form-item>
+<!--						<el-form-item class="loginType">-->
+<!--							<div class="sigma-middle-line">-->
+<!--								<span class="sigma-line-text">其他注册方式</span>-->
+<!--							</div>-->
+<!--						</el-form-item>-->
+<!--						<el-form-item class="usePhoneLogin">-->
+<!--							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">-->
+<!--							<p>邮箱注册</p>-->
+<!--						</el-form-item>-->
 					</el-form>
 				</div>
 			</b-col>
@@ -181,13 +182,13 @@
 				this.$emit("on-result-change",'toemail')
 			},
 			sendCode(){//获取验证码
-				if(this.ruleForm.email==""){
-					this.$refs.ruleForm.validateField('email');
-					return;
-				}else{
-					var ParmasData={
-						account:this.ruleForm.email,
-						type:"register",
+							if(this.ruleForm.email==""){
+								this.$refs.ruleForm.validateField('email');
+								return;
+							}else{
+								var ParmasData={
+									phone:this.ruleForm.email,
+									// type:"register",
 					}
 					this.$request.sandcode(ParmasData).then(res=>{
 						if(res.status){
@@ -277,9 +278,14 @@
 				})
 			},
 			userLoginFun(){
-				this.$request.register({'account':this.ruleForm.email,'password':this.ruleForm.password,'code':this.ruleForm.code,'remarks':this.ruleForm.remarks}).then(res=>{
+				this.$request.register(
+						{
+							'phone':this.ruleForm.email,
+							'pwd':this.ruleForm.password,
+							'code':this.ruleForm.code,
+						}).then(res=>{
 					this.loadingStatus = false;
-					if(res.status){
+					if(res.code === 200){
 						this.$router.push({path:'/login'});
 						window._agl && window._agl.push(['track', ['success', {t: 3}]])
 						return;

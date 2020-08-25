@@ -1,7 +1,7 @@
 <template>
     <section>
         <forget-phone v-if="currentStatus=='tophone'"  @on-result-change="onResultChange"></forget-phone>
-        <forget-email v-else  @on-result-change="onResultChange"></forget-email>
+<!--        <forget-email v-else  @on-result-change="onResultChange"></forget-email>-->
     </section>
 </template>
 

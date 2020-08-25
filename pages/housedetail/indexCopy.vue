@@ -1,139 +1,36 @@
 <template>
-	<section class="house-cont" v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
-		<b-container class="house-cont-detail" style="margin-top: 20px;">
-			<div class="house-cont-detail-left">
-				<div v-if="1==3" class="top-main-box">
-					<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
-						<div style="position: absolute;top: 10px;right: 10px;z-index: 999;">
-							<div @click="delcollect" v-if="iscollect" style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
-								<Icon style="font-size: 16px;color: red;margin-right: 7px;" type="md-heart" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">已收藏</p>
+	<section v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
+		<b-container style="margin-top: 20px;">
+			<div class="top-main-box">
+				<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
+					<div style="position: absolute;top: 10px;right: 10px;z-index: 999;">
+						<div @click="delcollect" v-if="iscollect" style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
+							<Icon style="font-size: 16px;color: red;margin-right: 7px;" type="md-heart" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">已收藏</p>
 							</div>
-							<div @click="collect" v-else style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
-								<Icon style="font-size: 16px;margin-right: 7px;" type="md-heart-outline" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">收藏</p>
-							</div>
+						<div @click="collect" v-else style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
+							<Icon style="font-size: 16px;margin-right: 7px;" type="md-heart-outline" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">收藏</p>
 						</div>
-						<slide-img :img-wrapper='userCheckUrl' :img-video='userCheckUrl2'></slide-img>
 					</div>
-
+					<slide-img :img-wrapper='userCheckUrl' :img-video='userCheckUrl2'></slide-img>
 				</div>
-				<div style="width: 727px;">
-					<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
-						<h1 class="inforTitle">房源概括</h1>
-						<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;"></div>
-
-						<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>
-						<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>
-					</div>
-					<div :id="'houseManagement?houseid='+fullPath">
-						<h1 class="inforTitle">房间管理</h1>
-						<!-- 当前所有的房间类型 -->
-						<div>
-							<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
-							<el-tooltip v-for="(item,$ii) in roomlist" :key="$ii" v-if="$ii < 5" class="item" effect="dark" :content="item.remark" placement="top"
-										@click.native="chooseHouseType(item.id)">
-								<el-button>{{item.name}}</el-button>
-							</el-tooltip>
-
-							<!-- 房间显示 -->
-							<ul class="roomListWrapper">
-								<li v-for="(item,$$index) in houseRoome" :key="$$index">
-									<template>
-										<div class="top">
-											<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
-												<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
-												<img :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
-											</div>
-											<div class="content">
-												<h1>{{item.room.name}}</h1>
-												<p class="center">
-													<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
-													<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
-												</p>
-												<div>更多详情</div>
-											</div>
-
-										</div>
-										<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
-										<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
-										<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
-										<div class="zuqi-right">
-											<div class="zuqi-right-money"><span class="zuqi-right-money-symble">{{val.rent}}</span><span>/{{val.leaseType | filterLeaseType}}</span></div>
-											<div class="zuqi-right-btn">申请-{{val.leaseType}}</div>
-										</div>
-									</div>
-									</template>
-									<!-- 如果 房间单间状态 rentstatus   182 代表上架中  非182代表已经售罄 -->
-<!--									<div v-else>-->
-<!--										<p style="text-align: center;padding: 20px;">该房间已租罄</p>-->
-<!--									</div>-->
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div :id="'houseSetting?houseid='+fullPath" class="houseSetting">
-						<h1 class="inforTitle">设施保障</h1>
-						<div class="housefacility">
-							<p class="housefacilityTitle">配套设施</p>
-							<ul>
-								<li v-for="listItem in userCheckLabel1">
-									<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
-									<p>{{listItem.labelDetalName}}</p>
-								</li>
-							</ul>
-						</div>
-						<div class="housefacility">
-							<p class="housefacilityTitle">安全保障</p>
-							<ul>
-								<li v-for="listItem in userCheckLabel2">
-									<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
-									<p>{{listItem.labelDetalName}}</p>
-								</li>
-							</ul>
-						</div>
-						<div class="housefacility">
-							<p class="housefacilityTitle">房源标签</p>
-							<ul style="padding-left: 40px;">
-								<li style="width: auto" v-for="listItem in userCheckLabel3">
-									<!--								<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>-->
-									<span class="tag" :style="{'background-color':'rgb(121, 137, 248)'}">{{listItem.labelDetalName}}</span>
-								</li>
-							</ul>
-						</div>
-
-					</div>
-				</div>
-			</div>
-			<div class="house-cont-detail-right">
 				<div class="house-message" ref="houseMessage">
-					<div class="message-wrapper">
+					<div class="message-wrapper" :class="status?'fixed':''">
 						<div class="message-top">
 							<h1 class="title">{{houseInfo.name}}</h1>
 							<p class="num">Property No.:{{houseInfo.no}}</p>
 							<p class="address">地址：{{houseInfo.address}}</p>
 							<p class="school">附近学校：<span v-for="item in schoolCheckLabel" :key="item.id"> {{item.name}} | </span></p>
-						</div>
-						<div class="message-label">
-							<h2 class="message-label-title">配套设施</h2>
-							<div class="message-label-cont">
-								<div class="message-label-cont-item" v-for="listItem in userCheckLabel1">
-									<img :src="yihomeGlobalVariable+listItem.img" alt="">
-									<span>{{listItem.labelDetalName}}</span>
-								</div>
-							</div>
-						</div>
-						<div class="message-label">
-							<h2 class="message-label-title">安全保障</h2>
-							<div class="message-label-cont">
-								<div class="message-label-cont-item" v-for="listItem in userCheckLabel2">
-									<img :src="yihomeGlobalVariable+listItem.img" alt="">
-									<span>{{listItem.labelDetalName}}</span>
-								</div>
-							</div>
+<!--							<p class="roomTag"><span v-for="item in userCheckLabel1" :style="{'background-color':item.color}">{{item.labelDetalName}}</span></p>-->
+							<p class="roomTag"><span v-for="item in userCheckLabel3" :style="{'background-color':'rgb(121, 137, 248)'}">{{item.labelDetalName}}</span></p>
 						</div>
 
-						<div class="message-label">
-							<h2 class="message-label-title">退改政策</h2>
-							<div class="message-label-html" v-html="houseInfoTuigai.info"></div>
+						<div class="ad clearfix">
+							<h1>年轻人，“拼”决定了你的生活质量</h1>
+							<div class="countMain">
+								<p>活动期间，提交英美澳租房拼团订单，最高可返佣2500元</p>
+								<div class="helpticketsW" style="text-align: right;margin-top: 10px;display:inline-block;padding: 7px 15px;border-radius: 4px;background-color: #FF5C64;"><a href="/helptickets?act=2" target="_blank" style="color: #fff;">立即参与</a></div>
+							</div>
+							<!-- <count-down class="time"></count-down> -->
 						</div>
 
 						<!-- 拨打电话免费咨询 -->
@@ -153,6 +50,152 @@
 				</div>
 			</div>
 
+			<div class="main">
+				<Anchor class="AnchorStyle" :scroll-offset="70">
+					<AnchorLink :href="'#houseIntroduce?houseid='+fullPath" title="房源概括" />
+					<AnchorLink :href="'#houseManagement?houseid='+fullPath" title="房间管理" />
+					<AnchorLink :href="'#houseSetting?houseid='+fullPath" title="设施保障" />
+					<!-- <AnchorLink :href="'#houseTraffic?houseid='+fullPath" title="周边交通" /> -->
+					<AnchorLink :href="'#houseNotice?houseid='+fullPath" title="住房租房须知" />
+					<AnchorLink :href="'#housePeriphery?houseid='+fullPath" title="周边房源" />
+				</Anchor>
+			</div>
+			<div style="width: 727px;">
+				<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
+					<h1 class="inforTitle">房源概括</h1>
+					<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;"></div>
+
+					<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>
+					<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>
+				</div>
+				<div :id="'houseManagement?houseid='+fullPath">
+					<h1 class="inforTitle">房间管理</h1>
+					<!-- 当前所有的房间类型 -->
+					<div>
+						<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
+						<el-tooltip v-for="(item,$ii) in roomlist" :key="$ii" class="item" effect="dark" :content="item.remark" placement="top"
+						 @click.native="chooseHouseType(item.id)">
+							<el-button>{{item.name}}</el-button>
+						</el-tooltip>
+
+						<!-- 房间显示 -->
+						<ul class="roomListWrapper">
+							<li v-for="(item,$$index) in houseRoome" :key="$$index">
+								<div class="top">
+									<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
+										<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
+										<img :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
+									</div>
+									<div class="content">
+										<h1>{{item.room.roomname}}</h1>
+										<p class="center">
+<!--											<span v-if="item.minweek">最短周期：{{item.minweek}}周</span>-->
+<!--											<span>卫浴类型：{{item.weiyu.length > 0 ? item.weiyu[0].labelDetalId | fliterWeiyu : ''}}</span>-->
+											<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
+											<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
+										</p>
+										<div v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
+											租期：{{val.minStartDate}}~{{val.maxStartDate}}
+										</div>
+									</div>
+									<div class="buttonWrap">
+										<!-- <p class="price">{{currencysymbol}}{{item.minrent}}/周</p> -->
+									</div>
+								</div>
+
+								<div class="zuqi" v-for="(val,ind) in item.leaseperiods">
+									{{}}
+
+								</div>
+								<!-- 如果 房间单间状态 rentstatus   182 代表上架中  非182代表已经售罄 -->
+								<div v-if="item.rentstatus=='182'">
+									<el-table :data="item.leaseperiod" stripe style="width: 100%">
+										<el-table-column prop="startdate" label="开始日期">
+											<template slot-scope="scope">
+												<div v-if="scope.row.startdate">
+													{{scope.row.startdate}}
+												</div>
+												<div v-else style="width: 130px;">
+													<el-date-picker v-model="scope.row.startdate?scope.row.customstartdate=scope.row.startdate:scope.row.customstartdate" type="date" value-format="yyyy-MM-dd" placeholder="起租日期" :readonly="scope.row.startdate?true:false">
+													</el-date-picker>
+												</div>
+											</template>
+										</el-table-column>
+										<el-table-column prop="enddate" label="结束日期">
+											<template slot-scope="scope">
+												<div v-if="scope.row.enddate">{{ scope.row.enddate }}</div>
+												<div v-else style="width: 130px;">
+													<el-date-picker  v-model="scope.row.enddate?scope.row.customenddate=scope.row.startdate:scope.row.customenddate" type="date" value-format="yyyy-MM-dd" placeholder="结束日期" :readonly="scope.row.enddate?true:false">
+													</el-date-picker>
+												</div>
+											</template>
+										</el-table-column>
+										<el-table-column prop="rent" label="价格">
+											<template slot-scope="scope">
+												<!-- 如果nowrent不等于0 说明此租期有 优惠价格    等于0说明没有优惠价格 -->
+												<!-- 按天还是按周显示   租期里面的daw   如果daw等于0 显示天  非0显示周 -->
+												<!-- 如果是固定的租期则不显示 起 -->
+												<p style="color: #3B44AC;">
+													<span style="font-weight: bolder;">{{currencysymbol}}{{ parseInt(scope.row.nowrent)==0?scope.row.rent:scope.row.nowrent }}</span> {{scope.row.startdate&&scope.row.enddate?'':'起'}}/{{scope.row.daw=='0'?'天':scope.row.daw=='1'?'周':scope.row.daw==''?'周':'月'}}
+												</p>
+												<p style="color: #999;" v-if="parseInt(scope.row.nowrent)!=0">
+													<del>{{currencysymbol}}{{scope.row.rent}}{{scope.row.startdate&&scope.row.enddate?'':'起'}}/{{scope.row.daw=='0'?'天':scope.row.daw=='1'?'周':scope.row.daw==''?'周':'月'}}</del>
+												</p>
+											</template>
+										</el-table-column>
+										<el-table-column label=""  >
+											<template slot-scope="scope">
+												<!-- 当前租期状态leasestatus  188代表上架中 非188代表售罄 不可预定和咨询 -->
+												<div v-if="scope.row.leasestatus=='188'" style="text-align: center;">
+													<el-button style="background-color: #3B44AC;outline: none;border-color: #3B44AC;" size="mini" type="primary" @click="handleConsultation(item, scope.row)">咨询</el-button>
+													<el-button style="background-color: #F56C6D;outline: none;border-color: #F56C6C;" size="mini" type="danger" @click.navite="handleReserve(item, scope.row)">预定</el-button>
+												</div>
+												<div v-else style="text-align: center;">
+													<el-button size="mini" type="danger" disabled style="background-color: #B2B2B2;border-color: #B2B2B2;">已租罄</el-button>
+												</div>
+											</template>
+										</el-table-column>
+									</el-table>
+								</div>
+								<div v-else>
+									<p style="text-align: center;padding: 20px;">该房间已租罄</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div :id="'houseSetting?houseid='+fullPath" class="houseSetting">
+					<h1 class="inforTitle">设施保障</h1>
+					<div class="housefacility">
+						<p class="housefacilityTitle">配套设施</p>
+						<ul>
+							<li v-for="listItem in userCheckLabel1">
+								<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
+								<p>{{listItem.labelDetalName}}</p>
+							</li>
+						</ul>
+					</div>
+					<div class="housefacility">
+						<p class="housefacilityTitle">安全保障</p>
+						<ul>
+							<li v-for="listItem in userCheckLabel2">
+								<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>
+								<p>{{listItem.labelDetalName}}</p>
+							</li>
+						</ul>
+					</div>
+					<div class="housefacility">
+						<p class="housefacilityTitle">房源标签</p>
+						<ul style="padding-left: 40px;">
+							<li style="width: auto" v-for="listItem in userCheckLabel3">
+<!--								<div><img :src="yihomeGlobalVariable+listItem.img" alt=""></div>-->
+								<span class="tag" :style="{'background-color':'rgb(121, 137, 248)'}">{{listItem.labelDetalName}}</span>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
 		</b-container>
 		<b-container fluid>
 			<div id="map"></div>
@@ -240,7 +283,7 @@
 
 		<!-- 单间预定 -->
 		<el-dialog title="申请人信息" :visible.sync="reserveStatus" :before-close="reserveFormClose" custom-class="reserveWrapper"
-				   :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
+		 :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
 			<el-form :model="reserveForm" :rules="reserveRules" ref="reserveForm" label-position="top">
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="reserveForm.name" autocomplete="off" placeholder="请输入您的姓名"></el-input>
@@ -262,14 +305,14 @@
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
+<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
 				<el-button @click="reserveStatus = false">取消</el-button>
 				<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
 			</div>
 		</el-dialog>
 		<!-- 查看当前单间的图片信息 -->
 		<el-dialog center custom-class="viewSingleRoomWrap" :visible.sync="viewSingleRoomStatus" :close-on-click-modal="false"
-				   :close-on-press-escape="false">
+		 :close-on-press-escape="false">
 			<div v-if="viewSingleRoomStatus">
 				<view-single :view-data="viewimgData"></view-single>
 			</div>
@@ -279,7 +322,7 @@
 		</el-dialog>
 
 		<el-dialog center top="0" width="100%" custom-class="videohouse" :visible.sync="videohouse" :close-on-click-modal="false"
-				   :close-on-press-escape="false">
+		 :close-on-press-escape="false">
 			<div v-if="videohouse" class="videohouseContent">
 				<b-container>
 					<div class="videoContent">
@@ -393,8 +436,6 @@
 				/**
 				 * 房源信息
 				 */
-				houseInfoTuigai: '', //退改政策
-				houseInfoXuzhi: '', //租房须知
 				houseInfoDescCh: '', //房源概括中文
 				houseInfoDescEn: '', //房源概括英文
 				userCheckLabel:[], //房源中的label信息  标签
@@ -415,15 +456,6 @@
 			imgStrClac:function(str,num){
 				let res = str.replace(/(.*)\./,'$1'+num+'.');   //$1 + 替换后的字符
 				return res;
-			},
-			filterLeaseType: (val) => {
-				let type = '';
-				switch (val) {
-					case '0': type = '天'; break
-					case '1': type = '周'; break
-					case '2': type = '月'; break
-				}
-				return type
 			}
 		},
 		mounted() {
@@ -704,12 +736,6 @@
 							if(el.type==2){
 								this.houseInfoDescEn = el
 							}
-							if(el.type==3){
-								this.houseInfoTuigai = el
-							}
-							if(el.type==4){
-								this.houseInfoXuzhi = el
-							}
 						});
 
 						console.log('标签', this.userCheckLabel)
@@ -747,11 +773,11 @@
 						//this.dropMap(res.address);
 						//周边房源
 						// this.getAroundHouse(res.cityid);
-
+						
 						this.addressData = res.addresses;
 						if(res.school){
 							// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
-
+							
 							res.school.forEach((item,index)=>{
 								console.log(item,111)
 								item['addressdetail'] = item['address']
@@ -759,8 +785,8 @@
 							})
 							this.addressData = res.addresses.concat(res.school);
 						}
-
-
+						
+						
 						//this.endAddress = this.addressData[0].addressdetail;
 						/* 当前房源的房间类型 */
 						this.roomType = res.housetag;
@@ -792,8 +818,8 @@
 				geocoder.geocode({
 					address: address
 				}, function(
-						results,
-						status
+					results,
+					status
 				) {
 					vthis.directionsDisplay = new google.maps.DirectionsRenderer();
 					//自定义缩放，默认中心点
@@ -804,8 +830,8 @@
 						center: results[0].geometry.location
 					};
 					vthis.map = new google.maps.Map(
-							document.getElementById("map"),
-							myOptions
+						document.getElementById("map"),
+						myOptions
 					);
 					var marker = new google.maps.Marker({
 						position: results[0].geometry.location,
@@ -842,13 +868,13 @@
 					}
 					marker = new google.maps.Marker({
 						position: response.routes[0].overview_path[
-								Math.ceil(response.routes[0].overview_path.length / 2)
-								],
+							Math.ceil(response.routes[0].overview_path.length / 2)
+						],
 						map: vthis.map,
 						icon: "https://inyihome.com/img/" + travelMode + "2.svg",
 						labelContent: response.routes[0].legs[0].distance.text +
-								"/" +
-								response.routes[0].legs[0].duration.text,
+							"/" +
+							response.routes[0].legs[0].duration.text,
 						labelClass: "roomdetail-label-map",
 						labelAnchor: new google.maps.Point(20, 0)
 					});
@@ -1000,7 +1026,7 @@
 					this.$refs['reserveForm'].resetFields();
 					done();
 				}).catch(_ => {
-
+					
 				}); */
 			},
 			viewSingleRoom(item) {
@@ -1025,21 +1051,7 @@
 </script>
 
 <style lang="scss" scoped="scoped">
-	.house-cont{
-		width: 1300px;
-		&-detail{
-			width: 100%;
-			display: flex;
-			&-left{
-				width: 750px;
-			}
-			&-right{
-				width: 510px;
-				margin-left: 40px;
-			}
-		}
-
-	}
+	
 	.saleouthouse{
 		position: absolute;
 		background-size:100% 100%;
@@ -1074,101 +1086,38 @@
 		position: relative;
 	}
 
-	.message-top{
+	.top-main-box .house-message {
+		width: 352px;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	.top-main-box .house-message .message-top {
+		-height: 290px;
+		padding: 20px;
 		background: #FFFFFF;
+		border: 1px solid #E6E6E6;
+		border-radius: 4px;
 		margin-bottom: 20px;
-		.title {
-			font-family: PingFangSC-Medium;
-			font-size: 18px;
-			line-height: 24px;
-			letter-spacing: 1px;
-			margin-bottom: 15px;
-			color: rgb(89,99,178);
-		}
-		.num,.address,.school{
-			font-family: PingFangSC-Regular;
-			font-size: 14px;
-			color: #333333;
-			letter-spacing: 0.99px;
-			margin-bottom: 15px;
-		}
 	}
-	.message-label{
-		margin: 10px 0 40px;
-		&-title{
-			line-height: 26px;
-			font-size: 18px;
-			margin-bottom: 20px;
-		}
-		&-cont{
-			&-item{
-				width: 50%;
-				display: inline-block;
-				margin-bottom: 14px;
-				&:nth-child(even){
-					text-indent: 70px;
-				}
-				img{
-					width: 20px;
-					height: auto;
-					display: inline-block;
-				}
-				span{
-					font-size: 14px;
-					color: #333333;
-					letter-spacing: 0.7px;
-					line-height: 20px;
-					margin-left: 4px;
-				}
-			}
-		}
-		&-html{}
+
+	.top-main-box .house-message .message-top .title {
+		font-family: PingFangSC-Medium;
+		font-size: 28px;
+		color: #333333;
+		letter-spacing: 1.98px;
+		margin-bottom: 15px;
 	}
-	.zuqi{
-		position: relative;
-		padding: 10px 0;
-		border-bottom: 1px solid #E6E6E6;
-		&-date{
-			line-height: 30px;
-			font-size: 14px;
-			&-next{
-				font-size: 20px;
-				color: #2f3c9f;
-				position: relative;
-				top: 3px;
-				margin: 0 10px 0 4px;
-			}
-		}
-		&-week{
-			line-height: 30px;
-			font-size: 15px;
-			font-weight: 600;
-		}
-		&-right{
-			position: absolute;
-			right: 0;
-			top: 10px;
-			&-money{
-				position: absolute;
-				right: 160px;
-				font-size: 14px;
-				&-symble{
-					color: rgb(255,86,89);
-				}
-			}
-			&-btn{
-				position: absolute;
-				right: 8px;
-				font-size: 14px;
-				background: rgb(47,60,159);
-				width: 100px;
-				height: 40px;
-				border-radius: 4px;
-				text-align: center;
-				line-height: 40px;
-				color: #fff;
-			}
-		}
+
+	.top-main-box .house-message .message-top .num,
+	.top-main-box .house-message .message-top .address,
+	.top-main-box .house-message .message-top .school {
+		font-family: PingFangSC-Regular;
+		font-size: 14px;
+		color: #333333;
+		letter-spacing: 0.99px;
+		margin-bottom: 15px;
 	}
 
 	.top-main-box .house-message .ad {
@@ -1222,7 +1171,7 @@
 		color: #FF4A5E;
 		letter-spacing: 0.4px;
 	}
-	.house-message .callFreeWrapper{
+	.top-main-box .house-message .callFreeWrapper{
 		display: flex;
 		background: #626AD1;
 		border-radius: 4px;
@@ -1230,24 +1179,24 @@
 		justify-content: space-around;
 		padding: 5px 0px 5px 5px;
 	}
-	.house-message .callFreeWrapper .content h3{
+	.top-main-box .house-message .callFreeWrapper .content h3{
 		font-family: PingFangSC-Regular;
 		font-size: 12px;
 		color: #FFFFFF;
 		margin-bottom: 7px;
 	}
-	.house-message .callFreeWrapper .content h1{
+	.top-main-box .house-message .callFreeWrapper .content h1{
 		font-family: PingFangSC-Semibold;
 		font-size: 18px;
 		color: #FFFFFF;
 	}
-	.house-message .callFreeWrapper .content,.top-main-box .house-message .callFreeWrapper .wechat{
+	.top-main-box .house-message .callFreeWrapper .content,.top-main-box .house-message .callFreeWrapper .wechat{
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 	}
-	.house-message .callFreeWrapper .wechat p{
+	.top-main-box .house-message .callFreeWrapper .wechat p{
 		font-family: PingFangSC-Regular;
 		font-size: 10px;
 		color: #FFFFFF;

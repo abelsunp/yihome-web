@@ -26,6 +26,7 @@ const _4da2fe32 = () => interopDefault(import('../pages/reset/index.vue' /* webp
 const _36936b94 = () => interopDefault(import('../pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */))
 const _e7a0b600 = () => interopDefault(import('../pages/storydetails/index.vue' /* webpackChunkName: "pages/storydetails/index" */))
 const _69194a91 = () => interopDefault(import('../pages/testStep/index.vue' /* webpackChunkName: "pages/testStep/index" */))
+const _fb0a1a2e = () => interopDefault(import('../pages/housedetail/indexCopy.vue' /* webpackChunkName: "pages/housedetail/indexCopy" */))
 const _991a8b0e = () => interopDefault(import('../pages/stories/storydetails.vue' /* webpackChunkName: "pages/stories/storydetails" */))
 const _1b118e1c = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -137,6 +138,10 @@ export const routerOptions = {
     path: "/testStep",
     component: _69194a91,
     name: "testStep"
+  }, {
+    path: "/housedetail/indexCopy",
+    component: _fb0a1a2e,
+    name: "housedetail-indexCopy"
   }, {
     path: "/stories/storydetails",
     component: _991a8b0e,

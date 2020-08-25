@@ -16,7 +16,7 @@
 										<p class="country">{{item.zhname}}</p>
 										<p class="cityWrap">
 											<span class="city" v-for="(listitem,$index2) in item.city" :key="$index2">
-												<a :href="'/findhouse?countryid='+item.id+'&cityid='+listitem.id+''">{{listitem.cityname}}</a>
+												<a :href="'/findhouse?countryId='+listitem.countryId+'&cityId='+listitem.id+''">{{listitem.name}}</a>
 											</span>
 										</p>
 									</div>
@@ -30,9 +30,9 @@
 								<el-menu-item index="/join-us" id="about">加入我们</el-menu-item>
 								<el-menu-item index="/contact" id="about">联系我们</el-menu-item>
 							</el-submenu>
-							
+
 							<el-menu-item v-if="!islogin" index="/login">商家入驻</el-menu-item>
-							
+
 							<!-- <el-menu-item index="/about">关于我们</el-menu-item>
 							<el-menu-item index="/join-us">加入我们</el-menu-item>
 							<el-menu-item index="/contact">联系我们</el-menu-item> -->
@@ -133,7 +133,7 @@
 		created(){
 			this.getPath();
 			this.findcityschool();
-			this.checkLogin();
+			// this.checkLogin();
 			
 			if(process.browser){
 				if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -254,8 +254,23 @@
 				} */
 			},
 			findcityschool(){
-				this.$request.findcityschool().then(res=>{
-					this.menuData = res;
+				this.$request.getAllCity().then(res=>{
+					console.log("findcityschool", res)
+
+					this.menuData = [
+						{
+							zhname: '英国',
+							city: res.data[134]
+						},
+						{
+							zhname: '澳大利亚',
+							city: res.data[136]
+						},
+						{
+							zhname: '美国',
+							city: res.data[138]
+						}
+					];
 				}).catch(e=>{
 					
 				})

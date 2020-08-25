@@ -56,15 +56,15 @@
 						<el-form-item style="margin-bottom: 6px;">
 							<p>已有账号? <nuxt-link to="/login">直接登录</nuxt-link></p>
 						</el-form-item>
-						<el-form-item class="loginType">
-							<div class="sigma-middle-line">
-								<span class="sigma-line-text">其他注册方式</span>
-							</div>
-						</el-form-item>
-						<el-form-item class="usePhoneLogin">
-							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">
-							<p>邮箱找回</p>
-						</el-form-item>
+<!--						<el-form-item class="loginType">-->
+<!--							<div class="sigma-middle-line">-->
+<!--								<span class="sigma-line-text">其他注册方式</span>-->
+<!--							</div>-->
+<!--						</el-form-item>-->
+<!--						<el-form-item class="usePhoneLogin">-->
+<!--							<img src="~assets/images/loginRegister/email.svg" alt="" @click="phonelLoginMode">-->
+<!--							<p>邮箱找回</p>-->
+<!--						</el-form-item>-->
 					</el-form>
 				</div>
 			</b-col>
@@ -94,8 +94,9 @@
 				if (value === '') {
 				  callback(new Error('验证码不能为空'));
 				} else {
-				  if (!(value.length==6)){
-	
+				  // if (!(value.length==6)){
+				  if (!(value)){
+
 					callback(new Error('请输入正确的验证码'));
 				  }
 				  callback();
@@ -200,8 +201,7 @@
 					return;
 				}else{
 					var ParmasData={
-						account:this.ruleForm.email,
-						type:"register",
+						phone:this.ruleForm.email,
 					}
 					this.$request.sandcode(ParmasData).then(res=>{
 						if(res.status){
@@ -291,9 +291,15 @@
 				})
 			},
 			userLoginFun(){
-				this.$request.register({'account':this.ruleForm.email,'password':this.ruleForm.password,'code':this.ruleForm.code,'remarks':this.ruleForm.remarks}).then(res=>{
+				this.$request.forgetPassword(
+						{
+							'phone':this.ruleForm.email,
+							'pwd':this.ruleForm.password,
+							'code':this.ruleForm.code,
+						}
+						).then(res=>{
 					this.loadingStatus = false;
-					if(res.status){
+					if(res.code === 200){
 						this.$router.push({path:'/login'});
 						window._agl && window._agl.push(['track', ['success', {t: 3}]])
 						return;

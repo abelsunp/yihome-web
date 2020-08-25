@@ -77,10 +77,10 @@
 				console.log(queryString,11111111,this.state)
 				
 				this.$request.findHouseSearchAll({search:queryString}).then(res=>{
-					for(let i of res){
+					for(let i of res.data){
 						i.value = i.titlename;  //将想要展示的数据作为value
 					}
-					this.list = res;
+					this.list = res.data;
 					/* if(this.list.length==0){
 						callback([{value:'',disabled:true}]);
 						return
@@ -91,7 +91,7 @@
 				}) 
 			},
 			searchSelect(item){
-				console.log(item) // country city school house 
+				console.log(item) // country city school house
 				
 				/* 如果选择的是国家 */
 				var str = item.id;

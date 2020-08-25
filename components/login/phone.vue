@@ -28,7 +28,7 @@
 				<el-input v-model="ruleForm.password" placeholder="请输入您的密码" maxlength="22" show-password></el-input>
 			</el-form-item>
 			<el-form-item class="form-pwd">
-				<nuxt-link to="/">忘记密码</nuxt-link>
+				<nuxt-link to="/findpwd">忘记密码</nuxt-link>
 			</el-form-item>
 			<el-form-item>
 				<el-button :loading="loadingStatus" class="login_btn" type="primary" @click="loginmethod('ruleForm')">登录</el-button>
@@ -111,7 +111,6 @@
 		},
 		methods:{
 			phoneMethod(){
-				console.log(11111)
 				this.ruleForm.phone=this.ruleForm.phone.replace(/[^\.\d]/g,'');
 				this.ruleForm.phone=this.ruleForm.phone.replace('.','');
 			},
@@ -120,21 +119,24 @@
 					if (valid) {
 						this.loadingStatus = true;
 						this.$Spin.show();
-						
 						setTimeout(()=>{
-							this.$request.loginin({'account':this.ruleForm.phone,'password':this.ruleForm.password}).then(res=>{
+							this.$request.loginin({
+								"type": "1",
+								'phone':this.ruleForm.phone,
+								'pwd':this.ruleForm.password
+							}).then(res=>{
 								this.$Spin.hide();
 								this.loadingStatus = false;
-								if(res.status){
-									localStorage.setItem('userid',res.data.id);
-									localStorage.setItem('checklicense',res.data.license);
+								if(res.code === 200){
+									localStorage.setItem('token',res.data.token);
+									// localStorage.setItem('userid',res.data.id);
+									// localStorage.setItem('checklicense',res.data.license);
 									
 									let backurl = localStorage.getItem('backurl')
 									if(backurl){
 										location.href = location.origin+backurl;
 									}else{
 										this.$router.push({path:'/profile'});
-										
 									}
 									
 									return;

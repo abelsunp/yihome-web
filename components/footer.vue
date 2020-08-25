@@ -8,7 +8,9 @@
 				<div class="footer-left-item">企业地址：上海市 宝山区 呼兰西路19号 上海智力产业园北区2号楼201室</div>
 				<div class="footer-left-item">热门城市</div>
 				<div class="footer-left-city">
-					<div class="footer-left-city-item" v-for="(item,index) in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]" :key="index">哈萨克斯坦</div>
+					<div class="footer-left-city-item" v-for="(item,index) in hotecityList" :key="index">
+						<a :href="'/findhouse?countryId='+item.countryId+'&cityId='+item.id+''">{{item.name}}</a>
+					</div>
 				</div>
 			</b-col>
 			<b-col md="4">
@@ -29,9 +31,35 @@
 </template>
 
 <script>
+
+	export default {
+		name: 'footer',
+		data(){
+			return {
+				hotecityList: [],
+			}
+		},
+		created() {
+			this.findhotecity()
+		},
+		methods: {
+			// 热门城市
+			findhotecity(){
+				this.$request.homeHotcity().then(res=>{
+					if(res.code === 200){
+						this.hotecityList = res.data;
+					}else{
+						this.$message.error(res.msg);
+					}
+				}).catch(e=>{
+					this.$message.error('网络错误');
+				})
+			},
+		}
+	}
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
 	.info{
 		font-family: PingFangSC-Regular;
 		font-size: 10px;
@@ -55,6 +83,12 @@
 		display: inline-block;
 		line-height: 30px;
 		/*font-weight: 500;*/
+		a{
+			color: #666666;
+			&:hover{
+				color: #666666;
+			}
+		}
 	}
 	dl dt{
 		font-family: PingFangSC-Medium;
@@ -80,7 +114,7 @@
 		font-size: 10px;
 		color: #666666;
 		margin-bottom: 28px;
-		margin-top: 4px;
+		margin-top: 10px;
 		text-align: center;
 	}
 </style>
