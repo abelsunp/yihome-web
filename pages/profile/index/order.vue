@@ -3,16 +3,33 @@
 		<h1>我的订单</h1>
 		<Spin size="large" fix v-if="spinShow"></Spin>
 		<ul class="orderWrapper">
-			<li v-for="(item,$index) in orderList" :key="$index">
+<!--			<li v-for="(item,$index) in orderList" :key="$index">-->
+<!--				<div class="content-left">-->
+<!--					<div class="img">-->
+<!--						<img :src="yihomeGlobalVariable+item.imgurl" alt="">-->
+<!--					</div>-->
+<!--					<div class="content-main">-->
+<!--						<h1 class="title">on A'Beckett Apartments and Residences</h1>-->
+<!--						<p class="orderNum">订单编号：{{item.billno}}</p>-->
+<!--						<p class="orderTime">创建时间：{{item.bdate}}</p>-->
+<!--						<p class="checkIn">入住时间：{{item.sdate}}至{{item.edate}}</p>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="content-right">-->
+<!--					<el-button type="primary" @click="viewOrder(item.id)">查看详情</el-button>-->
+<!--				</div>-->
+<!--			</li>-->
+			<li v-for="(item,$index) in [0,1,2,3,4,5,6]" :key="$index">
 				<div class="content-left">
 					<div class="img">
-						<img :src="yihomeGlobalVariable+item.imgurl" alt="">
+						<img src="https://www.inyihome.com/upload/1579500204358_4x.jpg" alt="">
 					</div>
 					<div class="content-main">
 						<h1 class="title">on A'Beckett Apartments and Residences</h1>
-						<p class="orderNum">订单编号：{{item.billno}}</p>
-						<p class="orderTime">创建时间：{{item.bdate}}</p>
-						<p class="checkIn">入住时间：{{item.sdate}}至{{item.edate}}</p>
+						<p class="orderNum">on A'Beckett Apartments and Residences</p>
+<!--						<p class="orderTime">创建时间：{{item.bdate}}</p>-->
+						<p class="money"><span>$229</span>/周</p>
+						<p class="checkIn">订单编号：1231231231231 <span>创建时间： 2019-01-01 19:30:00</span></p>
 					</div>
 				</div>
 				<div class="content-right">
@@ -23,7 +40,7 @@
 				暂无订单信息
 			</li>
 		</ul>
-		
+
 		<Modal
 			title="房源订单信息"
 			v-model="orderStatus"
@@ -53,7 +70,7 @@
 						<p v-else-if="item.titlename=='性别'" class="itemList">{{item.titlename}} ： {{item.label=='Male'?'男':'女'}}</p>
 						<p v-else-if="item.titlename=='是否全日制'" class="itemList">{{item.titlename}} ： {{item.label=='Yes'?'是':'否'}}</p>
 						<p v-else-if="item.titlename=='就读课程'" class="itemList">
-							{{item.titlename}} ： 
+							{{item.titlename}} ：
 							<span v-if="item.label=='Pre-Sessional Course'">语言班</span>
 							<span v-if="item.label=='Foundation Programme'">预科</span>
 							<span v-if="item.label=='Undergraduate'">本科</span>
@@ -97,8 +114,8 @@
 				<Button size="default" type="primary" @click="orderStatus = false">确定</Button>
 			</div>
 		</Modal>
-		
-		
+
+
 	</section>
 </template>
 
@@ -136,9 +153,9 @@
 					{titlename:'国内城市现居地邮编',value:'izipcode',label:''},
 					{titlename:'国内固定地址（中文）',value:'addressich',label:''},
 					{titlename:'国内固定地址（英文）',value:'addressien',label:''},
-					
+
 					{titlename:'紧急联系人信息',value:'',label:''},
-					
+
 					{titlename:'担保人(紧急联系人)姓名',value:'pnamech',label:''},
 					{titlename:'与担保人(紧急联系人)的关系',value:'relation',label:''},
 					{titlename:'联系电话',value:'pphone',label:''},
@@ -154,7 +171,7 @@
 			}
 		},
 		created() {
-			
+
 		},
 		mounted() {
 			this.getUserOrder();
@@ -187,17 +204,17 @@
 							}
 						}
 					})
-					
-					
+
+
 				}).catch(e=>{
-					
+
 				})
 			}
 		}
 	}
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
 	section{
 		position: relative;
 		height: 100%;
@@ -207,7 +224,7 @@
 	}
 	.orderWrapper li{
 		border-bottom: 1px solid #F0F0F0;
-		padding: 20px 8px;
+		padding: 20px 0px;
 		display: flex;
 		justify-content: space-between;
 	}
@@ -222,10 +239,34 @@
 	}
 	.orderWrapper li .content-left .content-main{
 		margin-left: 10px;
+		.orderNum{
+			font-family: PingFangSC-Medium;
+			font-size: 15px;
+			color: #756c6c;
+			letter-spacing: 1.13px;
+			line-height: 18px;
+			margin: 6px 0 7px;
+			font-weight: 500;
+		}
+		.money{
+			span{
+				font-size: 20px;
+			}
+			font-size: 14px;
+			color: #3B44AC;
+			letter-spacing: 1.5px;
+			line-height: 30px;
+		}
+		.checkIn{
+			span{
+				margin-left: 6px;
+			}
+		}
 	}
 	.orderWrapper li .content-left .img img{
-		width: 120px;
-		height: 90px;
+		width: 149px;
+		height: 107px;
+		margin-right: 8px;
 	}
 	.orderWrapper li .content-left .content-main .title{
 		font-family: PingFangSC-Medium;
@@ -235,9 +276,8 @@
 		line-height: 22px;
 		margin-bottom: 4px;
 	}
-	.orderWrapper li .content-left .content-main .orderNum,.orderWrapper li .content-left .content-main .orderTime{
+	.orderWrapper li .content-left .content-main .orderTime{
 		font-family: PingFangSC-Regular;
-		
 		color: #666666;
 		letter-spacing: 0.76px;
 		line-height: 17px;
