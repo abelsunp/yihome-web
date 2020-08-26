@@ -8,3 +8,4 @@ export default ({ app: { router }, store }) => {
       } catch (e) {}
     })
   }
+

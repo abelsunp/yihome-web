@@ -42,6 +42,13 @@
     "_name": "_0c15aea9"
   },
   {
+    "name": "house-detail",
+    "path": "/house-detail",
+    "component": "/Users/lydia/Desktop/yihome/pages/house-detail/index.vue",
+    "chunkName": "pages/house-detail/index",
+    "_name": "_119fb7b1"
+  },
+  {
     "name": "housedetail",
     "path": "/housedetail",
     "component": "/Users/lydia/Desktop/yihome/pages/housedetail/index.vue",

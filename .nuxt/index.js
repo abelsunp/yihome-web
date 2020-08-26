@@ -14,6 +14,7 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 
 import nuxt_plugin_bootstrapvue_6077969b from 'nuxt_plugin_bootstrapvue_6077969b' // Source: ./bootstrap-vue.js (mode: 'all')
 import nuxt_plugin_axios_e7b83728 from 'nuxt_plugin_axios_e7b83728' // Source: ./axios.js (mode: 'all')
+import nuxt_plugin_vant_6b946232 from 'nuxt_plugin_vant_6b946232' // Source: ../plugins/vant.js (mode: 'all')
 import nuxt_plugin_index_5e7689d9 from 'nuxt_plugin_index_5e7689d9' // Source: ../plugins/index.js (mode: 'client')
 import nuxt_plugin_filters_14a52510 from 'nuxt_plugin_filters_14a52510' // Source: ../plugins/filters.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ../plugins/element-ui (mode: 'all')
@@ -181,6 +182,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_axios_e7b83728 === 'function') {
     await nuxt_plugin_axios_e7b83728(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_vant_6b946232 === 'function') {
+    await nuxt_plugin_vant_6b946232(app.context, inject)
   }
 
   if (process.client && typeof nuxt_plugin_index_5e7689d9 === 'function') {

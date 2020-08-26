@@ -141,12 +141,10 @@
 					
 					console.log(this.$route.query.houseid)
 					if(this.$route.name=='housedetail'){
-						window.location.href='/dist/#/housedetail?houseid='+this.$route.query.houseid+''
-					}else{
+						window.location.href='/house-detail?houseid='+this.$route.query.houseid+''
+					}else if(this.$route.path !='/house-detail'){
 						window.location.href='/dist/index.html'
 					}
-					//
-					
 				}
 				// var domain = document.domain;
 				// if(domain.indexOf('m.inyihome') != -1) {

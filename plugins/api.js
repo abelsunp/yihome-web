@@ -257,10 +257,9 @@ const request = {
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
   },
 
-  getCollectList: (data) => {
+  getCollectList: () => {
     let config = {
       url: `/yihome-admin/api/user/users/myApiCollect`,
-      data,
       method: 'post',
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })

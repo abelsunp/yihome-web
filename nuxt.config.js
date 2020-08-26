@@ -60,12 +60,14 @@ export default {
     ** Plugins to load before mounting the App
     */
     plugins: [
+        "@/plugins/vant.js",
         {src: '@/plugins/index.js', ssr: false},
         {src: '@/plugins/filters.js', ssr: true},
         {src: '@/plugins/element-ui', ssr: true},
         {src: '@/plugins/bootstrap', ssr: true},
         {src: '@/plugins/api', ssr: false},
         {src: "@/plugins/vue-awesome-swiper.js", ssr: false},
+        {src: "@/plugins/vant.js", ssr: false},
         {src: '@/plugins/iview', ssr: true},
         {src: '@/plugins/baiduStatistics.js'},
         {src: '@/plugins/ga.js', ssr: false},
@@ -135,6 +137,15 @@ export default {
         },
         extractCSS: {allChunks: true},
         transpile: [/^element-ui/, /^bootstrapVue/],
+        // postcss: {
+        //     plugins: {
+        //         'postcss-pxtorem': {
+        //             rootValue: 37.5,
+        //             propList: ['*'],
+        //             selectorBlackList: ['mint-']
+        //         }
+        //     }
+        // },
         /* loaders:[
             //小图片的64位打包
               {

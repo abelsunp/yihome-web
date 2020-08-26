@@ -3,37 +3,17 @@
 		<h1>我的订单</h1>
 		<Spin size="large" fix v-if="spinShow"></Spin>
 		<ul class="orderWrapper">
-<!--			<li v-for="(item,$index) in orderList" :key="$index">-->
-<!--				<div class="content-left">-->
-<!--					<div class="img">-->
-<!--						<img :src="yihomeGlobalVariable+item.imgurl" alt="">-->
-<!--					</div>-->
-<!--					<div class="content-main">-->
-<!--						<h1 class="title">on A'Beckett Apartments and Residences</h1>-->
-<!--						<p class="orderNum">订单编号：{{item.billno}}</p>-->
-<!--						<p class="orderTime">创建时间：{{item.bdate}}</p>-->
-<!--						<p class="checkIn">入住时间：{{item.sdate}}至{{item.edate}}</p>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--				<div class="content-right">-->
-<!--					<el-button type="primary" @click="viewOrder(item.id)">查看详情</el-button>-->
-<!--				</div>-->
-<!--			</li>-->
-			<li v-for="(item,$index) in [0,1,2,3,4,5,6]" :key="$index">
+			<li v-for="(item,$index) in orderList" :key="$index">
 				<div class="content-left">
 					<div class="img">
-						<img src="https://www.inyihome.com/upload/1579500204358_4x.jpg" alt="">
+						<img class="april-img" :src="yihomeGlobalVariable+item.houseUrl" alt="">
 					</div>
 					<div class="content-main">
-						<h1 class="title">on A'Beckett Apartments and Residences</h1>
-						<p class="orderNum">on A'Beckett Apartments and Residences</p>
-<!--						<p class="orderTime">创建时间：{{item.bdate}}</p>-->
-						<p class="money"><span>$229</span>/周</p>
-						<p class="checkIn">订单编号：1231231231231 <span>创建时间： 2019-01-01 19:30:00</span></p>
+						<h1 class="title april-toe">{{item.houseName}}</h1>
+						<p class="orderNum april-toe">订单编号：{{item.number}}</p>
+						<p class="orderTime">创建时间：{{item.createTime}}</p>
+						<p class="checkIn">入住时间：{{item.startDate | formatData}}至{{item.endDate | formatData}}</p>
 					</div>
-				</div>
-				<div class="content-right">
-					<el-button type="primary" @click="viewOrder(item.id)">查看详情</el-button>
 				</div>
 			</li>
 			<li v-if="orderList.length==0">
@@ -42,6 +22,7 @@
 		</ul>
 
 		<Modal
+				v-if="1===3"
 			title="房源订单信息"
 			v-model="orderStatus"
 			class-name="orderDetails"
@@ -173,6 +154,11 @@
 		created() {
 
 		},
+		filters: {
+			formatData:(data) => {
+				return new Date(data).format('yyyy-MM-dd')
+			}
+		},
 		mounted() {
 			this.getOrderList();
 		},
@@ -183,7 +169,7 @@
 					this.$request.getOrderList().then(res=>{
 						this.spinShow = false;
 						if(res.code === 200){
-							this.orderList = res.order;
+							this.orderList = res.data;
 						}else this.$message.error(res.msg);
 					}).catch(e=>{
 						this.spinShow = false;
@@ -238,30 +224,42 @@
 	.orderWrapper li .content-left{
 		display: flex;
 	}
-	.orderWrapper li .content-left .content-main{
-		margin-left: 10px;
-		.orderNum{
-			font-family: PingFangSC-Medium;
-			font-size: 15px;
-			color: #756c6c;
-			letter-spacing: 1.13px;
-			line-height: 18px;
-			margin: 6px 0 7px;
-			font-weight: 500;
+	.orderWrapper li .content-left{
+		.img{
+			width: 149px;
+			height: 107px;
+			overflow: hidden;
 		}
-		.money{
-			span{
-				font-size: 20px;
+		.content-main{
+			margin-left: 10px;
+			.orderNum{
+				font-family: PingFangSC-Medium;
+				font-size: 15px;
+				color: #756c6c;
+				letter-spacing: 1.13px;
+				line-height: 18px;
+				margin: 6px 0 7px;
+				font-weight: 500;
 			}
-			font-size: 14px;
-			color: #3B44AC;
-			letter-spacing: 1.5px;
-			line-height: 30px;
-		}
-		.checkIn{
-			span{
-				margin-left: 6px;
+			.money{
+				span{
+					font-size: 20px;
+				}
+				font-size: 14px;
+				color: #3B44AC;
+				letter-spacing: 1.5px;
+				line-height: 30px;
 			}
+			.checkIn{
+				font-family: PingFangSC-Medium;
+				color: #756c6c;
+				letter-spacing: 0.76px;
+				line-height: 17px;
+				margin-bottom: 4px;
+				margin-top: 2px;
+				font-size: 15px;
+			}
+
 		}
 	}
 	.orderWrapper li .content-left .img img{
@@ -278,11 +276,13 @@
 		margin-bottom: 4px;
 	}
 	.orderWrapper li .content-left .content-main .orderTime{
-		font-family: PingFangSC-Regular;
-		color: #666666;
+		font-family: PingFangSC-Medium;
+		color: #756c6c;
 		letter-spacing: 0.76px;
-		line-height: 17px;
+		line-height: 26px;
 		margin-bottom: 4px;
+		margin-top: 8px;
+		font-size: 15px;
 	}
 	.orderWrapper li .content-right{
 		display: flex;

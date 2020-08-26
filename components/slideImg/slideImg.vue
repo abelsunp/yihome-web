@@ -3,9 +3,9 @@
 		<!-- Swiper -->
 		<div class="swiper-container gallery-top" >
 			
-			<div @click="viewVideo()" v-if="imgVideo" style="position: absolute;bottom: 10px;right: 10px;z-index: 9999;width: 86px;height: 32px;background: #FFFFFF;border-radius: 3px;line-height: 32px;text-align: center;">
-				<p style="font-size: 14px;color: #333333;letter-spacing: 0.99px;">视频看房</p>
-			</div>
+<!--			<div @click="viewVideo()" v-if="imgVideo" style="position: absolute;bottom: 10px;right: 10px;z-index: 9999;width: 86px;height: 32px;background: #FFFFFF;border-radius: 3px;line-height: 32px;text-align: center;">-->
+<!--				<p style="font-size: 14px;color: #333333;letter-spacing: 0.99px;">视频看房</p>-->
+<!--			</div>-->
 			
 			<div class="swiper-wrapper">
 				<div class="swiper-slide"  v-for="(item,$index) in imgWrapper" :key="$index" >
@@ -32,9 +32,9 @@
 				<source :src='yihomeGlobalVariable+videoUrl' type="video/mp4">
 				<source src="movie.ogg"  type="video/ogg">您的浏览器不支持 HTML5 video 标签。
 			</video>
-			<div slot="footer" style="text-align: center;">
-				<Button @click="videoStatus = false" type="primary" style="background-color: #3B44AC;border-color: #3B44AC;">关闭</Button>
-			</div>
+<!--			<div slot="footer" style="text-align: center;">-->
+<!--				<Button @click="videoStatus = false" type="primary" style="background-color: #3B44AC;border-color: #3B44AC;">关闭</Button>-->
+<!--			</div>-->
 		</Modal>
 	</section>
 </template>

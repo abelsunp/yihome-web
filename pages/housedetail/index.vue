@@ -1,283 +1,283 @@
 <template>
 	<section class="house-cont" v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
-		<b-container class="house-cont-detail" style="margin-top: 20px;">
-			<div class="house-cont-detail-left">
-				<div class="top-main-box">
-					<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
-						<div style="position: absolute;top: 10px;right: 10px;z-index: 999;">
-							<div @click="delcollect" v-if="iscollect" style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
-								<Icon style="font-size: 16px;color: red;margin-right: 7px;" type="md-heart" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">已收藏</p>
+			<b-container class="house-cont-detail" style="margin-top: 20px;">
+				<div class="house-cont-detail-left">
+					<div class="top-main-box">
+						<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
+							<div style="position: absolute;top: 10px;right: 10px;z-index: 999;">
+								<div @click="delcollect" v-if="iscollect" style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
+									<Icon style="font-size: 16px;color: red;margin-right: 7px;" type="md-heart" /><div style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">已收藏</div>
+								</div>
+								<div @click="collect" v-else style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
+									<Icon style="font-size: 16px;margin-right: 7px;" type="md-heart-outline" /><div style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">收藏</div>
+								</div>
 							</div>
-							<div @click="collect" v-else style="background-color: #fff;border-radius: 3px;padding: 6px 12px;cursor: pointer;">
-								<Icon style="font-size: 16px;margin-right: 7px;" type="md-heart-outline" /><p style="display: inline-block;font-size: 14px;color: #333333;letter-spacing: 0.99px;">收藏</p>
-							</div>
+							<slide-img :img-wrapper='userCheckUrl' :img-video='userCheckUrl2'></slide-img>
 						</div>
-						<slide-img :img-wrapper='userCheckUrl' :img-video='userCheckUrl2'></slide-img>
+
 					</div>
+					<div style="width: 727px;">
+						<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
+							<h1 class="inforTitle">房源概括</h1>
+							<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;"></div>
 
-				</div>
-				<div style="width: 727px;">
-					<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
-						<h1 class="inforTitle">房源概括</h1>
-						<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;"></div>
+<!--							<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>-->
+<!--							<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>-->
+						</div>
+						<div :id="'houseManagement?houseid='+fullPath">
+							<h1 class="inforTitle">房间管理</h1>
+							<!-- 当前所有的房间类型 -->
+							<div>
+								<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
+								<el-tooltip v-for="(item,$ii) in roomlist" :key="$ii" v-if="$ii < 5" class="item" effect="dark" :content="item.remark" placement="top"
+											@click.native="chooseHouseType(item.id)">
+									<el-button>{{item.name}}</el-button>
+								</el-tooltip>
 
-						<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>
-						<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>
-					</div>
-					<div :id="'houseManagement?houseid='+fullPath">
-						<h1 class="inforTitle">房间管理</h1>
-						<!-- 当前所有的房间类型 -->
-						<div>
-							<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
-							<el-tooltip v-for="(item,$ii) in roomlist" :key="$ii" v-if="$ii < 5" class="item" effect="dark" :content="item.remark" placement="top"
-										@click.native="chooseHouseType(item.id)">
-								<el-button>{{item.name}}</el-button>
-							</el-tooltip>
-
-							<!-- 房间显示 -->
-							<ul class="roomListWrapper">
-								<li v-for="(item,$$index) in houseRoome" :key="$$index">
-									<template v-if="item.room.status != 1 && item.room.status != 5">
-										<div class="top">
-											<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
-												<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
-												<img :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
-											</div>
-											<div class="content">
-												<h1>{{item.room.name}}</h1>
-												<p class="center">
-													<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
-													<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
-												</p>
-												<div class="show-more">更多详情</div>
-											</div>
-
-										</div>
-										<section>
-											<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
-												<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
-												<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
-												<div class="zuqi-right">
-													<div class="zuqi-right-money"><span class="zuqi-right-money-symble">{{val.rent}}</span><span>/{{val.leaseType | filterLeaseType}}</span></div>
-													<div class="zuqi-right-btn" :class="{'zuqi-right-btn-disable': item.room.status != 2}" @click="item.room.status == 2 && apply(val)">{{item.room.status == 2 ? '申请' : '已租罄'}}</div>
+								<!-- 房间显示 -->
+								<ul class="roomListWrapper">
+									<li v-for="(item,$$index) in houseRoome" :key="$$index">
+										<template v-if="item.room.status != 1 && item.room.status != 5">
+											<div class="top">
+												<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
+													<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
+													<img :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
 												</div>
+												<div class="content">
+													<h1>{{item.room.name}}</h1>
+													<p class="center">
+														<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
+														<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
+													</p>
+													<div class="show-more">更多详情</div>
+												</div>
+
 											</div>
-										</section>
-									</template>
-<!--									<div v-else>-->
-<!--										<p style="text-align: center;padding: 20px;">该房间已租罄</p>-->
-<!--									</div>-->
-								</li>
-							</ul>
+											<section>
+												<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
+													<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
+													<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
+													<div class="zuqi-right">
+														<div class="zuqi-right-money"><span class="zuqi-right-money-symble">{{houseInfo.countryId | fliterSymble}}{{val.rent}}</span><span>/{{val.leaseType | filterLeaseType}}</span></div>
+														<div class="zuqi-right-btn" :class="{'zuqi-right-btn-disable': item.room.status != 2}" @click="item.room.status == 2 && apply(val)">{{item.room.status == 2 ? '申请' : '已租罄'}}</div>
+													</div>
+												</div>
+											</section>
+										</template>
+	<!--									<div v-else>-->
+	<!--										<p style="text-align: center;padding: 20px;">该房间已租罄</p>-->
+	<!--									</div>-->
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="house-cont-detail-right">
-				<div class="house-message" ref="houseMessage">
-					<div class="message-wrapper">
-						<div class="message-top">
-							<h1 class="title">{{houseInfo.name}}</h1>
-							<p class="num">Property No.:{{houseInfo.no}}</p>
-							<p class="address">地址：{{houseInfo.address}}</p>
-							<p class="school">附近学校：<span v-for="item in schoolCheckLabel" :key="item.id"> {{item.name}} | </span></p>
-						</div>
-						<div class="message-label">
-							<h2 class="message-label-title">配套设施</h2>
-							<div class="message-label-cont">
-								<div class="message-label-cont-item" v-for="listItem in userCheckLabel1">
-									<img :src="yihomeGlobalVariable+listItem.img" alt="">
-									<span>{{listItem.labelDetalName}}</span>
+				<div class="house-cont-detail-right">
+					<div class="house-message" ref="houseMessage">
+						<div class="message-wrapper">
+							<div class="message-top">
+								<h1 class="title">{{houseInfo.name}}</h1>
+								<p class="num">Property No.:{{houseInfo.no}}</p>
+								<p class="address">地址：{{houseInfo.address}}</p>
+								<p class="school">附近学校：<span v-for="item in schoolCheckLabel" :key="item.id"> {{item.name}} | </span></p>
+							</div>
+							<div class="message-label">
+								<h2 class="message-label-title">配套设施</h2>
+								<div class="message-label-cont">
+									<div class="message-label-cont-item" v-for="listItem in userCheckLabel1">
+										<img :src="yihomeGlobalVariable+listItem.img" alt="">
+										<span>{{listItem.labelDetalName}}</span>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="message-label">
-							<h2 class="message-label-title">安全保障</h2>
-							<div class="message-label-cont">
-								<div class="message-label-cont-item" v-for="listItem in userCheckLabel2">
-									<img :src="yihomeGlobalVariable+listItem.img" alt="">
-									<span>{{listItem.labelDetalName}}</span>
+							<div class="message-label">
+								<h2 class="message-label-title">安全保障</h2>
+								<div class="message-label-cont">
+									<div class="message-label-cont-item" v-for="listItem in userCheckLabel2">
+										<img :src="yihomeGlobalVariable+listItem.img" alt="">
+										<span>{{listItem.labelDetalName}}</span>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="message-label">
-							<h2 class="message-label-title">退改政策</h2>
-							<div class="message-label-html" v-html="houseInfoTuigai.info"></div>
-						</div>
-
-						<!-- 拨打电话免费咨询 -->
-						<div class="callFreeWrapper">
-							<img src="~assets/images/housedetails/phone.svg" alt="免费电话">
-							<div class="content">
-								<h3>拨打电话免费咨询</h3>
-								<h1>17602106152</h1>
-							</div>
-							<div class="wechat">
-								<img src="~assets/images/housedetails/wechat.svg" alt="微信扫码联系">
-								<p>微信扫码联系</p>
+							<div class="message-label">
+								<h2 class="message-label-title">退改政策</h2>
+								<div class="message-label-html" v-html="houseInfoTuigai.info"></div>
 							</div>
 
+							<!-- 拨打电话免费咨询 -->
+							<div class="callFreeWrapper">
+								<img src="~assets/images/housedetails/phone.svg" alt="免费电话">
+								<div class="content">
+									<h3>拨打电话免费咨询</h3>
+									<h1>17602106152</h1>
+								</div>
+								<div class="wechat">
+									<img src="~assets/images/housedetails/wechat.svg" alt="微信扫码联系">
+									<p>微信扫码联系</p>
+								</div>
+
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-		</b-container>
-		<b-container fluid>
-			<div id="map"></div>
-<!--			<div :id="'houseTraffic?houseid='+fullPath">-->
-<!--				<b-container>-->
-<!--					<h1 class="inforTitle">周边交通</h1>-->
-<!--				</b-container>-->
-<!--				<div style="position: relative;">-->
-<!--					<div style="height: 520px;" id="map"></div>-->
-<!--					<div class="viewMpaTools">-->
-<!--						<p class="title">请选择目的地：</p>-->
-<!--						<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
-<!--							<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
-<!--							</el-option>-->
-<!--						</el-select>-->
-<!--						<div style="display: flex;margin-top: 10px;">-->
-
-<!--							<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
-<!--								<el-tab-pane>-->
-<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
-
-<!--									距离{{distance}}步行需要{{vehicletime}}-->
-<!--								</el-tab-pane>-->
-<!--								<el-tab-pane>-->
-<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
-
-<!--									距离{{distance}}骑行需要{{vehicletime}}-->
-<!--								</el-tab-pane>-->
-<!--								<el-tab-pane>-->
-<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
-
-<!--									距离{{distance}}公交需要{{vehicletime}}-->
-<!--								</el-tab-pane>-->
-<!--								<el-tab-pane>-->
-<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
-
-<!--									距离{{distance}}驾车需要{{vehicletime}}-->
-<!--								</el-tab-pane>-->
-<!--							</el-tabs>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</div>-->
-
-<!--			</div>-->
-
-			<!--	周边房源		-->
-			<b-container v-if="1==2">
-				<div :id="'houseNotice?houseid='+fullPath">
-					<h1 class="inforTitle">住房租房须知</h1>
-
-					<div style="color: #333;" v-html="housedetails.termcontent"></div>
-				</div>
-
-				<div :id="'housePeriphery?houseid='+fullPath" class="todaySpecial" v-loading="loadingAroundHouseStatus">
-					<h1 class="inforTitle">周边房源</h1>
-					<b-row v-if="loadingAroundHouseStatus">
-						<h1>暂无周边房源</h1>
-					</b-row>
-					<b-row v-if="!loadingAroundHouseStatus">
-						<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in aroundHousedata" :key="$index">
-							<a :href="'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
-								<div class="imgWrap" style="height: 250px;overflow: hidden;display: flex;border-radius: 4px;">
-									<div class="el-image">
-										<img :src="yihomeGlobalVariable+item.imgurl" class="el-image__inner" style="object-fit: cover;">
-									</div>
-								</div>
-								<div class="contentWrap">
-									<h3>{{item.housename}}</h3>
-									<p class="price"><b>{{item.currencysymbol}}{{item.price}}</b><span>起/{{item.daw=='0'?'天':'周'}}</span></p>
-									<div class="country">
-										<span v-for="(listitem,$$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$$index" :style="{ 'background-color':listitem.color,'font-size':'10px','color': '#FFFFFF','letter-spacing': '0.64px','padding':'3px 7px','margin-right':'6px','margin-bottom':'10px'}">
-											{{listitem.name}}
-										</span>
-									</div>
-									<div class="buttonWrap">
-										<a target="_blank" :href="'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
-											<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
-										</a>
-									</div>
-								</div>
-							</a>
-						</b-col>
-					</b-row>
-				</div>
 			</b-container>
-		</b-container>
+			<b-container fluid>
+				<div id="map"></div>
+	<!--			<div :id="'houseTraffic?houseid='+fullPath">-->
+	<!--				<b-container>-->
+	<!--					<h1 class="inforTitle">周边交通</h1>-->
+	<!--				</b-container>-->
+	<!--				<div style="position: relative;">-->
+	<!--					<div style="height: 520px;" id="map"></div>-->
+	<!--					<div class="viewMpaTools">-->
+	<!--						<p class="title">请选择目的地：</p>-->
+	<!--						<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
+	<!--							<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
+	<!--							</el-option>-->
+	<!--						</el-select>-->
+	<!--						<div style="display: flex;margin-top: 10px;">-->
 
-		<!-- 单间预定 -->
-		<el-dialog title="申请人信息" :visible.sync="reserveStatus" :before-close="reserveFormClose" custom-class="reserveWrapper"
-				   :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
-			<el-form :model="reserveForm" :rules="reserveRules" ref="reserveForm" label-position="top">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="reserveForm.name" autocomplete="off" placeholder="请输入您的姓名"></el-input>
-				</el-form-item>
-				<el-form-item label="手机号" prop="phone">
-					<el-input v-model="reserveForm.phone" autocomplete="off" placeholder="请输入您的手机号"></el-input>
-				</el-form-item>
-				<el-form-item label="性别" prop="sex">
-					<el-select v-model="reserveForm.sex" placeholder="请选择性别" style="width: 100%;">
-						<el-option label="男" value="男"></el-option>
-						<el-option label="女" value="女"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="微信" prop="Wechat">
-					<el-input v-model="reserveForm.WeChat" autocomplete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="邮箱" prop="email">
-					<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
-				<el-button @click="reserveStatus = false">取消</el-button>
-				<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
-			</div>
-		</el-dialog>
-		<!-- 查看当前单间的图片信息 -->
-		<el-dialog center custom-class="viewSingleRoomWrap" :visible.sync="viewSingleRoomStatus" :close-on-click-modal="false"
-				   :close-on-press-escape="false">
-			<div v-if="viewSingleRoomStatus">
-				<view-single :view-data="viewimgData"></view-single>
-			</div>
-			<span slot="footer" class="dialog-footer">
-				<el-button type="primary" @click="viewSingleRoomStatus = false">关 闭</el-button>
-			</span>
-		</el-dialog>
+	<!--							<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
+	<!--								<el-tab-pane>-->
+	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
 
-		<el-dialog center top="0" width="100%" custom-class="videohouse" :visible.sync="videohouse" :close-on-click-modal="false"
-				   :close-on-press-escape="false">
-			<div v-if="videohouse" class="videohouseContent">
-				<b-container>
-					<div class="videoContent">
-						<i class="el-icon-close" @click="videohouse = false"></i>
+	<!--									距离{{distance}}步行需要{{vehicletime}}-->
+	<!--								</el-tab-pane>-->
+	<!--								<el-tab-pane>-->
+	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
+
+	<!--									距离{{distance}}骑行需要{{vehicletime}}-->
+	<!--								</el-tab-pane>-->
+	<!--								<el-tab-pane>-->
+	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
+
+	<!--									距离{{distance}}公交需要{{vehicletime}}-->
+	<!--								</el-tab-pane>-->
+	<!--								<el-tab-pane>-->
+	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
+
+	<!--									距离{{distance}}驾车需要{{vehicletime}}-->
+	<!--								</el-tab-pane>-->
+	<!--							</el-tabs>-->
+	<!--						</div>-->
+	<!--					</div>-->
+	<!--				</div>-->
+
+	<!--			</div>-->
+
+				<!--	周边房源		-->
+				<b-container v-if="1==2">
+					<div :id="'houseNotice?houseid='+fullPath">
+						<h1 class="inforTitle">住房租房须知</h1>
+
+						<div style="color: #333;" v-html="housedetails.termcontent"></div>
 					</div>
-					<div class="videoMain">
-						<video width="800" height="600" controls id="myVideo">
-							<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/mp4">
-							<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/ogg">
-							您的浏览器不支持 HTML5 video 标签。
-						</video>
+
+					<div :id="'housePeriphery?houseid='+fullPath" class="todaySpecial" v-loading="loadingAroundHouseStatus">
+						<h1 class="inforTitle">周边房源</h1>
+						<b-row v-if="loadingAroundHouseStatus">
+							<h1>暂无周边房源</h1>
+						</b-row>
+						<b-row v-if="!loadingAroundHouseStatus">
+							<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in aroundHousedata" :key="$index">
+								<a :href="'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
+									<div class="imgWrap" style="height: 250px;overflow: hidden;display: flex;border-radius: 4px;">
+										<div class="el-image">
+											<img :src="yihomeGlobalVariable+item.imgurl" class="el-image__inner" style="object-fit: cover;">
+										</div>
+									</div>
+									<div class="contentWrap">
+										<h3>{{item.housename}}</h3>
+										<p class="price"><b>{{item.currencysymbol}}{{item.price}}</b><span>起/{{item.daw=='0'?'天':'周'}}</span></p>
+										<div class="country">
+											<span v-for="(listitem,$$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$$index" :style="{ 'background-color':listitem.color,'font-size':'10px','color': '#FFFFFF','letter-spacing': '0.64px','padding':'3px 7px','margin-right':'6px','margin-bottom':'10px'}">
+												{{listitem.name}}
+											</span>
+										</div>
+										<div class="buttonWrap">
+											<a target="_blank" :href="'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
+												<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
+											</a>
+										</div>
+									</div>
+								</a>
+							</b-col>
+						</b-row>
 					</div>
 				</b-container>
-			</div>
-			<span slot="footer" class="dialog-footer">
-				<!-- <el-button type="primary">确 定</el-button> -->
-			</span>
-		</el-dialog>
-		<Modal v-model="viewFullimgWrapper" fullscreen title="" class-name="viewFullimgWrapper">
-			<b-container>
-				<slide-img2 :img-wrapper='housedetails.houseimg'></slide-img2>
 			</b-container>
-			<div slot="footer">
-			</div>
-		</Modal>
-	</section>
+
+			<!-- 单间预定 -->
+			<el-dialog title="申请人信息" :visible.sync="reserveStatus" :before-close="reserveFormClose" custom-class="reserveWrapper"
+					   :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
+				<el-form :model="reserveForm" :rules="reserveRules" ref="reserveForm" label-position="top">
+					<el-form-item label="姓名" prop="name">
+						<el-input v-model="reserveForm.name" autocomplete="off" placeholder="请输入您的姓名"></el-input>
+					</el-form-item>
+					<el-form-item label="手机号" prop="phone">
+						<el-input v-model="reserveForm.phone" autocomplete="off" placeholder="请输入您的手机号"></el-input>
+					</el-form-item>
+					<el-form-item label="性别" prop="sex">
+						<el-select v-model="reserveForm.sex" placeholder="请选择性别" style="width: 100%;">
+							<el-option label="男" value="男"></el-option>
+							<el-option label="女" value="女"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="微信" prop="Wechat">
+						<el-input v-model="reserveForm.WeChat" autocomplete="off"></el-input>
+					</el-form-item>
+					<el-form-item label="邮箱" prop="email">
+						<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
+					<el-button @click="reserveStatus = false">取消</el-button>
+					<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
+				</div>
+			</el-dialog>
+			<!-- 查看当前单间的图片信息 -->
+			<el-dialog center custom-class="viewSingleRoomWrap" :visible.sync="viewSingleRoomStatus" :close-on-click-modal="false"
+					   :close-on-press-escape="false">
+				<div v-if="viewSingleRoomStatus">
+					<view-single :view-data="viewimgData"></view-single>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="viewSingleRoomStatus = false">关 闭</el-button>
+				</span>
+			</el-dialog>
+
+			<el-dialog center top="0" width="100%" custom-class="videohouse" :visible.sync="videohouse" :close-on-click-modal="false"
+					   :close-on-press-escape="false">
+				<div v-if="videohouse" class="videohouseContent">
+					<b-container>
+						<div class="videoContent">
+							<i class="el-icon-close" @click="videohouse = false"></i>
+						</div>
+						<div class="videoMain">
+							<video width="800" height="600" controls id="myVideo">
+								<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/mp4">
+								<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/ogg">
+								您的浏览器不支持 HTML5 video 标签。
+							</video>
+						</div>
+					</b-container>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<!-- <el-button type="primary">确 定</el-button> -->
+				</span>
+			</el-dialog>
+			<Modal v-model="viewFullimgWrapper" fullscreen title="" class-name="viewFullimgWrapper">
+				<b-container>
+					<slide-img2 :img-wrapper='housedetails.houseimg'></slide-img2>
+				</b-container>
+				<div slot="footer">
+				</div>
+			</Modal>
+		</section>
 </template>
 
 <script>
@@ -302,7 +302,7 @@
 
 				activeName: '',
 				status: false,
-				fullPath: '',
+
 				housedetails: {},
 				houseInfo: {},
 				roomlist: [],
@@ -361,6 +361,12 @@
 
 				houseDetailsData:{},//房源的详情信息
 
+
+				/**
+				 * common
+				 */
+				fullPath: '',
+
 				/**
 				 * 收藏
 				 */
@@ -405,7 +411,6 @@
 		},
 		mounted() {
 			window.addEventListener('scroll', this.handleScroll, true);
-			console.log('$route',this.$route)
 			this.fullPath = this.$route.query.houseid;
 
 			if (this.$route.query.houseid) {
@@ -417,6 +422,7 @@
 
 			this.getCurrentHouseDetails(this.fullPath);
 			this.getApiRoomType();
+			this.getCollectList();
 			if (process.browser) {
 				if (localStorage.getItem('backurl')) {
 					localStorage.removeItem('backurl');
@@ -485,24 +491,24 @@
 				}
 			},
 			chooseHouseType(currentid) {
-				console.log(currentid)
-				if (currentid == 'all') {
-					this.allRoom = this.oldAllRoom;
-					return;
-				}
-				this.allRoom = this.oldAllRoom;
-				let data = [];
-				this.allRoom.forEach((item, index) => {
-					if(item.roomtag){
-						item.roomtag.forEach((item2, index2) => {
-							if (item2.id == currentid) {
-								console.log(item)
-								data.push(item);
-								this.allRoom = data;
-							}
-						})
-					}
-				})
+				// console.log(currentid)
+				// if (currentid == 'all') {
+				// 	this.allRoom = this.oldAllRoom;
+				// 	return;
+				// }
+				// this.allRoom = this.oldAllRoom;
+				// let data = [];
+				// this.allRoom.forEach((item, index) => {
+				// 	if(item.roomtag){
+				// 		item.roomtag.forEach((item2, index2) => {
+				// 			if (item2.id == currentid) {
+				// 				console.log(item)
+				// 				data.push(item);
+				// 				this.allRoom = data;
+				// 			}
+				// 		})
+				// 	}
+				// })
 			},
 			handleClick(tab, event) {
 				console.log(tab.index);
@@ -554,11 +560,7 @@
 				}
 			},
 
-			getApiRoomType(){
-				this.$request.getApiRoomType().then(res => {
-					this.roomlist = res.data
-				})
-			},
+
 			dropMap(address) {
 				var vthis = this;
 				var geocoder = new google.maps.Geocoder();
@@ -792,7 +794,11 @@
 			},
 
 
-
+			getApiRoomType(){
+				this.$request.getApiRoomType().then(res => {
+					this.roomlist = res.data
+				})
+			},
 			getCurrentHouseDetails(number) {
 				const houseloading = this.$loading({
 					lock: true,
@@ -959,11 +965,12 @@
 				})
 			},
 			findCollect(){
-				// this.collectList
+				const _Index = this.collectList.findIndex(ele => ele.houseId == this.fullPath)
+				this.iscollect = _Index != -1 ? true : false
 			},
 			getCollectList(){
 				if(localStorage.getItem('token')){
-					this.$request.getCollectList({usersLeaseperiodId: data.id}).then(res => {
+					this.$request.getCollectList().then(res => {
 						if (res.code === 200) {
 							this.collectList = res.data
 						} else {
@@ -1326,10 +1333,10 @@
 
 	.houseIntroduce-desc{
 		transition: all .4s linear;
-		max-height: 134px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		/*max-height: 134px;*/
+		/*overflow: hidden;*/
+		/*text-overflow: ellipsis;*/
+		/*white-space: nowrap;*/
 	}
 	.houseIntroduce-show{
 		max-height: 1000px;

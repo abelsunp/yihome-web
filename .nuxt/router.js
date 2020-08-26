@@ -9,6 +9,7 @@ const _24ef1c7a = () => interopDefault(import('../pages/contact/index.vue' /* we
 const _8592d82c = () => interopDefault(import('../pages/findhouse/index.vue' /* webpackChunkName: "pages/findhouse/index" */))
 const _84fd40f2 = () => interopDefault(import('../pages/findpwd/index.vue' /* webpackChunkName: "pages/findpwd/index" */))
 const _0c15aea9 = () => interopDefault(import('../pages/helptickets/index.vue' /* webpackChunkName: "pages/helptickets/index" */))
+const _119fb7b1 = () => interopDefault(import('../pages/house-detail/index.vue' /* webpackChunkName: "pages/house-detail/index" */))
 const _02e19fd4 = () => interopDefault(import('../pages/housedetail/index.vue' /* webpackChunkName: "pages/housedetail/index" */))
 const _f91cdb38 = () => interopDefault(import('../pages/Join-us/index.vue' /* webpackChunkName: "pages/Join-us/index" */))
 const _786e77cc = () => interopDefault(import('../pages/login/index.vue' /* webpackChunkName: "pages/login/index" */))
@@ -70,6 +71,10 @@ export const routerOptions = {
     path: "/helptickets",
     component: _0c15aea9,
     name: "helptickets"
+  }, {
+    path: "/house-detail",
+    component: _119fb7b1,
+    name: "house-detail"
   }, {
     path: "/housedetail",
     component: _02e19fd4,
