@@ -23,15 +23,16 @@
 								</el-menu-item>
 							</el-submenu>
 							<el-menu-item index="/stories">精彩故事</el-menu-item>
-							<el-menu-item index="/abroad">留学动态</el-menu-item>
-							<el-submenu index="3444" popper-class="aboutItemMenu">
-							    <template slot="title">关于YIHOME</template>
-								<el-menu-item index="/about" id="about">关于我们</el-menu-item>
-								<el-menu-item index="/join-us" id="about">加入我们</el-menu-item>
-								<el-menu-item index="/contact" id="about">联系我们</el-menu-item>
-							</el-submenu>
+<!--							<el-menu-item index="/abroad">留学动态</el-menu-item>-->
+							<el-menu-item index="/about">关于YIHOME</el-menu-item>
+<!--							<el-submenu index="3444" popper-class="aboutItemMenu">-->
+<!--							    <template slot="title">关于YIHOME</template>-->
+<!--								<el-menu-item index="/about" id="about">关于我们</el-menu-item>-->
+<!--								<el-menu-item index="/join-us" id="about">加入我们</el-menu-item>-->
+<!--								<el-menu-item index="/contact" id="about">联系我们</el-menu-item>-->
+<!--							</el-submenu>-->
 
-							<el-menu-item v-if="!islogin" index="/login">商家入驻</el-menu-item>
+<!--							<el-menu-item v-if="!islogin" index="/login">商家入驻</el-menu-item>-->
 
 							<!-- <el-menu-item index="/about">关于我们</el-menu-item>
 							<el-menu-item index="/join-us">加入我们</el-menu-item>

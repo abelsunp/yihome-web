@@ -23,14 +23,14 @@
 		},
 		async asyncData(context){
 			console.log(context,1)
-			return context.app.$request.getStorydetails({'id': context.query.id}).then(res=>{
-				return {
-					content: res
-				}
-			})
+			// return context.app.$request.getStorydetails({'id': context.query.id}).then(res=>{
+			// 	return {
+			// 		content: res
+			// 	}
+			// })
 		},
 		created(){
-			
+			console.log(app.$request)
 			
 		}
 	}

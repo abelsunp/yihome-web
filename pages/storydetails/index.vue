@@ -2,8 +2,8 @@
 	<b-container fluid>
 		<b-container class="details">
 			<h1 class="title">{{content.title}}</h1>
-			<p class="time">{{content.updatedate}}</p>
-			<div class="content" v-html="content.context"></div>
+			<p class="time">{{content.updateTime}}</p>
+			<div class="content" v-html="content.info"></div>
 			<div class="details-footer">
 				<div class="details-footer-item">收藏 | 33</div>
 				<div class="details-footer-item">已收藏 | 100</div>
@@ -21,15 +21,15 @@
 			}
 		},
 		async asyncData({query,app,params,route}){
-			return app.$request.getStorydetails({'id': query.id}).then(res=>{
+			return app.$request.getStorydetails({'newsId': query.id}).then(res=>{
 				return {
-					content: res
+					content: res.data
 				}
-			}) 
+			})
 		},
 		created(){
-			
-			
+
+
 		}
 	}
 </script>
@@ -61,6 +61,7 @@
 			text-align: center;
 		}
 		&-footer{
+			margin-top: 30px;
 			&-item{
 				line-height: 35px;
 				display: inline-block;

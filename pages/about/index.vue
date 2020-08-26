@@ -4,16 +4,22 @@
 			<h1>海外生活有忆家</h1>
 			<img src="@/assets/images/about/aboutBanner.png" alt="">
 		</div>
+		<div class="others">
+			<div class="others-cont">
+				<div class="others-cont-items" @click="jump('/contact')">联系YIHOME</div>
+				<div class="others-cont-items" @click="jump('/join-us')">加入YIHOME</div>
+			</div>
+		</div>
 		<b-container>
 			<div class="main-content">
-				<h1 class="title">YIHOME 忆家</h1>
-				<p class="info">上海颖鸿网络科技有限公司是国内领先的“海外留学生高端长租公寓”运营平台，公司一直秉承“Better life in YIHOME”的理念，希望通过打造以公寓为核心的生活服务平台从而构建全新的海外租住生态圈。
-自成2017年成立以来，YIHOME就一直致力于为海外留学生提供长期租住解决方案。作为一家创业型互联网海外租房公司，YIHOME可谓是发展迅猛，如今已经在英国以及澳洲站稳脚跟并着手开拓其他欧美市场。YIHOME不仅探索出一套成熟稳定的盈利模式也凭借着自己的创新理念吸引了一大批精英的加入和合作。虽然长路漫漫，但是YIHOME会一直在路上。</p>
+				<h1 class="title">海外生活有忆家</h1>
+				<p class="info">上海颖鸿网络科技有限公司是国内领先的“海外留学生高端长租公寓”运营平台，<br/>公司一直秉承“Better life in YIHOME”的理念，<br/>希望通过打造以公寓为核心的生活服务平台从而构建全新的海外租住生态圈。
+自成2017年成立以来，<br/>YIHOME就一直致力于为海外留学生提供长期租住解决方案。作为一家创业型互联网海外租房公司，<br/>YIHOME可谓是发展迅猛，如今已经在英国以及澳洲站稳脚跟并着手开拓其他欧美市场。<br/>YIHOME不仅探索出一套成熟稳定的盈利模式也凭借着自己的创新理念吸引了一大批精英的加入和合作。<br/>虽然长路漫漫，但是YIHOME会一直在路上。</p>
 			</div>
-			<div class="main-info">
+			<div class="main-content">
 				<h1 class="title">我们的房东房客正引领未来</h1>
 				<p class="info">
-					我们一直致力创建一个更好的平台，成就每一次独特的海外留学租房体验。始终秉承客户第一、拥抱变化、诚信敬业、团队合作为核心价值观，用心服务每一位客户，真诚对待每一位合作伙伴。和业界同仁们一起为留学生租房做出自己的努力。
+					我们一直致力创建一个更好的平台，成就每一次独特的海外留学租房体验。<br/>始终秉承客户第一、拥抱变化、诚信敬业、团队合作为核心价值观，<br/>用心服务每一位客户，真诚对待每一位合作伙伴。<br/>和业界同仁们一起为留学生租房做出自己的努力。
 				</p>
 			</div>
 			<b-row>
@@ -64,7 +70,10 @@
       },
 	  freeCall(){
 		this.$parent.$parent.freeCallStatus = true;
-	  }
+	  },
+	jump(path){
+		this.$router.push({path })
+	}
     },
     created(){
       
@@ -73,7 +82,7 @@
   }
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
 	.container-fluid{
 		padding: 0;
 	}
@@ -98,6 +107,46 @@
 	.container{
 		padding: 50px 0 82px;
 	}
+	.others{
+		width: 100%;
+		height: 100px;
+		background: rgba(246, 246, 246, 1);
+		&-cont{
+			position: relative;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: 560px;
+			display: flex;
+			&-items{
+				width: 250px;
+				line-height: 50px;
+				border-radius: 25px;
+				display: inline-block;
+				background-color: #fff;
+				border: 2px solid rgb(60,71,170);
+				text-align: center;
+				color: rgb(60,71,170);
+				font-size: 18px;
+				cursor: pointer;
+				transition: all .3s linear;
+				&:hover{
+					background-color: rgb(60,71,170);
+					color: #fff;
+				}
+				&:first-child{
+					background-color: rgba(247, 71, 56, 1);
+					border-color: rgba(247, 71, 56, 1);
+					margin-right: 60px;
+					color: #fff;
+					&:hover{
+						border-color: rgba(206, 23, 30, 1);
+						background-color: rgba(206, 23, 30, 1);
+					}
+				}
+			}
+		}
+	}
 	.container h1{
 		font-family: PingFangSC-Medium;
 		font-size: 30px;
@@ -107,14 +156,21 @@
 		line-height: 42px;
 		margin-bottom: 30px;
 	}
-	.main-content .info{
-		font-family: PingFangSC-Regular;
-		font-size: 16px;
-		color: #484848;
-		letter-spacing: 1.38px;
-		line-height: 22px;
-		margin-bottom: 60px;
+	.main-content{
+		.title{
+			text-align: center;
+		}
+		.info{
+			font-family: PingFangSC-Regular;
+			font-size: 16px;
+			color: #484848;
+			letter-spacing: 1.38px;
+			line-height: 32px;
+			margin-bottom: 60px;
+			text-align: center;
+		}
 	}
+
 	.main-info .info{
 		font-family: PingFangSC-Regular;
 		font-size: 16px;

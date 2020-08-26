@@ -285,16 +285,16 @@
 				<h1>留学动态<span style="float: right;"><nuxt-link target="_blank" to="/abroad" class="readMore">查看更多<i class="el-icon-arrow-right"></i></nuxt-link></span></h1>
 				<p class="info">海外生活有忆家，忆家事事关心</p>
 				<b-row>
-					<b-col md="4" sm="6" lg="3" class="listitem" v-for="(item,$index) in studentData" :key="$index">
+					<b-col md="4" sm="6" lg="3" class="listitem" v-for="(item,$index) in studentData" :key="$index" v-if="$index < 4">
 						<a :href="'/storydetails?id='+item.id" target="_blank">
 							<div class="imgWrap">
 								<div class="el-image">
-									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="april-img" style="object-fit: cover;">
+									<img :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="april-img" style="object-fit: cover;">
 								</div>
 							</div>
 							<div class="contentWrap">
 								<h5>{{item.title}}</h5>
-								<p>{{item.titcon}}</p>
+								<p v-html="item.info"></p>
 							</div>
 						</a>
 					</b-col>
@@ -600,7 +600,7 @@
 			},
 			/* 精选故事 */
 			getStory(){
-				this.$request.getStory({'page':'1','limit':'3',type: 3}).then(res=>{
+				this.$request.getStory({type: 2}).then(res=>{
 					var resData = res.data;
 					// resData.forEach(function(item,index){
 					// 	item.titleimg = 'https://www.inyihome.com'+item.titleimg

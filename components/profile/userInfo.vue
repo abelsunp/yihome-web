@@ -13,7 +13,7 @@
 								</el-form-item>
 							</b-col>
 							<b-col md="6" sm="12" lg="6">
-								<el-form-item label="姓名（如中文名为“李明”请输入“Ming Li”）" prop="nameEn">
+								<el-form-item label="姓名（英文）" prop="nameEn">
 									<el-input v-model="ruleForm.nameEn" placeholder="请输入个人英文姓名" clearable></el-input>
 								</el-form-item>
 							</b-col>
@@ -89,8 +89,8 @@
 							<b-col md="6" sm="12" lg="6">
 								<el-form-item label="性别" prop="guaranteeSex">
 									<el-select v-model="ruleForm.guaranteeSex" placeholder="请选择性别" clearable style="width: 100%;">
-										<el-option label="男" value="Male"></el-option>
-										<el-option label="女" value="Female"></el-option>
+										<el-option label="男" value="男"></el-option>
+										<el-option label="女" value="女"></el-option>
 									</el-select>
 								</el-form-item>
 							</b-col>
@@ -542,11 +542,10 @@
 			dataSubmit() {
 				this.$refs.ruleForm.validate((valid) => {
 					let parmasData = this.ruleForm;
-					console.log('valid', valid)
 					if (valid) {
 						const params = {
-							user: this.ruleForm,
-							guarantee: {
+							users: this.ruleForm,
+							usersGuarantee: {
 								name: this.ruleForm.guaranteeName,
 								relation: this.ruleForm.guaranteeRelation,
 								phone: this.ruleForm.guaranteePhone,
@@ -556,10 +555,9 @@
 							}
 						}
 						this.$request.saveuserInfo(params).then(res => {
-							console.log(res)
 							if(res.code === 200){
 								this.$router.go();
-								//$("html,body").animate({ scrollTop: 10 }, 500);
+								$("html,body").animate({ scrollTop: 10 }, 500);
 							}else{
 
 							}

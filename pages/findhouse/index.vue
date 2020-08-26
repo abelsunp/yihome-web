@@ -123,7 +123,7 @@
 					<b-col md="3" class="listitem" >
 						<div class="pic-box">
 							<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
-							<img :src="yihomeGlobalVariable+item.houseUrl| imgStrClac('x')" :alt="item.housename">
+							<img class="april-img" :src="yihomeGlobalVariable+item.houseUrl| imgStrClac('x')" :alt="item.housename">
 							<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
 						</div>
 					</b-col>
@@ -131,7 +131,7 @@
 						<div class="info-box">
 							<h5 class="title">{{item.name}}</h5>
 							<h6 class="price">{{item.countryId | fliterSymble}}{{item.minPrice}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
-							<div class="location" v-if="item.schoolName"> <i class="iconfont">&#xe62c;</i> {{item.schoolName}} </div>
+							<div class="location" > <i v-if="item.schoolName" class="iconfont">&#xe62c;</i> {{item.schoolName}} </div>
 							<div class="location"> </div>
 							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
 							<div class="info-box-other"> <span>房租包含：</span>水费、电费、网费 </div>
@@ -630,7 +630,7 @@
 		color: #333333;
 		letter-spacing: 1.13px;
 		line-height: 22px;
-		margin: 20px 0 25px;
+		margin: 20px 0 31px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
@@ -667,7 +667,7 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		line-height: 28px;
+		line-height: 34px;
 	}
 	.info-box{
 		border-top: none;

@@ -1,6 +1,6 @@
 <template>
 	<section id="profile">
-		<b-container>
+		<b-container class="profile-cont">
 			<el-container>
 				<el-container>
 					<el-aside width="205px">
@@ -75,6 +75,10 @@
 		background: #FBFBFB;
 		padding:40px 0;
 		border-bottom: 1px solid #E6E6E6;
+
+	}
+	.profile-cont{
+		min-width: 900px !important;
 	}
 	.profileMenu {
 		min-height: 732px;

@@ -9,12 +9,12 @@
 					<a :href="'/storydetails?id='+item.id" target="_blank">
 						<div class="img">
 							<div  class="el-image">
-								<img :src="yihomeGlobalVariable+item.titleimg | imgStrClac('l')"  class="april-img" style="object-fit: cover;">
+								<img :src="yihomeGlobalVariable+item.imgUrl | imgStrClac('l')"  class="april-img" style="object-fit: cover;">
 							</div>
 						</div>
 						<div class="content">
 							<h5>{{item.title}}</h5>
-							<p>{{item.titcon}}</p>
+							<p v-html="item.info"></p>
 						</div>
 					</a>
 				</b-col>
@@ -89,21 +89,15 @@
 		},
 		methods:{
 			getList(){
-				this.loadingStatus = true
-				this.$request.getStory({page:this.pageNum,limit:this.pageSize,type: 3}).then(res=>{
-					var resData = res.data;
-					if(res.count>6){
-						this.pageStatus = true;
-					}else{
-						this.pageStatus = false;
-					}
-					// resData.forEach(function(item,index){
-					// 	item.titleimg = 'https://www.inyihome.com'+item.titleimg
-					// })
-					this.listitemData = res.data;
-					this.totalCount = res.count;
-					
+				this.loadingStatus = true;
+				this.$request.getStory({type: 1}).then(res=>{
 					this.loadingStatus = false;
+					if(res.code === 200){
+						this.listitemData = res.data;
+						console.log(this.listitemData)
+					}else{
+						this.$message.error(res.msg);
+					}
 				}).catch(e=>{
 					this.loadingStatus = false;
 				})

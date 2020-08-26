@@ -90,8 +90,15 @@ const request = {
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
   },
   /* 故事详情 */
-  getStorydetails:(postData) => fetch('/front/findnewsdetail',postData),
-
+  // getStorydetails:(postData) => fetch('/front/findnewsdetail',postData),
+  getStorydetails: (params) => {
+    let config = {
+      url: `/yihome-admin/api/home/house/newsDetail`,
+      params,
+      method: 'get',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
   /* 注册 */
   //验证邮箱是否注册
@@ -230,7 +237,7 @@ const request = {
   // insertfavorite:(postData) => fetch('/front/insertfavorite',postData),//userid houseid
   insertfavorite:(data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/userApiCollect`,
+      url: `/yihome-admin/api/home/house/userApiCollect?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -243,7 +250,7 @@ const request = {
   // deletefavorite:(postData) => fetch('/front/deletefavorite',postData),//userid houseid
   deletefavorite:(data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/userApiCollect`,
+      url: `/yihome-admin/api/home/house/unUserApiCollect?${qs.stringify(data)}`,
       data,
       method: 'post',
     };

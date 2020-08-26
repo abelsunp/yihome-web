@@ -126,47 +126,47 @@
 		</b-container>
 		<b-container fluid>
 			<div id="map"></div>
-			<!-- <div :id="'houseTraffic?houseid='+fullPath">
-				<b-container>
-					<h1 class="inforTitle">周边交通</h1>
-				</b-container>
-				<div style="position: relative;">
-					<div style="height: 520px;" id="map"></div>
-					<div class="viewMpaTools">
-						<p class="title">请选择目的地：</p>
-						<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">
-							<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">
-							</el-option>
-						</el-select>
-						<div style="display: flex;margin-top: 10px;">
+<!--			<div :id="'houseTraffic?houseid='+fullPath">-->
+<!--				<b-container>-->
+<!--					<h1 class="inforTitle">周边交通</h1>-->
+<!--				</b-container>-->
+<!--				<div style="position: relative;">-->
+<!--					<div style="height: 520px;" id="map"></div>-->
+<!--					<div class="viewMpaTools">-->
+<!--						<p class="title">请选择目的地：</p>-->
+<!--						<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
+<!--							<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
+<!--							</el-option>-->
+<!--						</el-select>-->
+<!--						<div style="display: flex;margin-top: 10px;">-->
 
-							<el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-								<el-tab-pane>
-									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>
+<!--							<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
+<!--								<el-tab-pane>-->
+<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
 
-									距离{{distance}}步行需要{{vehicletime}}
-								</el-tab-pane>
-								<el-tab-pane>
-									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>
+<!--									距离{{distance}}步行需要{{vehicletime}}-->
+<!--								</el-tab-pane>-->
+<!--								<el-tab-pane>-->
+<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
 
-									距离{{distance}}骑行需要{{vehicletime}}
-								</el-tab-pane>
-								<el-tab-pane>
-									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>
+<!--									距离{{distance}}骑行需要{{vehicletime}}-->
+<!--								</el-tab-pane>-->
+<!--								<el-tab-pane>-->
+<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
 
-									距离{{distance}}公交需要{{vehicletime}}
-								</el-tab-pane>
-								<el-tab-pane>
-									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>
+<!--									距离{{distance}}公交需要{{vehicletime}}-->
+<!--								</el-tab-pane>-->
+<!--								<el-tab-pane>-->
+<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
 
-									距离{{distance}}驾车需要{{vehicletime}}
-								</el-tab-pane>
-							</el-tabs>
-						</div>
-					</div>
-				</div>
+<!--									距离{{distance}}驾车需要{{vehicletime}}-->
+<!--								</el-tab-pane>-->
+<!--							</el-tabs>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
 
-			</div> -->
+<!--			</div>-->
 
 			<!--	周边房源		-->
 			<b-container v-if="1==2">
@@ -512,7 +512,7 @@
 
 					return;
 				}
-				//var map = new google.maps.Map(document.getElementById('map'));
+				var map = new google.maps.Map(document.getElementById('map'));
 				if (tab.index == 0) {
 					this.typetext = "步行";
 					this.icon = "https://www.inyihome.com/img/WALKING2.svg";
@@ -958,11 +958,14 @@
 					this.$message.error('网络错误');
 				})
 			},
+			findCollect(){
+				// this.collectList
+			},
 			getCollectList(){
 				if(localStorage.getItem('token')){
 					this.$request.getCollectList({usersLeaseperiodId: data.id}).then(res => {
 						if (res.code === 200) {
-							this.collectList = data
+							this.collectList = res.data
 						} else {
 							this.$message.error(res.msg);
 						}
@@ -980,9 +983,9 @@
 					}).then(res => {
 						if (res.code == 200) {
 							this.iscollect = true;
-						}
+						}else this.$message.error(res.msg);
 					}).catch(e => {
-
+						this.$message.error('网络错误');
 					})
 				}else{
 					localStorage.setItem('backurl', this.$route.fullPath);
@@ -1003,9 +1006,9 @@
 						}).then(res => {
 							if (res.code == 200) {
 								this.iscollect = false;
-							}
+							}else this.$message.error(res.msg);
 						}).catch(e => {
-
+							this.$message.error('网络错误');
 						})
 
 					}).catch(() => {
