@@ -304,10 +304,10 @@
 				status: false,
 
 				housedetails: {},
-				houseInfo: {},
-				roomlist: [],
+
+
 				weiyuList: [],
-				houseRoome: {},
+
 				loadingAroundHouseStatus: false,
 				aroundHousedata: [],
 				addressData: [],
@@ -376,6 +376,9 @@
 				/**
 				 * 房源信息
 				 */
+				houseInfo: {},
+				roomlist: [],
+				houseRoome: {},
 				houseInfoTuigai: '', //退改政策
 				houseInfoXuzhi: '', //租房须知
 				houseInfoDescCh: '', //房源概括中文
@@ -806,143 +809,142 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$request.findhousedetail({
-					houseId: number
-				}).then(res => {
-					console.log('getCurrentHouseDetails', res)
-					houseloading.close();
-					if (Object.keys(res.data).length == 0) {
-						this.$confirm('当前房屋信息不存在', '提示', {
-							confirmButtonText: '确定',
-							cancelButtonText: '取消',
-							type: 'warning'
-						}).then(() => {
-							this.$router.push({
-								path: '/'
-							})
-						}).catch(() => {
-							this.$router.push({
-								path: '/'
-							})
-						});
-						return
-					} else {
-						this.housedetails = res.data;
-						this.houseInfo = res.data.house;
-						this.houseRoome = res.data.rooms;
-						for(let item of this.houseRoome){
-							item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
+				this.$request.findhousedetail({houseId: number}).then(res => {
+					if(res.code === 200){
+						houseloading.close();
+						if (Object.keys(res.data).length == 0) {
+							this.$confirm('当前房屋信息不存在', '提示', {
+								confirmButtonText: '确定',
+								cancelButtonText: '取消',
+								type: 'warning'
+							}).then(() => {
+								this.$router.push({
+									path: '/'
+								})
+							}).catch(() => {
+								this.$router.push({
+									path: '/'
+								})
+							});
+							return
+						} else {
+							this.housedetails = res.data;
+							this.houseInfo = res.data.house;
+							this.houseRoome = res.data.rooms;
+							for(let item of this.houseRoome){
+								item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
+							}
+
+							console.log("this.houseRoome", this.houseRoome)
+
+
+							//*********** 卫浴，在rooms 里的lables  labelTypeId === 16
+							// console.log("this.houseRoome.lables", res.data)
+							// this.weiyuList = this.houseRoome.lables.filter(ele => ele.labelTypeId === 16)
+							// console.log("this.houseRoome.lables", this.houseRoome.lables, this.weiyuList)
+							//获取选中的label  分类  1.标签  2.学校 3.学校
+
+							const checkAll = res.data.lables;
+							checkAll.forEach(el=>{
+								if(el.type==1){
+									this.userCheckLabel.push(el)
+								}
+								// if(el.type==2){
+								// 	this.schoolCheckLabel.push(el)
+								// }
+								if(el.type==3){
+									this.addressCheckLabel.push(el)
+								}
+							});
+
+
+
+							this.schoolCheckLabel = res.data.schools;
+							console.log("this.housedetails.schools", this.housedetails.schools)
+
+							res.data.infos.forEach(el=>{
+								if(el.type==1){
+									this.houseInfoDescCh = el
+								}
+								if(el.type==2){
+									this.houseInfoDescEn = el
+								}
+								if(el.type==3){
+									this.houseInfoTuigai = el
+								}
+								if(el.type==4){
+									this.houseInfoXuzhi = el
+								}
+							});
+
+							console.log('标签', this.userCheckLabel)
+							console.log('学校',this.schoolCheckLabel)
+							console.log('地址',this.addressCheckLabel)
+
+							//再次循环this.userCheckLabel
+							this.userCheckLabel.forEach(el=>{
+								if(el.labelTypeId==2){//配套设施
+									this.userCheckLabel1.push(el)
+								}
+								if(el.labelTypeId==3){//安全保障
+									this.userCheckLabel2.push(el)
+								}
+								if(el.labelTypeId==15){//房源标签
+									this.userCheckLabel3.push(el)
+								}
+							});
+							console.log('配套设施',this.userCheckLabel1)
+							console.log('安全保障',this.userCheckLabel2)
+							console.log('房源标签',this.userCheckLabel3)
+
+
+							res.data.urls.forEach(el=>{
+								if(el.type==1){
+									this.userCheckUrl.push(el)
+								}
+								if(el.type==2){
+									this.userCheckUrl2.push(el)
+								}
+							});
+
+
+							this.myaddress = res.address;
+							//this.dropMap(res.address);
+							//周边房源
+							// this.getAroundHouse(res.cityid);
+
+							this.addressData = res.addresses;
+							if(res.school){
+								// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
+
+								res.school.forEach((item,index)=>{
+									console.log(item,111)
+									item['addressdetail'] = item['address']
+									item['addressname'] = item['schoolname']
+								})
+								this.addressData = res.addresses.concat(res.school);
+							}
+
+
+							//this.endAddress = this.addressData[0].addressdetail;
+							/* 当前房源的房间类型 */
+							this.roomType = res.housetag;
+							/* 所有房间 */
+							this.allRoom = res.room;
+							this.oldAllRoom = res.room;
+
+							this.currencysymbol = res.country.currencysymbol;
+
+
+							/* 检查是否收藏房间 */
+							this.checkCollect();
+
 						}
-
-						console.log("this.houseRoome", this.houseRoome)
-
-
-						//*********** 卫浴，在rooms 里的lables  labelTypeId === 16
-						// console.log("this.houseRoome.lables", res.data)
-						// this.weiyuList = this.houseRoome.lables.filter(ele => ele.labelTypeId === 16)
-						// console.log("this.houseRoome.lables", this.houseRoome.lables, this.weiyuList)
-						//获取选中的label  分类  1.标签  2.学校 3.学校
-
-						const checkAll = res.data.lables;
-						checkAll.forEach(el=>{
-							if(el.type==1){
-								this.userCheckLabel.push(el)
-							}
-							// if(el.type==2){
-							// 	this.schoolCheckLabel.push(el)
-							// }
-							if(el.type==3){
-								this.addressCheckLabel.push(el)
-							}
-						});
-
-
-
-						this.schoolCheckLabel = res.data.schools;
-						console.log("this.housedetails.schools", this.housedetails.schools)
-
-						res.data.infos.forEach(el=>{
-							if(el.type==1){
-								this.houseInfoDescCh = el
-							}
-							if(el.type==2){
-								this.houseInfoDescEn = el
-							}
-							if(el.type==3){
-								this.houseInfoTuigai = el
-							}
-							if(el.type==4){
-								this.houseInfoXuzhi = el
-							}
-						});
-
-						console.log('标签', this.userCheckLabel)
-						console.log('学校',this.schoolCheckLabel)
-						console.log('地址',this.addressCheckLabel)
-
-						//再次循环this.userCheckLabel
-						this.userCheckLabel.forEach(el=>{
-							if(el.labelTypeId==2){//配套设施
-								this.userCheckLabel1.push(el)
-							}
-							if(el.labelTypeId==3){//安全保障
-								this.userCheckLabel2.push(el)
-							}
-							if(el.labelTypeId==15){//房源标签
-								this.userCheckLabel3.push(el)
-							}
-						});
-						console.log('配套设施',this.userCheckLabel1)
-						console.log('安全保障',this.userCheckLabel2)
-						console.log('房源标签',this.userCheckLabel3)
-
-
-						res.data.urls.forEach(el=>{
-							if(el.type==1){
-								this.userCheckUrl.push(el)
-							}
-							if(el.type==2){
-								this.userCheckUrl2.push(el)
-							}
-						});
-
-
-						this.myaddress = res.address;
-						//this.dropMap(res.address);
-						//周边房源
-						// this.getAroundHouse(res.cityid);
-
-						this.addressData = res.addresses;
-						if(res.school){
-							// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
-
-							res.school.forEach((item,index)=>{
-								console.log(item,111)
-								item['addressdetail'] = item['address']
-								item['addressname'] = item['schoolname']
-							})
-							this.addressData = res.addresses.concat(res.school);
-						}
-
-
-						//this.endAddress = this.addressData[0].addressdetail;
-						/* 当前房源的房间类型 */
-						this.roomType = res.housetag;
-						/* 所有房间 */
-						this.allRoom = res.room;
-						this.oldAllRoom = res.room;
-
-						this.currencysymbol = res.country.currencysymbol;
-
-
-						/* 检查是否收藏房间 */
-						this.checkCollect();
-
 					}
-				}).catch(e => {
-					houseloading.close();
-					this.$message.error('网络错误');
-					console.log(e,88888888)
+					else{
+						houseloading.close();
+						this.$message.error('网络错误');
+					}
 				})
 			},
 			apply(data){
@@ -956,6 +958,14 @@
 						});
 						this.reserveStatus = false;
 						window._agl && window._agl.push(['track', ['success', {t: 3}]])
+					}else if(res.code === 401){
+						this.$message.error(res.msg);
+						setTimeout(() => {
+							localStorage.setItem('backurl', this.$route.fullPath);
+							this.$router.push({
+								path: '/login'
+							})
+						},2000)
 					} else {
 						this.$message.error(res.msg);
 					}
@@ -973,14 +983,8 @@
 					this.$request.getCollectList().then(res => {
 						if (res.code === 200) {
 							this.collectList = res.data
-						} else {
-							this.$message.error(res.msg);
 						}
-					}).catch(e => {
-						this.fullscreenLoading = false;
-						this.$message.error('网络错误');
 					})
-
 				}
 			},
 			collect() {
@@ -990,6 +994,14 @@
 					}).then(res => {
 						if (res.code == 200) {
 							this.iscollect = true;
+						}else if(res.code === 401){
+							this.$message.error(res.msg);
+							setTimeout(() => {
+								localStorage.setItem('backurl', this.$route.fullPath);
+								this.$router.push({
+									path: '/login'
+								})
+							},2000)
 						}else this.$message.error(res.msg);
 					}).catch(e => {
 						this.$message.error('网络错误');
@@ -1013,7 +1025,15 @@
 						}).then(res => {
 							if (res.code == 200) {
 								this.iscollect = false;
-							}else this.$message.error(res.msg);
+							}else if(res.code === 401){
+								this.$message.error(res.msg);
+								setTimeout(() => {
+									localStorage.setItem('backurl', this.$route.fullPath);
+									this.$router.push({
+										path: '/login'
+									})
+								},2000)
+							} else this.$message.error(res.msg);
 						}).catch(e => {
 							this.$message.error('网络错误');
 						})
@@ -1039,6 +1059,7 @@
 <style lang="scss" scoped="scoped">
 	.house-cont{
 		width: 1300px;
+		margin: 0 auto;
 		&-detail{
 			width: 100%;
 			display: flex;
