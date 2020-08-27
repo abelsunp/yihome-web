@@ -68,7 +68,7 @@
 					<el-tabs type="border-card" class="el-discount" @tab-click="handleClickCity">
 						<el-tab-pane :label="item.name" v-for="(item,$index) in hotecityList" :key="$index" v-if="$index < 6">
 							<b-row>
-								<b-col md="6" sm="6" lg="4" class="listitem" v-for="(listItem,$$index) in houseList" :key="$$index">
+								<b-col md="6" sm="6" lg="4" class="listitem" v-for="(listItem,$$index) in houseList" :key="$$index" v-if="$$index < 6">
 									<a target="_blank" :href="'/housedetail?houseid='+listItem.id">
 										<div class="move">
 											<div class="imgWrap">

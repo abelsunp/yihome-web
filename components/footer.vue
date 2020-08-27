@@ -3,7 +3,8 @@
 		<b-row>
 			<b-col md="8">
 				<div class="footer-left-item">
-					客服电话：17602106152 <span style="margin-left: 140px">企业邮箱：service@inyihome.com</span>
+<!--					客服电话：17602106152 <span style="margin-left: 140px">企业邮箱：service@inyihome.com</span>-->
+					企业邮箱：service@inyihome.com
 				</div>
 				<div class="footer-left-item">企业地址：上海市 宝山区 呼兰西路19号 上海智力产业园北区2号楼201室</div>
 				<div class="footer-left-item">热门城市</div>

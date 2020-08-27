@@ -35,7 +35,7 @@ export default {
             {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
         ],
         script: [
-            {src: "https://ditu.google.cn/maps/api/js?key=AIzaSyBvJmcaYjx2WDBwhoQtxJNIHwfvodK2UEk&signed_in=true"},
+            {src: "https://ditu.google.cn/maps/api/js?key=AIzaSyA0F01riG9J_SEvDkn_xav7q96H8IvzbWo&signed_in=true"},
             {src: "https://map.qq.com/api/js?v=2.exp&key=A64BZ-NCVKX-X4M4Q-7V7GK-7FH6T-OEFUB"},
             {src: 'https://hm.baidu.com/hm.js?b127ed932a7cdf1b6d9a5b7c238903b3'},
             // {src:"https://components.demo.mydriver-international.com/mdr-components.js"}

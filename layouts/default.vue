@@ -57,7 +57,7 @@
 					<div v-else style="display: inline-block;">
 						<span><nuxt-link to='/register'>注册</nuxt-link></span><span class="line">|</span><nuxt-link to='/login'>登录</nuxt-link><span></span>
 					</div>
-					<span style="color: #fff;margin-left: 30px;"><a href="https://www.inyihome.com/en">EN</a></span>
+<!--					<span style="color: #fff;margin-left: 30px;"><a href="https://www.inyihome.com/en">EN</a></span>-->
 				</div>
 			</div>
 		</b-container>
