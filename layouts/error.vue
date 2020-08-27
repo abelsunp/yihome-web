@@ -2,9 +2,9 @@
 	<b-container fluid>
 		<div class="notfoundPage" v-if="error.statusCode == 404">
 			<nav class="shelf">
-				<a class="book home-page" href="/" style="transform: rotate(-90deg) translate(-10.2rem, 3rem);">首页</a>
-				<a class="book about-us" href="/about" style="transform: rotate(-100deg) translate(-11.7rem, 6.1rem);">关于我们</a>
-				<a class="book contact" href="/contact">联系我们</a>
+				<a class="book home-page" :href="commonGlobalPath+'/'" style="transform: rotate(-90deg) translate(-10.2rem, 3rem);">首页</a>
+				<a class="book about-us" :href="commonGlobalPath+'/about'" style="transform: rotate(-100deg) translate(-11.7rem, 6.1rem);">关于我们</a>
+				<a class="book contact" :href="commonGlobalPath+'/contact'">联系我们</a>
 				<!-- <a class="book faq">F.A.Q.</a> -->
 				<span class="book not-found" style="transform: rotate(-90deg) translate(-10.8rem, 13rem) scale(1);"></span>
 				<span class="door left"></span>

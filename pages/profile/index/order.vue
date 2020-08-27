@@ -62,7 +62,7 @@
 					<b-col md="4" class="imgW">
 						<p>护照信息</p>
 						<div v-if="viewOrderData.passportimg">
-							<a target="_blank" :href="yihomeGlobalVariable+viewOrderData.passportimg.split(',')[0]">
+							<a target="_blank" :href="commonGlobalPath+viewOrderData.passportimg.split(',')[0]">
 								<img v-if="viewOrderData.passportimg.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg">
 								<img v-else :src="yihomeGlobalVariable+viewOrderData.passportimg.split(',')[0]">
 							</a>
@@ -72,7 +72,7 @@
 					<b-col md="4" class="imgW">
 						<p>签证信息</p>
 						<div v-if="viewOrderData.cardimga">
-							<a target="_blank" :href="yihomeGlobalVariable+viewOrderData.cardimga.split(',')[0]">
+							<a target="_blank" :href="commonGlobalPath+viewOrderData.cardimga.split(',')[0]">
 								<img v-if="viewOrderData.cardimga.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg">
 								<img v-else :src="yihomeGlobalVariable+viewOrderData.cardimga.split(',')[0]">
 							</a>
@@ -82,7 +82,7 @@
 					<b-col md="4" class="imgW">
 						<p>录取证明（offer/coe/cas/学生卡照片）</p>
 						<div v-if="viewOrderData.cardimgb">
-							<a target="_blank" :href="yihomeGlobalVariable+viewOrderData.cardimgb.split(',')[0]">
+							<a target="_blank" :href="commonGlobalPath+viewOrderData.cardimgb.split(',')[0]">
 								<img v-if="viewOrderData.cardimgb.split(',')[0].toLowerCase().includes('pdf')" src="https://www.inyihome.com/img/pdf.svg">
 								<img v-else :src="yihomeGlobalVariable+viewOrderData.cardimgb.split(',')[0]">
 							</a>

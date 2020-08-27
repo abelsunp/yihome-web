@@ -13,7 +13,7 @@
 				</el-carousel-item>
 
 				<el-carousel-item class="homepageBannerone">
-					<a href="/helptickets?act=2" target="_blank" style="display: block;width: 100%;height: 100%;"></a>
+					<a :href="commonGlobalPath+'/helptickets?act=2'" target="_blank" style="display: block;width: 100%;height: 100%;"></a>
 				</el-carousel-item>
 				<!-- <el-carousel-item class="homepageBannerone">
                   <b-container class="bannerContainer">
@@ -26,7 +26,7 @@
 					<b-container class="bannerContainer">
 						<h1>假如给我第二次机会，我还是会选择和你在忆起！</h1>
 						<p>忆家英国老租客，续订立<span style="color: #05e9ab;">免服务费</span>，推荐租房立<span style="color: #05e9ab;">返300元现金红包</span></p>
-						<a style="background-color: #3B44AC;" href="/helptickets?act=3" target="_blank">续订咨询</a>
+						<a style="background-color: #3B44AC;" :href="commonGlobalPath+'/helptickets?act=3'" target="_blank">续订咨询</a>
 					</b-container>
 
 				</el-carousel-item>
@@ -69,11 +69,12 @@
 						<el-tab-pane :label="item.name" v-for="(item,$index) in hotecityList" :key="$index" v-if="$index < 6">
 							<b-row>
 								<b-col md="6" sm="6" lg="4" class="listitem" v-for="(listItem,$$index) in houseList" :key="$$index" v-if="$$index < 6">
-									<a target="_blank" :href="'/housedetail?houseid='+listItem.id">
+									<a target="_blank" :href="commonGlobalPath+'/housedetail?houseid='+listItem.id">
 										<div class="move">
 											<div class="imgWrap">
 												<div class="el-image">
-													<img :src="yihomeGlobalVariable+listItem.houseUrl| imgStrClac('x')" class="april-img" style="object-fit: cover;">
+													<img v-if="!listItem.houseUrl" src="../assets/images/zhan.jpg" class="april-img" style="object-fit: cover;">
+													<img v-else :src="yihomeGlobalVariable+listItem.houseUrl| imgStrClac('x')" class="april-img" style="object-fit: cover;">
 												</div>
 											</div>
 											<div class="contentWrap">
@@ -81,7 +82,7 @@
 												<p class="price"><b>{{listItem.countryId | fliterSymble}}{{listItem.minPrice}}</b><span>起/周</span></p>
 												<p class="country">近{{listItem.address}}</p>
 												<div class="buttonWrap">
-													<a :href="'/housedetail?houseid='+listItem.id" style="display: flex;justify-content: space-between;width: 100%;">
+													<a :href="commonGlobalPath+'/housedetail?houseid='+listItem.id" style="display: flex;justify-content: space-between;width: 100%;">
 														<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
 													</a>
 												</div>
@@ -262,7 +263,7 @@
 				<p class="info">在忆家，发现更精彩的留学生涯</p>
 				<b-row>
 					<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in storyData" :key="$index" >
-						<a :href="'/storydetails?id='+item.id" target="_blank">
+						<a :href="commonGlobalPath+'/storydetails?id='+item.id" target="_blank">
 							<div class="img">
 								<div class="el-image">
 									<img :src="yihomeGlobalVariable+item.titleimg| imgStrClac('l')" class="april-img" style="object-fit: cover;">
@@ -286,10 +287,11 @@
 				<p class="info">海外生活有忆家，忆家事事关心</p>
 				<b-row>
 					<b-col md="4" sm="6" lg="3" class="listitem" v-for="(item,$index) in studentData" :key="$index" v-if="$index < 4">
-						<a :href="'/storydetails?id='+item.id" target="_blank">
+						<a :href="commonGlobalPath+'/storydetails?id='+item.id" target="_blank">
 							<div class="imgWrap">
 								<div class="el-image">
-									<img :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="april-img" style="object-fit: cover;">
+									<img v-if="!item.imgUrl" src="../assets/images/zhan1.jpeg" class="april-img" style="object-fit: cover;">
+									<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="april-img" style="object-fit: cover;">
 								</div>
 							</div>
 							<div class="contentWrap">

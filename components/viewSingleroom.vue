@@ -3,7 +3,7 @@
 		
 		<div class="swiper-container viewData-class"  ref="mySwipers">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="(banner,$index) in viewData" :key="$index">
+				<div class="swiper-slide" v-for="(banner,$index) in imgUrl" :key="$index">
 					<img :src="yihomeGlobalVariable+banner.imgurl">
 				</div>
 			</div>
@@ -24,7 +24,7 @@
 
 		<div class="swiper-container gallery-thumbs">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="(item,$index) in viewData" :key="$index"  @click="toslide($index)">
+				<div class="swiper-slide" v-for="(item,$index) in imgUrl" :key="$index"  @click="toslide($index)">
 					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
 				</div>
 			</div>
@@ -45,6 +45,7 @@
 		
 		data(){
 			return {
+				imgUrl: [],
 				mySwiper: '',
 				swiperOption: {
 					loop:true,
@@ -93,14 +94,13 @@
 				this.mySwiper.slideTo(num, 1000, false)
 			},
 		},
-		created(){
-			console.log(this.viewData,1111111111)
-		},
+
 		watch: {
 		    viewData: {
-		        handler () {
-		          console.log(this.viewData)
-		        },
+				handler (value) {
+					if(value.length == 0 || !value) this.imgUrl = [{imgurl: '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg'}];
+					else this.imgUrl = value
+				},
 		        // 监听到数据变化时立即调用
 		        immediate: true
 		     }

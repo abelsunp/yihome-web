@@ -183,7 +183,7 @@
 						</b-row>
 						<b-row v-if="!loadingAroundHouseStatus">
 							<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in aroundHousedata" :key="$index">
-								<a :href="'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
+								<a :href="commonGlobalPath+'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
 									<div class="imgWrap" style="height: 250px;overflow: hidden;display: flex;border-radius: 4px;">
 										<div class="el-image">
 											<img :src="yihomeGlobalVariable+item.imgurl" class="el-image__inner" style="object-fit: cover;">
@@ -198,7 +198,7 @@
 											</span>
 										</div>
 										<div class="buttonWrap">
-											<a target="_blank" :href="'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
+											<a target="_blank" :href="commonGlobalPath+'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
 												<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
 											</a>
 										</div>

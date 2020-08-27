@@ -8,7 +8,7 @@
 <!--			</div>-->
 			
 			<div class="swiper-wrapper">
-				<div class="swiper-slide"  v-for="(item,$index) in imgWrapper" :key="$index" >
+				<div class="swiper-slide"  v-for="(item,$index) in imgUrl" :key="$index" >
 					<img id="test" :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" alt="">
 					<!-- :style="{'background-image':'url('+yihomeGlobalVariable+item.imgurl+')'}" -->
 				</div>
@@ -19,7 +19,7 @@
 		</div>
 		<div class="swiper-container gallery-thumbs">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="(item,$index) in imgWrapper" :key="$index">
+				<div class="swiper-slide" v-for="(item,$index) in imgUrl" :key="$index">
 					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
 				</div>
 			</div>
@@ -45,8 +45,19 @@
 		  	imgWrapper: Array,
 			imgVideo:Array,
 		},
+		watch:{
+			imgWrapper: {
+				handler (value) {
+					if(value.length == 0 || !value) this.imgUrl = [{imgurl: '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg'}];
+					else this.imgUrl = value
+				},
+				// 监听到数据变化时立即调用
+				immediate: true
+			},
+		},
 		data(){
 			return {
+				imgUrl: [],
 				videoStatus:false,
 				videoUrl:'',
 				galleryTop: ''
@@ -84,24 +95,6 @@
 					loop:true,
 				});
 			},500)
-		},
-		watch: {
-		    imgWrapper: {
-		        handler () {
-		          console.log(this.imgWrapper,765)
-		        },
-		        // 监听到数据变化时立即调用
-		        immediate: true
-		    },
-			imgVideo: {
-			    handler () {
-			      console.log(this.imgVideo,9898)
-				  
-				  
-			    },
-			    // 监听到数据变化时立即调用
-			    immediate: true
-			},
 		},
 		methods:{
 			viewVideo(){

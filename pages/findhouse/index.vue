@@ -135,7 +135,7 @@
 							<div class="location"> </div>
 							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
 							<div class="info-box-other"> <span>房租包含：</span>水费、电费、网费 </div>
-							<a :href="'/housedetail?houseid='+item.id" target="_blank">
+							<a :href="commonGlobalPath+'/housedetail?houseid='+item.id" target="_blank">
 								<el-button class="info-box-see" type="primary">查看房源</el-button>
 							</a>
 <!--							<div class="tag">-->

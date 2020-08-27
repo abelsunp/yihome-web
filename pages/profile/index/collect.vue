@@ -12,7 +12,7 @@
 					</div>
 				</div>
 				<div class="buttonWrapper">
-					<div class="collectBtn"><el-button type="primary"><a style="color: #fff;" target="_blank" :href="'/housedetail?houseid='+item.id">查看详情</a></el-button></div>
+					<div class="collectBtn"><el-button type="primary"><a style="color: #fff;" target="_blank" :href="commonGlobalPath+'/housedetail?houseid='+item.id">查看详情</a></el-button></div>
 				</div>
 			</li>
 			

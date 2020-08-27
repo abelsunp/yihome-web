@@ -10,7 +10,7 @@
 				<div class="footer-left-item">热门城市</div>
 				<div class="footer-left-city">
 					<div class="footer-left-city-item" v-for="(item,index) in hotecityList" :key="index">
-						<a :href="'/findhouse?countryId='+item.countryId+'&cityId='+item.id+''">{{item.name}}</a>
+						<a :href="commonGlobalPath+'/findhouse?countryId='+item.countryId+'&cityId='+item.id+''">{{item.name}}</a>
 					</div>
 				</div>
 			</b-col>

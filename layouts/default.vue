@@ -16,7 +16,7 @@
 										<p class="country">{{item.zhname}}</p>
 										<p class="cityWrap">
 											<span class="city" v-for="(listitem,$index2) in item.city" :key="$index2">
-												<a :href="'/findhouse?countryId='+listitem.countryId+'&cityId='+listitem.id+''">{{listitem.name}}</a>
+												<a :href="commonGlobalPath+'/findhouse?countryId='+listitem.countryId+'&cityId='+listitem.id+''">{{listitem.name}}</a>
 											</span>
 										</p>
 									</div>

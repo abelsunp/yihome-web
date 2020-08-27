@@ -6,10 +6,11 @@
 			 <p v-if="!listitemData">暂无数据....</p> 
 			<b-row>
 				<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in listitemData" :key="$index">
-					<a :href="'/storydetails?id='+item.id" target="_blank">
+					<a :href="commonGlobalPath+'/storydetails?id='+item.id" target="_blank">
 						<div class="img">
 							<div  class="el-image">
-								<img :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="el-image__inner" style="object-fit: cover;">
+								<img v-if="!item.imgUrl" src="../../assets/images/zhan1.jpeg" class="april-img" style="object-fit: cover;">
+								<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="el-image__inner" style="object-fit: cover;">
 							</div>
 						</div>
 						<div class="content">
