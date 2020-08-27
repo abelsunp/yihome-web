@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section style="min-width: 1300px">
 		<b-container fluid class="header" :id="headerStatus ? 'headerYihome':'otherYihome'">
 			<div class="header-top">
 				<div style="display: flex;align-items:center;justify-content: space-between;">
@@ -68,7 +68,7 @@
 				<p>免费通话</p>
 			</div>
 		</div>
-		<section v-if="footerStatus">
+		<section v-if="footerStatus" >
 			<web-footer></web-footer>
 		</section>
 		<Modal

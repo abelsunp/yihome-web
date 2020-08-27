@@ -69,6 +69,7 @@
 	}
 	#footer{
 		padding-top: 30px;
+		min-width: 960px !important;
 	}
 	.footer-left-item{
 		line-height: 44px;

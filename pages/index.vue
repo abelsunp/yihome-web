@@ -647,8 +647,7 @@
 			},
 
 			finddiscounthouse(id){
-				// this.$request.getDiscountsCity({cityId: id}).then(res=>{
-				this.$request.searHouse({cityId: 161}).then(res=>{
+				this.$request.searHouse({cityId: id}).then(res=>{
 					if(res.code === 200){
 						this.houseList = res.data.list;
 					}else{
