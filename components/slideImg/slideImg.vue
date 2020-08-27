@@ -23,7 +23,6 @@
 					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
 				</div>
 			</div>
-			
 		</div>
 		
 		
@@ -49,7 +48,8 @@
 		data(){
 			return {
 				videoStatus:false,
-				videoUrl:''
+				videoUrl:'',
+				galleryTop: ''
 			}
 		},
 		filters:{
@@ -72,7 +72,7 @@
 					slideToClickedSlide: true,
 					
 				});
-				var galleryTop = new Swiper('.gallery-top', {
+				this.galleryTop = new Swiper('.gallery-top', {
 					spaceBetween: 10,
 					navigation: {
 						nextEl: '.swiper-button-next',
@@ -150,7 +150,7 @@
 		object-fit: cover;
 	}
 	#inhome-swiper .gallery-thumbs .swiper-slide {
-		
+
 		height: 100%;
 		opacity: 0.4;
 		cursor: pointer;

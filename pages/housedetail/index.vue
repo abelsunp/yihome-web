@@ -41,7 +41,7 @@
 											<div class="top">
 												<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
 													<div v-if="item.rentstatus!='182'" class="saleouthouse"></div>
-													<img :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
+													<img v-if="item.urls.length > 0" :src="yihomeGlobalVariable+item.urls[0].imgurl | imgStrClac('l')" alt="">
 												</div>
 												<div class="content">
 													<h1>{{item.room.name}}</h1>
@@ -49,12 +49,14 @@
 														<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
 														<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
 													</p>
-													<div class="show-more">更多详情</div>
+													<div class="show-more" @click="showMore(item.urls)">更多详情</div>
 												</div>
-
 											</div>
 											<section>
-												<div class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
+												<div v-if="item.usersLeaseperiods.length == 0">
+													<p style="text-align: center;padding: 20px;">该房间已租罄</p>
+												</div>
+												<div v-else class="zuqi" v-for="(val,ind) in item.usersLeaseperiods" :key="ind">
 													<p class="zuqi-date">{{val.minStartDate}}入住 <i class="iconfont zuqi-date-next">&#xe61f;</i>{{val.maxStartDate}}离开</p>
 													<p class="zuqi-week">固定租期{{val.periods}}{{val.leaseType | filterLeaseType}}</p>
 													<div class="zuqi-right">
@@ -64,9 +66,7 @@
 												</div>
 											</section>
 										</template>
-	<!--									<div v-else>-->
-	<!--										<p style="text-align: center;padding: 20px;">该房间已租罄</p>-->
-	<!--									</div>-->
+
 									</li>
 								</ul>
 							</div>
@@ -951,14 +951,14 @@
 				this.fullscreenLoading = true;
 				this.$request.houseapply({usersLeaseperiodId: data.id}).then(res => {
 					this.fullscreenLoading = false;
-					if (res.code === 200) {
+					if (res.status === 200) {
 						this.$message({
 							message: '数据提交成功，客服稍后会和您联系',
 							type: 'success'
 						});
 						this.reserveStatus = false;
 						window._agl && window._agl.push(['track', ['success', {t: 3}]])
-					}else if(res.code === 401){
+					}else if(res.status === 401){
 						this.$message.error(res.msg);
 						setTimeout(() => {
 							localStorage.setItem('backurl', this.$route.fullPath);
@@ -1048,6 +1048,10 @@
 					})
 				}
 			},
+			showMore(data){
+				this.viewSingleRoomStatus = true;
+				this.viewimgData = data
+			}
 
 		},
 		destroyed() {

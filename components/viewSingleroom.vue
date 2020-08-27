@@ -1,7 +1,7 @@
 <template>
 	<section>
 		
-		<div class="swiper-container viewData-class" >
+		<div class="swiper-container viewData-class"  ref="mySwipers">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide" v-for="(banner,$index) in viewData" :key="$index">
 					<img :src="yihomeGlobalVariable+banner.imgurl">
@@ -11,18 +11,28 @@
 			<div class="swiper-button-next"></div>
 			<div class="swiper-button-prev"></div>
 		</div>
-		
-		
-		
-		<!-- <div v-swiper:mySwiper3="swiperOption">
-		    <div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="(banner,$index) in viewData" :key="$index">
-					<img :src="'https://www.inyihome.com'+banner.imgurl">
+
+<!--			<div v-swiper:mySwiper3="swiperOption">-->
+<!--				<div class="swiper-wrapper">-->
+<!--					<div class="swiper-slide" v-for="(banner,$index) in viewData" :key="$index">-->
+<!--						<img :src="yihomeGlobalVariable+banner.imgurl">-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="swiper-button-prev"></div>-->
+<!--				<div class="swiper-button-next"></div>-->
+<!--			</div>-->
+
+		<div class="swiper-container gallery-thumbs">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" v-for="(item,$index) in viewData" :key="$index"  @click="toslide($index)">
+					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
 				</div>
-		    </div>
-			<div class="swiper-button-prev"></div>
-			<div class="swiper-button-next"></div>
-		</div> -->
+			</div>
+		</div>
+		
+		
+		
+
 	</section>
 </template>
 
@@ -35,6 +45,7 @@
 		
 		data(){
 			return {
+				mySwiper: '',
 				swiperOption: {
 					loop:true,
 					navigation: {
@@ -46,7 +57,29 @@
 			}
 		},
 		mounted() {
-			new Swiper('.viewData-class', {
+			setTimeout(function(){
+				var galleryThumbs = new Swiper('.gallery-thumbs', {
+					spaceBetween: 10,
+					slidesPerView: 6,
+					freeMode: true,
+					watchSlidesVisibility: true,
+					watchSlidesProgress: true,
+					slideToClickedSlide: true,
+
+				});
+				var galleryTop = new Swiper('.gallery-top', {
+					spaceBetween: 10,
+					navigation: {
+						nextEl: '.swiper-button-next',
+						prevEl: '.swiper-button-prev',
+					},
+					thumbs: {
+						swiper: galleryThumbs
+					},
+					loop:true,
+				});
+			},500)
+			this.mySwiper = new Swiper('.viewData-class', {
 				spaceBetween: 10,
 				navigation: {
 					nextEl: '.swiper-button-next',
@@ -54,6 +87,11 @@
 				},
 				loop:true,
 			});
+		},
+		methods: {
+			toslide (num) {
+				this.mySwiper.slideTo(num, 1000, false)
+			},
 		},
 		created(){
 			console.log(this.viewData,1111111111)
@@ -71,5 +109,23 @@
 </script>
 
 <style scoped="scoped">
-	
+	.gallery-thumbs {
+		height: 104px;
+		box-sizing: border-box;
+		padding: 10px 0;
+	}
+	.gallery-thumbs img{
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.gallery-thumbs .swiper-slide {
+
+		height: 100%;
+		opacity: 0.4;
+		cursor: pointer;
+	}
+	.gallery-thumbs .swiper-slide-thumb-active {
+		opacity: 1;
+	}
 </style>

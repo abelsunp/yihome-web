@@ -493,10 +493,10 @@
                 this.fullscreenLoading = true;
                 this.$request.houseapply({usersLeaseperiodId: data.id}).then(res => {
                     this.fullscreenLoading = false;
-                    if (res.code === 200) {
+                    if (res.status === 200) {
                         this.$toast('数据提交成功，客服稍后会和您联系');
                         this.reserveStatus = false;
-                    }else if(res.code === 401){
+                    }else if(res.status === 401){
                         this.$toast(res.msg);
                         setTimeout(() => {
                             localStorage.setItem('backurl', this.$route.fullPath);
