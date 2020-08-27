@@ -6,10 +6,9 @@ if (process.env.NODE_ENV === 'production') {
     plugins.push('transform-remove-console')
 }
 
-
 export default {
-    //mode: 'universal',
-    mode: 'spa',
+    mode: 'universal',
+    // mode: 'spa',
     /*
     ** Headers of the page
     */
@@ -104,6 +103,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {},
+    router:{
+        base:"/dist", //此为根目录，如果有具体目录需求按实际情况写
+    },
     /*
     ** Build configuration
     */

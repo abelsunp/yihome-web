@@ -5,11 +5,11 @@
 
 				<el-carousel-item class="homepageBanneractivity">
 					<!-- <a href="/helptickets" target="_blank" style="display: block;width: 100%;height: 100%;"></a> -->
-					<b-container class="bannerContainer">
-						<h1 style="color: #ead462;">2020新年红包 “鼠” 不停</h1>
-						<p>租房推荐，预定成功立返300元现金红包</p>
-						<a style="background-color: #ead462;color: #000;" href="/helptickets?act=1" target="_blank">一键领取</a>
-					</b-container>
+<!--					<b-container class="bannerContainer">-->
+<!--						<h1 style="color: #ead462;">2020新年红包 “鼠” 不停</h1>-->
+<!--						<p>租房推荐，预定成功立返300元现金红包</p>-->
+<!--						<a style="background-color: #ead462;color: #000;" href="/helptickets?act=1" target="_blank">一键领取</a>-->
+<!--					</b-container>-->
 				</el-carousel-item>
 
 				<el-carousel-item class="homepageBannerone">
@@ -529,12 +529,14 @@
 					if(!regPhone.test(this.appointmentForm.phone)){
 						this.$Message.warning('请输入正确的手机号');
 					}
+					return;
 				}
 				if(this.appointmentForm.phoneArea=='+44'||this.appointmentForm.phoneArea=='+61'){
 					if(this.appointmentForm.phone.length<5){
 						this.$Message.warning('请输入正确的手机号');
 						return;
 					}
+					return;
 				}
 
 				this.savehelpticketsStatus = true;

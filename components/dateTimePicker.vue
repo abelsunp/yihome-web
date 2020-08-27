@@ -76,7 +76,7 @@
 			querySearchAsync(queryString,callback){
 				console.log(queryString,11111111,this.state)
 				
-				this.$request.findHouseSearchAll({search:queryString}).then(res=>{
+				this.$request.findHouseSearchAll({value:queryString}).then(res=>{
 					for(let i of res.data){
 						i.value = i.titlename;  //将想要展示的数据作为value
 					}
