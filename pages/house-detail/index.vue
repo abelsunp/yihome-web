@@ -41,9 +41,9 @@
             <div class="housebasicinfo">
                 <div class="basicinfotop">
                     <div class="housetitle">{{houseInfo.name}}</div>
-                    <a class="mapicon" @click="mapshow(housedata.id)">
-                        <img src="../../assets/images/gomap.svg" alt />
-                    </a>
+<!--                    <a class="mapicon" @click="mapshow(housedata.id)">-->
+<!--                        <img src="../../assets/images/gomap.svg" alt />-->
+<!--                    </a>-->
                 </div>
                 <div class="basicinfobottom">
                     <span v-if="housedata.housetypeid=='147'" class="tag">{{housedata.bedcount}}室{{housedata.stoolcount}}卫{{housedata.washcount}}浴</span>
@@ -159,7 +159,7 @@
                             <div class="itemcontent">
                                 <div class="contentleft">
                                     <div class="roombasic">
-                                        <span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
+                                        <span>面积：{{item.room.minArea || 0}}㎡ ~ {{item.room.maxArea || 0}}㎡</span>
                                     </div>
                                     <div class="roombasic">
                                         <span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
@@ -170,7 +170,7 @@
                                         <img
                                                 v-for="(itemimg, index) in item.urls"
                                                 :key="index"
-                                                :src="linkurl+itemimg.imgurl"
+                                                :src="yihomeGlobalVariable+itemimg.imgurl"
                                         />
                                     </div>
                                 </div>
@@ -772,7 +772,7 @@
                     line-clamp: 2;
                     -webkit-box-orient: vertical;
                     font-family: pingFangSC-Medium;
-                    padding-right: 62px;
+                    /*padding-right: 62px;*/
                 }
 
                 .mapicon {

@@ -14,7 +14,7 @@
 					    <el-option
 					      v-for="item in citylist"
 					      :key="item.id"
-					      :label="item.id"
+					      :label="item.name"
 					      :value="item.id">
 					    </el-option>
 					</el-select>
@@ -43,12 +43,12 @@
 				<div class="selectPrice listitem">
 					<el-select v-model="rent" placeholder="请选择价格"  @change="rentChange">
 						<el-option label="不限" value=""> 不限</el-option>
-						<el-option label="0-100" value="0,100.">0-100</el-option>
-						<el-option label="100-200" value="100,200.">100-200 </el-option>
-						<el-option label="200-300" value="200,300.">200-300 </el-option>
-						<el-option label="300-400" value="300,400.">300-400 </el-option>
-						<el-option label="400-500" value="400,500."> 400-500</el-option>
-						<el-option label="500以上" value="500.">500以上 </el-option>
+						<el-option label="0-100" value="0,100">0-100</el-option>
+						<el-option label="100-200" value="100,200">100-200 </el-option>
+						<el-option label="200-300" value="200,300">200-300 </el-option>
+						<el-option label="300-400" value="300,400">300-400 </el-option>
+						<el-option label="400-500" value="400,500"> 400-500</el-option>
+						<el-option label="500以上" value="500">500以上 </el-option>
 					</el-select>
 				</div>
 				<div class="selectSort listitem">
@@ -61,7 +61,7 @@
 					    </el-option>
 					</el-select>
 				</div>
-				<el-button  @click="otherSearch = !otherSearch">筛选更多</el-button>
+				<el-button v-if="1==2"  @click="otherSearch = !otherSearch">筛选更多</el-button>
 				
 				<transition name="el-zoom-in-top">
 					<div v-show="otherSearch" class="otherSearchWrapper">
@@ -73,33 +73,34 @@
 									</div>
 									<div class="searchSubContent">
 										<el-radio v-model="apartmentid" label="">不限</el-radio>
-										<el-radio v-model="apartmentid" label="1">一室</el-radio>
-										<el-radio v-model="apartmentid" label="2">二室</el-radio>
-										<el-radio v-model="apartmentid" label="3">三室</el-radio>
-										<el-radio v-model="apartmentid" label="4">四室</el-radio>
-										<el-radio v-model="apartmentid" label="5">五室</el-radio>
-										<el-radio v-model="apartmentid" label="6">六室</el-radio>
-										<el-radio v-model="apartmentid" label="7">七室以上</el-radio>
+										<el-radio v-model="apartmentid" label=135>单人套房</el-radio>
+										<el-radio v-model="apartmentid" label=136>双人套房</el-radio>
+										<el-radio v-model="apartmentid" label=137>单人卧室</el-radio>
+										<el-radio v-model="apartmentid" label=138>双人卧室</el-radio>
+										<el-radio v-model="apartmentid" label=139>多人卧室</el-radio>
+										<el-radio v-model="apartmentid" label=140>三人卧室</el-radio>
+										<el-radio v-model="apartmentid" label=141>多人套房</el-radio>
+										<el-radio v-model="apartmentid" label=142>整租房源</el-radio>
 									</div>
 								</li>
-								<li>
-									<div class="searchSubTitle">
-										租赁状态：
-									</div>
-									<div class="searchSubContent">
-										<el-radio v-model="leaseid" label="">不限</el-radio>
-										<el-radio v-model="leaseid" label="1">可整租</el-radio>
-										<el-radio v-model="leaseid" label="2">有室友</el-radio>
-									</div>
-								</li>
+<!--								<li>-->
+<!--									<div class="searchSubTitle">-->
+<!--										租赁状态：-->
+<!--									</div>-->
+<!--									<div class="searchSubContent">-->
+<!--										<el-radio v-model="leaseid" label="">不限</el-radio>-->
+<!--										<el-radio v-model="leaseid" label="1">可整租</el-radio>-->
+<!--										<el-radio v-model="leaseid" label="2">有室友</el-radio>-->
+<!--									</div>-->
+<!--								</li>-->
 								<li>
 									<div class="searchSubTitle">
 										卫浴类型：
 									</div>
 									<div class="searchSubContent">
 										<el-radio v-model="bathroomid" label="">不限</el-radio>
-										<el-radio v-model="bathroomid" label="133">共享卫浴</el-radio>
-										<el-radio v-model="bathroomid" label="134">独立卫浴</el-radio>
+										<el-radio v-model="bathroomid" label=133>共享卫浴</el-radio>
+										<el-radio v-model="bathroomid" label=134>独立卫浴</el-radio>
 									</div>
 								</li>
 							</ul>
@@ -130,7 +131,7 @@
 					<b-col md="9" class="listitem" >
 						<div class="info-box">
 							<h5 class="title">{{item.name}}</h5>
-							<h6 class="price">{{item.countryId | fliterSymble}}{{item.minPrice}} <span>起/{{item.daw=='0'?'天':item.daw=='1'?'周':'月'}}</span></h6>
+							<h6 class="price">{{item.countryId | fliterSymble}}{{item.minPrice}} <span>起/周</span></h6>
 							<div class="location" > <i v-if="item.schoolName" class="iconfont">&#xe62c;</i> {{item.schoolName}} </div>
 							<div class="location"> </div>
 							<div class="location"> <i class="el-icon-location-outline"></i> {{item.address}} </div>
@@ -412,16 +413,17 @@
 				});
 				this.$request.searHouse(
 					{
-						countryid: countryid,
-						cityid: cityid,
-						schoolid: schoolid,
-						housetypeid: housetypeid,
-						apartmentid: apartmentid,
-						leaseid: leaseid,
-						bathroomid: bathroomid,
-						rent: rent,
-						order: order,
+						countryId: countryid,
+						cityId: cityid,
+						schoolId: schoolid,
 						search:search,
+						roomDto: {
+							// labelDto: [{labels: [Number(apartmentid) || '',Number(bathroomid) || '']}],
+							houseId: housetypeid,
+							sort: order, // 价格排序
+							roomMaxPrice: rent ? rent.split(',')[1] : '',  // 价格集阶梯
+							roomMinPrice: rent ? rent.split(',')[0] : '',  // 价格集阶梯
+						},
 						page:pageNum,
 						limit:pageSize
 					}
@@ -440,21 +442,21 @@
 
 						console.log("this.houseArray", this.houseArray)
 						
-						if(statusChange=='cityChange'){
-											window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'','_self')
-											// this.$router.push({ path: 'findhouse/',query:{
-											// 	countryid:this.$route.query.countryid,
-											// 	cityid:this.cityvalue,
-											// }}); 
-										}else if(statusChange=='schoolChange'){
-											
-						window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'&schoolId='+this.schoolvalue+'','_self')
+						// if(statusChange=='cityChange'){
+						// 					window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'','_self')
+						// 					// this.$router.push({ path: 'findhouse/',query:{
+						// 					// 	countryid:this.$route.query.countryid,
+						// 					// 	cityid:this.cityvalue,
+						// 					// }});
+						// 				}else if(statusChange=='schoolChange'){
+						//
+						// window.open('/findhouse?countryId='+this.$route.query.countryid+'&cityId='+this.cityvalue+'&schoolId='+this.schoolvalue+'','_self')
 											// this.$router.push({ path: 'findhouse/',query:{
 											// 	countryid:this.$route.query.countryid,
 											// 	cityid:this.cityvalue,
 											// 	schoolid:this.schoolvalue,
 											// }});
-										}
+										// }
 						
 						// if(statusChange=='cityChange'){
 						// 	this.$router.push({ name: 'findhouse',query:{
@@ -629,15 +631,14 @@
 		font-size: 26px;
 		color: #333333;
 		letter-spacing: 1.13px;
-		line-height: 22px;
-		margin: 20px 0 31px;
+		line-height: 30px;
+		margin: 18px 0 31px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
-		
 	}
 	.houseContent .listitem .info-box .price{
 		position: absolute;

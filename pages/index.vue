@@ -12,9 +12,9 @@
 <!--					</b-container>-->
 				</el-carousel-item>
 
-				<el-carousel-item class="homepageBannerone">
-					<a :href="commonGlobalPath+'/helptickets?act=2'" target="_blank" style="display: block;width: 100%;height: 100%;"></a>
-				</el-carousel-item>
+<!--				<el-carousel-item class="homepageBannerone">-->
+<!--					<a :href="commonGlobalPath+'/helptickets?act=2'" target="_blank" style="display: block;width: 100%;height: 100%;"></a>-->
+<!--				</el-carousel-item>-->
 				<!-- <el-carousel-item class="homepageBannerone">
                   <b-container class="bannerContainer">
                     <h1>春节重磅福利！忆家把爱送出国</h1>
@@ -24,9 +24,9 @@
                 </el-carousel-item> -->
 				<el-carousel-item class="homepageBannertwo">
 					<b-container class="bannerContainer">
-						<h1>假如给我第二次机会，我还是会选择和你在忆起！</h1>
-						<p>忆家英国老租客，续订立<span style="color: #05e9ab;">免服务费</span>，推荐租房立<span style="color: #05e9ab;">返300元现金红包</span></p>
-						<a style="background-color: #3B44AC;" :href="commonGlobalPath+'/helptickets?act=3'" target="_blank">续订咨询</a>
+<!--						<h1>假如给我第二次机会，我还是会选择和你在忆起！</h1>-->
+<!--						<p>忆家英国老租客，续订立<span style="color: #05e9ab;">免服务费</span>，推荐租房立<span style="color: #05e9ab;">返300元现金红包</span></p>-->
+<!--						<a style="background-color: #3B44AC;" :href="commonGlobalPath+'/helptickets?act=3'" target="_blank">续订咨询</a>-->
 					</b-container>
 
 				</el-carousel-item>
@@ -647,7 +647,10 @@
 			},
 
 			finddiscounthouse(id){
-				this.$request.searHouse({cityId: id}).then(res=>{
+				this.$request.searHouse({
+					cityId: id,
+					houseStatus: '2,3,4'
+				}).then(res=>{
 					if(res.code === 200){
 						this.houseList = res.data.list;
 					}else{
@@ -676,11 +679,14 @@
 		position: relative;
 	}
 	.selectTime{
-		width: 100%;
+		width: 800px;
 		position: absolute;
-		bottom: 0;
+		/*bottom: 0;*/
 		z-index: 20;
-		margin-bottom: 60px;
+		/*margin-bottom: 60px;*/
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 		height: 70px;
 	}
 	.bannerContainer{

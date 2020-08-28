@@ -47,7 +47,7 @@
 													<h1>{{item.room.name}}</h1>
 													<p class="center">
 														<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
-														<span>面积：{{item.minArea || 0}}㎡ ~ {{item.mmaxArea || 0}}㎡</span>
+														<span >面积：{{item.room.minArea || 0}}㎡ ~ {{item.room.maxArea || 0}}㎡</span>
 													</p>
 													<div class="show-more" @click="showMore(item.urls)">更多详情</div>
 												</div>
@@ -125,48 +125,53 @@
 
 			</b-container>
 			<b-container fluid>
-				<div id="map"></div>
-	<!--			<div :id="'houseTraffic?houseid='+fullPath">-->
-	<!--				<b-container>-->
-	<!--					<h1 class="inforTitle">周边交通</h1>-->
-	<!--				</b-container>-->
-	<!--				<div style="position: relative;">-->
-	<!--					<div style="height: 520px;" id="map"></div>-->
-	<!--					<div class="viewMpaTools">-->
-	<!--						<p class="title">请选择目的地：</p>-->
-	<!--						<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
-	<!--							<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
-	<!--							</el-option>-->
-	<!--						</el-select>-->
-	<!--						<div style="display: flex;margin-top: 10px;">-->
+<!--				<div id="map"></div>-->
+				<div :id="'houseTraffic?houseid='+fullPath">
+					<b-container>
+						<h1 class="inforTitle">周边交通</h1>
+					</b-container>
+					<div style="position: relative;">
+						<div style="height: 520px;" id="map"></div>
+						<div class="map-tools" v-if="mapToolsFlag">
+							<div class="map-tools-img"><img class="april-img" :src="yihomeGlobalVariable + (userCheckUrl.length > 0 ? userCheckUrl[0].imgurl : '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg')" alt=""></div>
+							<div class="map-tools-title">{{houseInfo.name}}</div>
+							<div class="map-tools-address">地址：{{houseInfo.address}}</div>
+						</div>
+<!--						<div class="viewMpaTools">-->
+<!--							<p class="title">请选择目的地：</p>-->
+<!--							<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
+<!--								<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--							<div style="display: flex;margin-top: 10px;">-->
 
-	<!--							<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
-	<!--								<el-tab-pane>-->
-	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
+<!--								<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
+<!--									<el-tab-pane>-->
+<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
 
-	<!--									距离{{distance}}步行需要{{vehicletime}}-->
-	<!--								</el-tab-pane>-->
-	<!--								<el-tab-pane>-->
-	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
+<!--										距离{{distance}}步行需要{{vehicletime}}-->
+<!--									</el-tab-pane>-->
+<!--									<el-tab-pane>-->
+<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
 
-	<!--									距离{{distance}}骑行需要{{vehicletime}}-->
-	<!--								</el-tab-pane>-->
-	<!--								<el-tab-pane>-->
-	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
+<!--										距离{{distance}}骑行需要{{vehicletime}}-->
+<!--									</el-tab-pane>-->
+<!--									<el-tab-pane>-->
+<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
 
-	<!--									距离{{distance}}公交需要{{vehicletime}}-->
-	<!--								</el-tab-pane>-->
-	<!--								<el-tab-pane>-->
-	<!--									<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
+<!--										距离{{distance}}公交需要{{vehicletime}}-->
+<!--									</el-tab-pane>-->
+<!--									<el-tab-pane>-->
+<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
 
-	<!--									距离{{distance}}驾车需要{{vehicletime}}-->
-	<!--								</el-tab-pane>-->
-	<!--							</el-tabs>-->
-	<!--						</div>-->
-	<!--					</div>-->
-	<!--				</div>-->
+<!--										距离{{distance}}驾车需要{{vehicletime}}-->
+<!--									</el-tab-pane>-->
+<!--								</el-tabs>-->
+<!--							</div>-->
+<!--						</div>-->
+					</div>
 
-	<!--			</div>-->
+				</div>
 
 				<!--	周边房源		-->
 				<b-container v-if="1==2">
@@ -272,7 +277,7 @@
 			</el-dialog>
 			<Modal v-model="viewFullimgWrapper" fullscreen title="" class-name="viewFullimgWrapper">
 				<b-container>
-					<slide-img2 :img-wrapper='housedetails.houseimg'></slide-img2>
+					<slide-img2 :img-wrapper='userCheckUrl'></slide-img2>
 				</b-container>
 				<div slot="footer">
 				</div>
@@ -366,6 +371,7 @@
 				 * common
 				 */
 				fullPath: '',
+				mapToolsFlag: false,
 
 				/**
 				 * 收藏
@@ -576,7 +582,7 @@
 					vthis.directionsDisplay = new google.maps.DirectionsRenderer();
 					//自定义缩放，默认中心点
 					var myOptions = {
-						zoom: 13,
+						zoom: 17,
 						disableDefaultUI: true,
 						mapTypeId: google.maps.MapTypeId.ROADMAP,
 						center: results[0].geometry.location
@@ -592,9 +598,21 @@
 						icon: "https://www.inyihome.com/newStatic/house.svg",
 					});
 					vthis.directionsDisplay.setMap(vthis.map);
-					google.maps.event.addListener(marker, "click", function() {
-						map.setZoom(17);
-						map.setCenter(marker.getPosition());
+
+
+					google.maps.event.addListener(vthis.map, "click", function() {
+						vthis.mapToolsFlag = false;
+						// vthis.map.setZoom(19);
+						// vthis.map.setCenter(marker.getPosition());
+					});
+					google.maps.event.addListener(marker, "mouseover", function() {
+						vthis.mapToolsFlag = true;
+						// vthis.map.setZoom(19);
+						vthis.map.setCenter(marker.getPosition());
+					});
+					google.maps.event.addListener(marker, "mouseout", function() {
+						// vthis.map.setZoom(17);
+						// vthis.map.setCenter(marker.getPosition());
 					});
 				});
 
@@ -908,8 +926,10 @@
 							});
 
 
-							this.myaddress = res.address;
-							//this.dropMap(res.address);
+							this.myaddress = res.data.house.address;
+
+							console.log("dsajlkfjaslkdjflasdjflskdjfs=====>", res.data.house.address)
+							this.dropMap(this.myaddress);
 							//周边房源
 							// this.getAroundHouse(res.cityid);
 
@@ -1223,6 +1243,47 @@
 			&-btn-disable{
 				background-color: rgb(178, 178, 178);
 			}
+		}
+	}
+	.map-tools{
+		position: absolute;
+		width: 250px;
+		border-radius: 6px;
+		background: #fff;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		&-img{
+			width: 100%;
+			height: 200px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			overflow: hidden;
+			img{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		&-title{
+			font-family: PingFangSC-Medium;
+			font-size: 18px;
+			line-height: 20px;
+			letter-spacing: 1px;
+			margin-bottom: 15px;
+			margin-top: 15px;
+			color: #5963b2;
+			padding: 0 10px 0 15px;
+			box-sizing: border-box;
+		}
+		&-address{
+			font-family: PingFangSC-Regular;
+			font-size: 14px;
+			line-height: 18px;
+			color: #333333;
+			letter-spacing: 0.99px;
+			margin-bottom: 15px;
+			padding: 0 10px 0 15px;
+			box-sizing: border-box;
 		}
 	}
 
@@ -1721,6 +1782,10 @@
 	.houseIntroduce ul li {
 		list-style: none !important;
 
+	}
+	#map{
+		width: 100%;
+		height: 400px;
 	}
 
 	#map .gmnoprint {

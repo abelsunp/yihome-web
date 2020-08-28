@@ -9,8 +9,8 @@
 					<a :href="commonGlobalPath+'/storydetails?id='+item.id" target="_blank">
 						<div class="img">
 							<div  class="el-image">
-								<img v-if="!item.imgUrl" src="../../assets/images/zhan1.jpeg" class="april-img" style="object-fit: cover;">
-								<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="el-image__inner" style="object-fit: cover;">
+								<img v-if="!item.imgUrl" src="https://inyihome.com/img/zhan1.jpeg" class="april-img" style="object-fit: cover;">
+								<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="el-image__inner april-img" style="object-fit: cover;">
 							</div>
 						</div>
 						<div class="content">

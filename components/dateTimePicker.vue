@@ -140,7 +140,7 @@
 		justify-content: center;
 	}
 	.wrapper{
-		width: 77%;
+		width: 100%;
 	}
 	.wrapperSe{
 		display: flex;

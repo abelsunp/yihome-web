@@ -9,7 +9,7 @@
 			
 			<div class="swiper-wrapper">
 				<div class="swiper-slide"  v-for="(item,$index) in imgUrl" :key="$index" >
-					<img id="test" :src="yihomeGlobalVariable+item.imgurl| imgStrClac('x')" alt="">
+					<img id="test" :src="yihomeGlobalVariable+item.imgurl" alt="">
 					<!-- :style="{'background-image':'url('+yihomeGlobalVariable+item.imgurl+')'}" -->
 				</div>
 			</div>
@@ -20,21 +20,21 @@
 		<div class="swiper-container gallery-thumbs">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide" v-for="(item,$index) in imgUrl" :key="$index">
-					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
+					<img :src="yihomeGlobalVariable+item.imgurl" alt="">
 				</div>
 			</div>
 		</div>
 		
 		
-		<Modal v-model="videoStatus" fullscreen title="">
-			<video id="myVideo" width="100%" height="100%" controls v-if="videoStatus">
-				<source :src='yihomeGlobalVariable+videoUrl' type="video/mp4">
-				<source src="movie.ogg"  type="video/ogg">您的浏览器不支持 HTML5 video 标签。
-			</video>
-<!--			<div slot="footer" style="text-align: center;">-->
-<!--				<Button @click="videoStatus = false" type="primary" style="background-color: #3B44AC;border-color: #3B44AC;">关闭</Button>-->
-<!--			</div>-->
-		</Modal>
+<!--		<Modal v-model="videoStatus" fullscreen title="">-->
+<!--			<video id="myVideo" width="100%" height="100%" controls v-if="videoStatus">-->
+<!--				<source :src='yihomeGlobalVariable+videoUrl' type="video/mp4">-->
+<!--				<source src="movie.ogg"  type="video/ogg">您的浏览器不支持 HTML5 video 标签。-->
+<!--			</video>-->
+<!--&lt;!&ndash;			<div slot="footer" style="text-align: center;">&ndash;&gt;-->
+<!--&lt;!&ndash;				<Button @click="videoStatus = false" type="primary" style="background-color: #3B44AC;border-color: #3B44AC;">关闭</Button>&ndash;&gt;-->
+<!--&lt;!&ndash;			</div>&ndash;&gt;-->
+<!--		</Modal>-->
 	</section>
 </template>
 
@@ -49,7 +49,9 @@
 			imgWrapper: {
 				handler (value) {
 					if(value.length == 0 || !value) this.imgUrl = [{imgurl: '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg'}];
-					else this.imgUrl = value
+					else this.imgUrl = value;
+
+					this.drapSwiper();
 				},
 				// 监听到数据变化时立即调用
 				immediate: true
@@ -73,35 +75,39 @@
 			
 		},
 		mounted() {
-			setTimeout(function(){
-				var galleryThumbs = new Swiper('.gallery-thumbs', {
-					spaceBetween: 10,
-					slidesPerView: 6,
-					freeMode: true,
-					watchSlidesVisibility: true,
-					watchSlidesProgress: true,
-					slideToClickedSlide: true,
-					
-				});
-				this.galleryTop = new Swiper('.gallery-top', {
-					spaceBetween: 10,
-					navigation: {
-						nextEl: '.swiper-button-next',
-						prevEl: '.swiper-button-prev',
-					},
-					thumbs: {
-						swiper: galleryThumbs
-					},
-					loop:true,
-				});
-			},500)
+
+			// setTimeout(function(){
+			//
+			// },500)
 		},
 		methods:{
+			drapSwiper(){
+				this.$nextTick(() => {
+					var galleryThumbs = new Swiper('.gallery-thumbs', {
+						spaceBetween: 10,
+						slidesPerView: 6,
+						freeMode: true,
+						watchSlidesVisibility: true,
+						watchSlidesProgress: true,
+						slideToClickedSlide: true,
+
+					});
+					this.galleryTop = new Swiper('.gallery-top', {
+						spaceBetween: 10,
+						navigation: {
+							nextEl: '.swiper-button-next',
+							prevEl: '.swiper-button-prev',
+						},
+						thumbs: {
+							swiper: galleryThumbs
+						},
+						loop:true,
+					});
+				})
+			},
 			viewVideo(){
 				this.videoStatus = true;
-				console.log(this.imgVideo[0].videourl)
 				this.videoUrl = this.imgVideo[0].videourl
-				
 			}
 		}
 	}
