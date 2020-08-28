@@ -3,79 +3,92 @@
     "name": "about",
     "path": "/about",
     "component": "/Users/lydia/Desktop/yihome/pages/about/index.vue",
-    "chunkName": "pages/about/index"
+    "chunkName": "pages/about/index",
+    "_name": "_7185cef0"
   },
   {
     "name": "abroad",
     "path": "/abroad",
     "component": "/Users/lydia/Desktop/yihome/pages/abroad/index.vue",
-    "chunkName": "pages/abroad/index"
+    "chunkName": "pages/abroad/index",
+    "_name": "_e35285d8"
   },
   {
     "name": "contact",
     "path": "/contact",
     "component": "/Users/lydia/Desktop/yihome/pages/contact/index.vue",
-    "chunkName": "pages/contact/index"
+    "chunkName": "pages/contact/index",
+    "_name": "_24ef1c7a"
   },
   {
     "name": "findhouse",
     "path": "/findhouse",
     "component": "/Users/lydia/Desktop/yihome/pages/findhouse/index.vue",
-    "chunkName": "pages/findhouse/index"
+    "chunkName": "pages/findhouse/index",
+    "_name": "_8592d82c"
   },
   {
     "name": "findpwd",
     "path": "/findpwd",
     "component": "/Users/lydia/Desktop/yihome/pages/findpwd/index.vue",
-    "chunkName": "pages/findpwd/index"
+    "chunkName": "pages/findpwd/index",
+    "_name": "_84fd40f2"
   },
   {
     "name": "helptickets",
     "path": "/helptickets",
     "component": "/Users/lydia/Desktop/yihome/pages/helptickets/index.vue",
-    "chunkName": "pages/helptickets/index"
+    "chunkName": "pages/helptickets/index",
+    "_name": "_0c15aea9"
   },
   {
     "name": "house-detail",
     "path": "/house-detail",
     "component": "/Users/lydia/Desktop/yihome/pages/house-detail/index.vue",
-    "chunkName": "pages/house-detail/index"
+    "chunkName": "pages/house-detail/index",
+    "_name": "_119fb7b1"
   },
   {
     "name": "housedetail",
     "path": "/housedetail",
     "component": "/Users/lydia/Desktop/yihome/pages/housedetail/index.vue",
-    "chunkName": "pages/housedetail/index"
+    "chunkName": "pages/housedetail/index",
+    "_name": "_02e19fd4"
   },
   {
     "name": "Join-us",
     "path": "/Join-us",
     "component": "/Users/lydia/Desktop/yihome/pages/Join-us/index.vue",
-    "chunkName": "pages/Join-us/index"
+    "chunkName": "pages/Join-us/index",
+    "_name": "_f91cdb38"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "/Users/lydia/Desktop/yihome/pages/login/index.vue",
-    "chunkName": "pages/login/index"
+    "chunkName": "pages/login/index",
+    "_name": "_786e77cc"
   },
   {
     "name": "newlogin",
     "path": "/newlogin",
     "component": "/Users/lydia/Desktop/yihome/pages/newlogin/index.vue",
-    "chunkName": "pages/newlogin/index"
+    "chunkName": "pages/newlogin/index",
+    "_name": "_11b20c1c"
   },
   {
     "name": "notice",
     "path": "/notice",
     "component": "/Users/lydia/Desktop/yihome/pages/notice/index.vue",
-    "chunkName": "pages/notice/index"
+    "chunkName": "pages/notice/index",
+    "_name": "_63d4d06b"
   },
   {
     "name": "order",
     "path": "/order",
     "component": "/Users/lydia/Desktop/yihome/pages/order/index.vue",
-    "chunkName": "pages/order/index"
+    "chunkName": "pages/order/index",
+    "_name": "_d645951e"
   },
   {
     "path": "/profile",
@@ -86,80 +99,94 @@
         "name": "profile-index",
         "path": "",
         "component": "/Users/lydia/Desktop/yihome/pages/profile/index/index.vue",
-        "chunkName": "pages/profile/index/index"
+        "chunkName": "pages/profile/index/index",
+        "_name": "_059ee4e2"
       },
       {
         "name": "profile-index-activity",
         "path": "activity",
         "component": "/Users/lydia/Desktop/yihome/pages/profile/index/activity.vue",
-        "chunkName": "pages/profile/index/activity"
+        "chunkName": "pages/profile/index/activity",
+        "_name": "_45760ce2"
       },
       {
         "name": "profile-index-collect",
         "path": "collect",
         "component": "/Users/lydia/Desktop/yihome/pages/profile/index/collect.vue",
-        "chunkName": "pages/profile/index/collect"
+        "chunkName": "pages/profile/index/collect",
+        "_name": "_5ecab6b2"
       },
       {
         "name": "profile-index-order",
         "path": "order",
         "component": "/Users/lydia/Desktop/yihome/pages/profile/index/order.vue",
-        "chunkName": "pages/profile/index/order"
+        "chunkName": "pages/profile/index/order",
+        "_name": "_15fb4e0b"
       },
       {
         "name": "profile-index-setting",
         "path": "setting",
         "component": "/Users/lydia/Desktop/yihome/pages/profile/index/setting.vue",
-        "chunkName": "pages/profile/index/setting"
+        "chunkName": "pages/profile/index/setting",
+        "_name": "_5adb4ecd"
       }
-    ]
+    ],
+    "_name": "_aaed7fe8"
   },
   {
     "name": "register",
     "path": "/register",
     "component": "/Users/lydia/Desktop/yihome/pages/register/index.vue",
-    "chunkName": "pages/register/index"
+    "chunkName": "pages/register/index",
+    "_name": "_5397af14"
   },
   {
     "name": "reset",
     "path": "/reset",
     "component": "/Users/lydia/Desktop/yihome/pages/reset/index.vue",
-    "chunkName": "pages/reset/index"
+    "chunkName": "pages/reset/index",
+    "_name": "_4da2fe32"
   },
   {
     "name": "stories",
     "path": "/stories",
     "component": "/Users/lydia/Desktop/yihome/pages/stories/index.vue",
-    "chunkName": "pages/stories/index"
+    "chunkName": "pages/stories/index",
+    "_name": "_36936b94"
   },
   {
     "name": "storydetails",
     "path": "/storydetails",
     "component": "/Users/lydia/Desktop/yihome/pages/storydetails/index.vue",
-    "chunkName": "pages/storydetails/index"
+    "chunkName": "pages/storydetails/index",
+    "_name": "_e7a0b600"
   },
   {
     "name": "testStep",
     "path": "/testStep",
     "component": "/Users/lydia/Desktop/yihome/pages/testStep/index.vue",
-    "chunkName": "pages/testStep/index"
+    "chunkName": "pages/testStep/index",
+    "_name": "_69194a91"
   },
   {
     "name": "housedetail-indexCopy",
     "path": "/housedetail/indexCopy",
     "component": "/Users/lydia/Desktop/yihome/pages/housedetail/indexCopy.vue",
-    "chunkName": "pages/housedetail/indexCopy"
+    "chunkName": "pages/housedetail/indexCopy",
+    "_name": "_fb0a1a2e"
   },
   {
     "name": "stories-storydetails",
     "path": "/stories/storydetails",
     "component": "/Users/lydia/Desktop/yihome/pages/stories/storydetails.vue",
-    "chunkName": "pages/stories/storydetails"
+    "chunkName": "pages/stories/storydetails",
+    "_name": "_991a8b0e"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/Users/lydia/Desktop/yihome/pages/index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_1b118e1c"
   }
 ]

@@ -120,7 +120,7 @@
 				freeCallStatus:false,
 				freeCallPhoneArea:'',
 				freeCallPhone:'',
-				islogin:false,
+				islogin:localStorage.getItem('token'),
 				ispersonalCenter:false,
 				activeIndex:'1',
 				headerStatus:true,
@@ -131,6 +131,7 @@
 		computed: {
 		   
 		},
+
 		created(){
 			this.getPath();
 			this.findcityschool();
@@ -162,11 +163,9 @@
 			},
 			logout(){
 				if(process.browser){
-					localStorage.removeItem('userid')
-					localStorage.removeItem('checklicense')
+					localStorage.removeItem('token')
 					this.$router.push({path:"/"})
-					console.log(1111)
-					this.checkLogin();
+					this.islogin = false;
 				}
 			},
 			onResultPhoneChange(val){
@@ -232,6 +231,7 @@
 				this.$router.push({path:key})
 			},
 			getPath(){
+				this.islogin = localStorage.getItem('token');
 				if(this.$route.name=="index"||this.$route.name=="about"||this.$route.name=="Join-us"||this.$route.name=="contact"){
 					this.headerStatus = true;
 				}else{

@@ -181,6 +181,14 @@ const request = {
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
   },
+  updatePassword: (data) => {
+    let config = {
+      url: `/yihome-admin/api/user/users/updatePassword`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
   forgetPassword: (data) => {
     let config = {
       url: `/yihome-admin/api/user/users/forgetPassword`,
