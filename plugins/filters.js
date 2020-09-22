@@ -18,6 +18,9 @@ const filters = {
         ];
         const findList = _data.filter(ele => ele.countryId == v);
         return findList.length > 0 ? findList[0].name : ''
+    },
+    filterImgUrl: function(path) {
+        return path.replace('https://inyihome.com/yihome-admin', '');
     }
 }
 

@@ -1,7 +1,7 @@
 <template>
 	<b-container id="footer">
-		<b-row>
-			<b-col md="8">
+		<div style="display: flex">
+			<div style="flex: 8">
 				<div class="footer-left-item">
 <!--					客服电话：17602106152 <span style="margin-left: 140px">企业邮箱：service@inyihome.com</span>-->
 					企业邮箱：service@inyihome.com
@@ -13,20 +13,20 @@
 						<a :href="commonGlobalPath+'/findhouse?countryId='+item.countryId+'&cityId='+item.id+''">{{item.name}}</a>
 					</div>
 				</div>
-			</b-col>
-			<b-col md="4">
-				<b-row>
-					<b-col md="6" style="text-align: center;">
+			</div>
+			<div style="flex: 4">
+				<div style="display: flex">
+					<div md="6" style="text-align: center;flex: 6">
 						<img src="@/assets/images/footer/subscription.svg" alt="">
 						<p class="info">微信扫一扫，添加专业老师</p>
-					</b-col>
-					<b-col md="6" style="text-align: center;">
+					</div>
+					<div md="6" style="text-align: center;flex: 6">
 						<img src="@/assets/images/footer/smallProgram.svg" alt="">
 						<p class="info">微信扫一扫，添加公众号</p>
-					</b-col>
-				</b-row>
-			</b-col>
-		</b-row>
+					</div>
+				</div>
+			</div>
+		</div>
 		<p>Copyright 上海颖鸿网络科技有限公司 All Right Reserved 沪ICP备18002555号-1</p>
 	</b-container>
 </template>
@@ -69,7 +69,7 @@
 	}
 	#footer{
 		padding-top: 30px;
-		min-width: 960px !important;
+		/*min-width: 960px !important;*/
 	}
 	.footer-left-item{
 		line-height: 44px;

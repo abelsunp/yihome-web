@@ -1,6 +1,7 @@
 <template>
-	<section class="house-cont" v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
-			<b-container class="house-cont-detail" style="margin-top: 20px;">
+	<div>
+		<section class="house-cont" v-loading.fullscreen.lock="fullscreenLoading" style="border-bottom: 1px solid #E6E6E6;">
+			<b-container class="house-cont-detail" style="margin: 20px auto 0;">
 				<div class="house-cont-detail-left">
 					<div class="top-main-box">
 						<div class="img-loop-wrap" @click="viewFullimgWrapperMethod($event)">
@@ -19,24 +20,25 @@
 					<div style="width: 727px;">
 						<div :id="'houseIntroduce?houseid='+fullPath" class="houseIntroduce">
 							<h1 class="inforTitle">房源概括</h1>
-							<div class="houseIntroduce-desc" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;"></div>
+							<div class="houseIntroduce-desc" ref="housedec" :class="{'houseIntroduce-show': !descClose}" v-html="houseInfoDescCh.info" style="color: #333;">
+							</div>
 
-<!--							<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>-->
-<!--							<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>-->
+							<span class="houseIntroduce-desc-more" v-if="descClose" @click="descClose = false">更多详情</span>
+							<span class="houseIntroduce-desc-close" v-else  @click="descClose = true">收起</span>
 						</div>
 						<div :id="'houseManagement?houseid='+fullPath">
 							<h1 class="inforTitle">房间管理</h1>
 							<!-- 当前所有的房间类型 -->
 							<div>
-								<el-button @click.native="chooseHouseType('all')">全部房间</el-button>
-								<el-tooltip v-for="(item,$ii) in roomlist" :key="$ii" v-if="$ii < 5" class="item" effect="dark" :content="item.remark" placement="top"
-											@click.native="chooseHouseType(item.id)">
-									<el-button>{{item.name}}</el-button>
+								<el-button @click.native="chooseHouseType('')">全部房间</el-button>
+								<el-tooltip v-for="(item,$ii) in roomSelectlist" :key="$ii" class="item" effect="dark" :content="roomObject[item.labelDetalId].remark" placement="top"
+											@click.native="chooseHouseType(item.labelDetalId)">
+									<el-button>{{item.labelDetalName}}</el-button>
 								</el-tooltip>
 
 								<!-- 房间显示 -->
 								<ul class="roomListWrapper">
-									<li v-for="(item,$$index) in houseRoome" :key="$$index">
+									<li v-for="(item,$$index) in houseRoome" :key="$$index" v-if="item.roomId == checkRoomId || !checkRoomId">
 										<template v-if="item.room.status != 1 && item.room.status != 5">
 											<div class="top">
 												<div class="imgWrapper" @click="viewSingleRoom(item)" style="position: relative;">
@@ -47,7 +49,7 @@
 													<h1>{{item.room.name}}</h1>
 													<p class="center">
 														<span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
-														<span >面积：{{item.room.minArea || 0}}㎡ ~ {{item.room.maxArea || 0}}㎡</span>
+														<span v-if="item.room.minArea">面积：{{item.room.minArea || 0}}㎡ <span v-if="item.room.maxArea">~ {{item.room.maxArea}}㎡</span></span>
 													</p>
 													<div class="show-more" @click="showMore(item.urls)">更多详情</div>
 												</div>
@@ -66,7 +68,6 @@
 												</div>
 											</section>
 										</template>
-
 									</li>
 								</ul>
 							</div>
@@ -124,165 +125,167 @@
 				</div>
 
 			</b-container>
-			<b-container fluid>
-<!--				<div id="map"></div>-->
-				<div :id="'houseTraffic?houseid='+fullPath">
-					<b-container>
-						<h1 class="inforTitle">周边交通</h1>
-					</b-container>
-					<div style="position: relative;">
-						<div style="height: 520px;" id="map"></div>
-						<div class="map-tools" v-if="mapToolsFlag">
-							<div class="map-tools-img"><img class="april-img" :src="yihomeGlobalVariable + (userCheckUrl.length > 0 ? userCheckUrl[0].imgurl : '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg')" alt=""></div>
-							<div class="map-tools-title">{{houseInfo.name}}</div>
-							<div class="map-tools-address">地址：{{houseInfo.address}}</div>
-						</div>
-<!--						<div class="viewMpaTools">-->
-<!--							<p class="title">请选择目的地：</p>-->
-<!--							<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
-<!--								<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
-<!--								</el-option>-->
-<!--							</el-select>-->
-<!--							<div style="display: flex;margin-top: 10px;">-->
 
-<!--								<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
-<!--									<el-tab-pane>-->
-<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
-
-<!--										距离{{distance}}步行需要{{vehicletime}}-->
-<!--									</el-tab-pane>-->
-<!--									<el-tab-pane>-->
-<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
-
-<!--										距离{{distance}}骑行需要{{vehicletime}}-->
-<!--									</el-tab-pane>-->
-<!--									<el-tab-pane>-->
-<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
-
-<!--										距离{{distance}}公交需要{{vehicletime}}-->
-<!--									</el-tab-pane>-->
-<!--									<el-tab-pane>-->
-<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
-
-<!--										距离{{distance}}驾车需要{{vehicletime}}-->
-<!--									</el-tab-pane>-->
-<!--								</el-tabs>-->
-<!--							</div>-->
-<!--						</div>-->
+		</section>
+		<b-container fluid style="padding: 0 !important;">
+			<!--				<div id="map"></div>-->
+			<div :id="'houseTraffic?houseid='+fullPath">
+				<b-container>
+					<h1 class="inforTitle">周边交通</h1>
+				</b-container>
+				<div style="position: relative;">
+					<div style="height: 400px;" id="map"></div>
+					<div class="map-tools" v-if="mapToolsFlag">
+						<div class="map-tools-img"><img class="april-img" :src="yihomeGlobalVariable + (userCheckUrl.length > 0 ? userCheckUrl[0].imgurl : '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg')" alt=""></div>
+						<div class="map-tools-title">{{houseInfo.name}}</div>
+						<div class="map-tools-address">地址：{{houseInfo.address}}</div>
 					</div>
+					<!--						<div class="viewMpaTools">-->
+					<!--							<p class="title">请选择目的地：</p>-->
+					<!--							<el-select v-model="endAddress" placeholder="请选择地址" style="width: 100%;" @change="selectAddress">-->
+					<!--								<el-option v-for="item in addressData" :key="item.id" :label="item.addressname" :value="item.addressdetail">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--							<div style="display: flex;margin-top: 10px;">-->
 
+					<!--								<el-tabs v-model="activeName" type="card" @tab-click="handleClick">-->
+					<!--									<el-tab-pane>-->
+					<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/walk.svg" alt="">步行</span>-->
+
+					<!--										距离{{distance}}步行需要{{vehicletime}}-->
+					<!--									</el-tab-pane>-->
+					<!--									<el-tab-pane>-->
+					<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/bicycle.svg" alt="">骑行</span>-->
+
+					<!--										距离{{distance}}骑行需要{{vehicletime}}-->
+					<!--									</el-tab-pane>-->
+					<!--									<el-tab-pane>-->
+					<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/subway.svg" alt="">公交</span>-->
+
+					<!--										距离{{distance}}公交需要{{vehicletime}}-->
+					<!--									</el-tab-pane>-->
+					<!--									<el-tab-pane>-->
+					<!--										<span slot="label"><img style="width: 15px;" src="@/assets/images/map/taxi.svg" alt="">驾车</span>-->
+
+					<!--										距离{{distance}}驾车需要{{vehicletime}}-->
+					<!--									</el-tab-pane>-->
+					<!--								</el-tabs>-->
+					<!--							</div>-->
+					<!--						</div>-->
 				</div>
 
-				<!--	周边房源		-->
-				<b-container v-if="1==2">
-					<div :id="'houseNotice?houseid='+fullPath">
-						<h1 class="inforTitle">住房租房须知</h1>
+			</div>
 
-						<div style="color: #333;" v-html="housedetails.termcontent"></div>
-					</div>
+			<!--	周边房源		-->
+			<b-container v-if="1==2">
+				<div :id="'houseNotice?houseid='+fullPath">
+					<h1 class="inforTitle">住房租房须知</h1>
 
-					<div :id="'housePeriphery?houseid='+fullPath" class="todaySpecial" v-loading="loadingAroundHouseStatus">
-						<h1 class="inforTitle">周边房源</h1>
-						<b-row v-if="loadingAroundHouseStatus">
-							<h1>暂无周边房源</h1>
-						</b-row>
-						<b-row v-if="!loadingAroundHouseStatus">
-							<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in aroundHousedata" :key="$index">
-								<a :href="commonGlobalPath+'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
-									<div class="imgWrap" style="height: 250px;overflow: hidden;display: flex;border-radius: 4px;">
-										<div class="el-image">
-											<img :src="yihomeGlobalVariable+item.imgurl" class="el-image__inner" style="object-fit: cover;">
-										</div>
+					<div style="color: #333;" v-html="housedetails.termcontent"></div>
+				</div>
+
+				<div :id="'housePeriphery?houseid='+fullPath" class="todaySpecial" v-loading="loadingAroundHouseStatus">
+					<h1 class="inforTitle">周边房源</h1>
+					<b-row v-if="loadingAroundHouseStatus">
+						<h1>暂无周边房源</h1>
+					</b-row>
+					<b-row v-if="!loadingAroundHouseStatus">
+						<b-col md="6" sm="6" lg="4" class="listitem" v-for="(item,$index) in aroundHousedata" :key="$index">
+							<a :href="commonGlobalPath+'/housedetail?houseid='+item.id" target="_blank" class="a-wrap" style="box-shadow: 0 0 4px rgba(0,0,0,0.10);">
+								<div class="imgWrap" style="height: 250px;overflow: hidden;display: flex;border-radius: 4px;">
+									<div class="el-image">
+										<img :src="yihomeGlobalVariable+item.imgurl" class="el-image__inner" style="object-fit: cover;">
 									</div>
-									<div class="contentWrap">
-										<h3>{{item.housename}}</h3>
-										<p class="price"><b>{{item.currencysymbol}}{{item.price}}</b><span>起/{{item.daw=='0'?'天':'周'}}</span></p>
-										<div class="country">
+								</div>
+								<div class="contentWrap">
+									<h3>{{item.housename}}</h3>
+									<p class="price"><b>{{item.currencysymbol}}{{item.price}}</b><span>起/{{item.daw=='0'?'天':'周'}}</span></p>
+									<div class="country">
 											<span v-for="(listitem,$$$index) in item.tag?item.tag.slice(0,3):[]" :key="$$$index" :style="{ 'background-color':listitem.color,'font-size':'10px','color': '#FFFFFF','letter-spacing': '0.64px','padding':'3px 7px','margin-right':'6px','margin-bottom':'10px'}">
 												{{listitem.name}}
 											</span>
-										</div>
-										<div class="buttonWrap">
-											<a target="_blank" :href="commonGlobalPath+'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
-												<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
-											</a>
-										</div>
 									</div>
-								</a>
-							</b-col>
-						</b-row>
-					</div>
-				</b-container>
+									<div class="buttonWrap">
+										<a target="_blank" :href="commonGlobalPath+'/housedetail?houseid='+item.id" style="display: flex;justify-content: space-between;width: 100%;">
+											<span>点击查看</span> <i style="color: #333;" class="el-icon-right"></i>
+										</a>
+									</div>
+								</div>
+							</a>
+						</b-col>
+					</b-row>
+				</div>
 			</b-container>
+		</b-container>
 
-			<!-- 单间预定 -->
-			<el-dialog title="申请人信息" :visible.sync="reserveStatus" :before-close="reserveFormClose" custom-class="reserveWrapper"
-					   :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
-				<el-form :model="reserveForm" :rules="reserveRules" ref="reserveForm" label-position="top">
-					<el-form-item label="姓名" prop="name">
-						<el-input v-model="reserveForm.name" autocomplete="off" placeholder="请输入您的姓名"></el-input>
-					</el-form-item>
-					<el-form-item label="手机号" prop="phone">
-						<el-input v-model="reserveForm.phone" autocomplete="off" placeholder="请输入您的手机号"></el-input>
-					</el-form-item>
-					<el-form-item label="性别" prop="sex">
-						<el-select v-model="reserveForm.sex" placeholder="请选择性别" style="width: 100%;">
-							<el-option label="男" value="男"></el-option>
-							<el-option label="女" value="女"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="微信" prop="Wechat">
-						<el-input v-model="reserveForm.WeChat" autocomplete="off"></el-input>
-					</el-form-item>
-					<el-form-item label="邮箱" prop="email">
-						<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
-					</el-form-item>
-				</el-form>
-				<div slot="footer" class="dialog-footer">
-					<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
-					<el-button @click="reserveStatus = false">取消</el-button>
-					<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
-				</div>
-			</el-dialog>
-			<!-- 查看当前单间的图片信息 -->
-			<el-dialog center custom-class="viewSingleRoomWrap" :visible.sync="viewSingleRoomStatus" :close-on-click-modal="false"
-					   :close-on-press-escape="false">
-				<div v-if="viewSingleRoomStatus">
-					<view-single :view-data="viewimgData"></view-single>
-				</div>
-				<span slot="footer" class="dialog-footer">
+		<!-- 单间预定 -->
+		<el-dialog title="申请人信息" :visible.sync="reserveStatus" :before-close="reserveFormClose" custom-class="reserveWrapper"
+				   :lock-scroll="true" top="8vh" center :close-on-click-modal="false" :close-on-press-escape="false">
+			<el-form :model="reserveForm" :rules="reserveRules" ref="reserveForm" label-position="top">
+				<el-form-item label="姓名" prop="name">
+					<el-input v-model="reserveForm.name" autocomplete="off" placeholder="请输入您的姓名"></el-input>
+				</el-form-item>
+				<el-form-item label="手机号" prop="phone">
+					<el-input v-model="reserveForm.phone" autocomplete="off" placeholder="请输入您的手机号"></el-input>
+				</el-form-item>
+				<el-form-item label="性别" prop="sex">
+					<el-select v-model="reserveForm.sex" placeholder="请选择性别" style="width: 100%;">
+						<el-option label="男" value="男"></el-option>
+						<el-option label="女" value="女"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="微信" prop="Wechat">
+					<el-input v-model="reserveForm.WeChat" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="邮箱" prop="email">
+					<el-input v-model="reserveForm.email" autocomplete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<!--				<el-button @click="reserveFormReset('reserveForm')">重 置</el-button>-->
+				<el-button @click="reserveStatus = false">取消</el-button>
+				<el-button type="primary" @click="reserveFormSubmit('reserveForm')">提 交</el-button>
+			</div>
+		</el-dialog>
+		<!-- 查看当前单间的图片信息 -->
+		<el-dialog center custom-class="viewSingleRoomWrap" :visible.sync="viewSingleRoomStatus" :close-on-click-modal="false"
+				   :close-on-press-escape="false">
+			<div v-if="viewSingleRoomStatus">
+				<view-single :view-data="viewimgData"></view-single>
+			</div>
+			<span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="viewSingleRoomStatus = false">关 闭</el-button>
 				</span>
-			</el-dialog>
+		</el-dialog>
 
-			<el-dialog center top="0" width="100%" custom-class="videohouse" :visible.sync="videohouse" :close-on-click-modal="false"
-					   :close-on-press-escape="false">
-				<div v-if="videohouse" class="videohouseContent">
-					<b-container>
-						<div class="videoContent">
-							<i class="el-icon-close" @click="videohouse = false"></i>
-						</div>
-						<div class="videoMain">
-							<video width="800" height="600" controls id="myVideo">
-								<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/mp4">
-								<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/ogg">
-								您的浏览器不支持 HTML5 video 标签。
-							</video>
-						</div>
-					</b-container>
-				</div>
-				<span slot="footer" class="dialog-footer">
+		<el-dialog center top="0" width="100%" custom-class="videohouse" :visible.sync="videohouse" :close-on-click-modal="false"
+				   :close-on-press-escape="false">
+			<div v-if="videohouse" class="videohouseContent">
+				<b-container>
+					<div class="videoContent">
+						<i class="el-icon-close" @click="videohouse = false"></i>
+					</div>
+					<div class="videoMain">
+						<video width="800" height="600" controls id="myVideo">
+							<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/mp4">
+							<source :src="'http://www.inyihome.com'+housedetails.video[0].videourl" type="video/ogg">
+							您的浏览器不支持 HTML5 video 标签。
+						</video>
+					</div>
+				</b-container>
+			</div>
+			<span slot="footer" class="dialog-footer">
 					<!-- <el-button type="primary">确 定</el-button> -->
 				</span>
-			</el-dialog>
-			<Modal v-model="viewFullimgWrapper" fullscreen title="" class-name="viewFullimgWrapper">
-				<b-container>
-					<slide-img2 :img-wrapper='userCheckUrl'></slide-img2>
-				</b-container>
-				<div slot="footer">
-				</div>
-			</Modal>
-		</section>
+		</el-dialog>
+		<Modal v-model="viewFullimgWrapper" fullscreen title="" class-name="viewFullimgWrapper">
+			<b-container>
+				<slide-img2 :img-wrapper='userCheckUrl'></slide-img2>
+			</b-container>
+			<div slot="footer">
+			</div>
+		</Modal>
+	</div>
 </template>
 
 <script>
@@ -301,7 +304,7 @@
 		},
 		data() {
 			return {
-				descClose: true,
+				descClose: false,
 				viewFullimgWrapper: false,
 				videohouse: false,
 
@@ -383,7 +386,9 @@
 				 * 房源信息
 				 */
 				houseInfo: {},
-				roomlist: [],
+				roomObject: {},
+				roomSelectlist: [],
+				checkRoomId: '',
 				houseRoome: {},
 				houseInfoTuigai: '', //退改政策
 				houseInfoXuzhi: '', //租房须知
@@ -499,30 +504,9 @@
 					})
 				}
 			},
-			chooseHouseType(currentid) {
-				// console.log(currentid)
-				// if (currentid == 'all') {
-				// 	this.allRoom = this.oldAllRoom;
-				// 	return;
-				// }
-				// this.allRoom = this.oldAllRoom;
-				// let data = [];
-				// this.allRoom.forEach((item, index) => {
-				// 	if(item.roomtag){
-				// 		item.roomtag.forEach((item2, index2) => {
-				// 			if (item2.id == currentid) {
-				// 				console.log(item)
-				// 				data.push(item);
-				// 				this.allRoom = data;
-				// 			}
-				// 		})
-				// 	}
-				// })
-			},
+
 			handleClick(tab, event) {
 				console.log(tab.index);
-
-
 				if (!this.endAddress) {
 
 					return;
@@ -547,7 +531,7 @@
 					this.travelMode = google.maps.TravelMode.DRIVING;
 				}
 
-				this.dropMap(this.myaddress);
+				// this.dropMap(this.myaddress);
 				this.calcRoute2(this.myaddress, this.endAddress);
 
 
@@ -571,6 +555,7 @@
 
 
 			dropMap(address) {
+				return
 				var vthis = this;
 				var geocoder = new google.maps.Geocoder();
 				geocoder.geocode({
@@ -579,6 +564,9 @@
 						results,
 						status
 				) {
+
+					console.log('address===》', address, results)
+
 					vthis.directionsDisplay = new google.maps.DirectionsRenderer();
 					//自定义缩放，默认中心点
 					var myOptions = {
@@ -595,7 +583,7 @@
 						position: results[0].geometry.location,
 						map: vthis.map,
 						labelAnchor: new google.maps.Point(20, 0),
-						icon: "https://www.inyihome.com/newStatic/house.svg",
+						icon: `${this.yihomeGlobalVariable}/upload/newStatic/house.svg`,
 					});
 					vthis.directionsDisplay.setMap(vthis.map);
 
@@ -616,6 +604,102 @@
 					});
 				});
 
+			},
+
+			setMap(longitude, latitude) {
+
+				console.log(longitude, latitude)
+				mapboxgl.accessToken = 'pk.eyJ1IjoiYXByaWxkYXkxMjMxIiwiYSI6ImNrZjNweTl0azA1Z2MycnM2b3E4b2JoeTcifQ.nZ7YbjCzRrh743wsE2MwUg';
+
+				var map = new mapboxgl.Map({
+					container: 'map',
+					style: 'mapbox://styles/mapbox/streets-v11',
+					center: [longitude, latitude],
+					zoom: 11.15
+				});
+
+				let that = this;
+
+				map.on('load', function () {
+					map.loadImage(
+							'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+							function (error, image) {
+								if (error) throw error;
+								map.addImage('custom-marker', image);
+
+								map.addSource('places', {
+									'type': 'geojson',
+									'data': {
+										'type': 'FeatureCollection',
+										'features': [
+
+											{
+												'type': 'Feature',
+
+												'geometry': {
+													'type': 'Point',
+													'coordinates': [longitude, latitude]
+												}
+											}
+										]
+									}
+								});
+
+								map.addLayer({
+									'id': 'places',
+									'type': 'symbol',
+									'source': 'places',
+									'layout': {
+										'icon-image': 'custom-marker',
+										'icon-allow-overlap': true,
+										'icon-rotation-alignment': 'map',
+										'icon-ignore-placement': true
+									}
+								});
+							}
+					);
+
+					// 添加 icon 和 名称 标记
+					// 创建 div.marker-wrap, div.marker-title, div.marker-wrap 用作定位, div.marker-title 显示标题
+					let elWrap = document.createElement('div')
+					elWrap.className = 'marker-wrap'
+					elWrap.addEventListener('click', function () {
+						// that.shipInfoBoardDisplay = !shipInfoBoardDisplay
+						console.log('this.style.display', getComputedStyle(this).display)
+						this.style.display = 'none';
+						if (map.getZoom() < 6.5) {
+							that.flyTo()
+						}
+					})
+
+					// elWrap.addEventListener('mouseleave', function () {
+					//     elWrap.style.display = 'none'
+					// })
+
+					map.on('click', function () {
+						elWrap.style.display = 'none'
+					})
+
+
+					let elTitle = document.createElement('div')
+					elTitle.className = 'marker-title'
+
+					elTitle.innerHTML = `<div class="map-tools">
+											<div class="map-tools-img"><img class="april-img" src="${that.yihomeGlobalVariable + (that.userCheckUrl.length > 0 ? that.userCheckUrl[0].imgurl : '/upload/2020/08/14/116ef552d4b0bc9a7cee80092952cb1c.jpg')}" alt=""></div>
+											<div class="map-tools-title">${that.houseInfo.name}</div>
+											<div class="map-tools-address">地址：${that.houseInfo.address}</div>
+										</div>`
+					elWrap.appendChild(elTitle)
+					// 将 div.marker-wrap 加入到 map
+					let markerTagObject = new mapboxgl.Marker(elWrap).setLngLat([longitude, latitude]).addTo(map)
+
+					map.on('mouseenter', 'places', function (e) {
+						elWrap.style.display = 'block'
+					});
+					map.on('mouseleave', 'places', function () {
+
+					});
+				});
 			},
 			calcRoute2(start, end) {
 				var vthis = this;
@@ -817,8 +901,13 @@
 
 			getApiRoomType(){
 				this.$request.getApiRoomType().then(res => {
-					this.roomlist = res.data
+					for(let item of res.data){
+						this.roomObject[item.id] = item
+					}
 				})
+			},
+			chooseHouseType(currentid) {
+				this.checkRoomId = currentid
 			},
 			getCurrentHouseDetails(number) {
 				const houseloading = this.$loading({
@@ -848,12 +937,23 @@
 						} else {
 							this.housedetails = res.data;
 							this.houseInfo = res.data.house;
+
 							this.houseRoome = res.data.rooms;
+							let _roomSelectlist = [], _roomObj = {};
 							for(let item of this.houseRoome){
 								item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
+								const roomList = item.lables.filter(ele => ele.labelTypeId === 17);
+								item.roomId = roomList[0].labelDetalId;
+
+								_roomSelectlist.push(roomList[0])
 							}
 
-							console.log("this.houseRoome", this.houseRoome)
+							this.roomSelectlist = _roomSelectlist.reduce((cur,next) => {
+								_roomObj[next.labelDetalId] ? "" : _roomObj[next.labelDetalId] = true && cur.push(next);
+								return cur;
+							},[])
+
+
 
 
 							//*********** 卫浴，在rooms 里的lables  labelTypeId === 16
@@ -878,7 +978,6 @@
 
 
 							this.schoolCheckLabel = res.data.schools;
-							console.log("this.housedetails.schools", this.housedetails.schools)
 
 							res.data.infos.forEach(el=>{
 								if(el.type==1){
@@ -895,9 +994,9 @@
 								}
 							});
 
-							console.log('标签', this.userCheckLabel)
-							console.log('学校',this.schoolCheckLabel)
-							console.log('地址',this.addressCheckLabel)
+							// console.log('标签', this.userCheckLabel)
+							// console.log('学校',this.schoolCheckLabel)
+							// console.log('地址',this.addressCheckLabel)
 
 							//再次循环this.userCheckLabel
 							this.userCheckLabel.forEach(el=>{
@@ -911,9 +1010,9 @@
 									this.userCheckLabel3.push(el)
 								}
 							});
-							console.log('配套设施',this.userCheckLabel1)
-							console.log('安全保障',this.userCheckLabel2)
-							console.log('房源标签',this.userCheckLabel3)
+							// console.log('配套设施',this.userCheckLabel1)
+							// console.log('安全保障',this.userCheckLabel2)
+							// console.log('房源标签',this.userCheckLabel3)
 
 
 							res.data.urls.forEach(el=>{
@@ -928,8 +1027,13 @@
 
 							this.myaddress = res.data.house.address;
 
-							console.log("dsajlkfjaslkdjflasdjflskdjfs=====>", res.data.house.address)
-							this.dropMap(this.myaddress);
+							this.$nextTick(() => {
+								this.viewmore()
+							})
+
+							// this.dropMap(this.myaddress);
+
+							this.setMap(this.houseInfo.longitude || '32.43', this.houseInfo.latitude || '122.12')
 							//周边房源
 							// this.getAroundHouse(res.cityid);
 
@@ -938,7 +1042,6 @@
 								// 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
 
 								res.school.forEach((item,index)=>{
-									console.log(item,111)
 									item['addressdetail'] = item['address']
 									item['addressname'] = item['schoolname']
 								})
@@ -958,6 +1061,8 @@
 
 							/* 检查是否收藏房间 */
 							this.checkCollect();
+
+
 
 						}
 					}
@@ -1071,7 +1176,18 @@
 			showMore(data){
 				this.viewSingleRoomStatus = true;
 				this.viewimgData = data
-			}
+			},
+			viewmore() {
+				let offsetHeight = this.$refs.housedec.offsetHeight;
+
+				console.log("offsetHeight==>", offsetHeight)
+				if (offsetHeight > "80") {
+					// this.$refs.housedec.style.height = "66px";
+					this.descClose = true;
+				} else {
+					this.descClose = false;
+				}
+			},
 
 		},
 		destroyed() {
@@ -1082,7 +1198,7 @@
 
 <style lang="scss" scoped="scoped">
 	.house-cont{
-		width: 1300px;
+		/*width: 1300px;*/
 		margin: 0 auto;
 		&-detail{
 			width: 100%;
@@ -1245,47 +1361,6 @@
 			}
 		}
 	}
-	.map-tools{
-		position: absolute;
-		width: 250px;
-		border-radius: 6px;
-		background: #fff;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		&-img{
-			width: 100%;
-			height: 200px;
-			border-top-left-radius: 6px;
-			border-top-right-radius: 6px;
-			overflow: hidden;
-			img{
-				width: 100%;
-				height: 100%;
-			}
-		}
-		&-title{
-			font-family: PingFangSC-Medium;
-			font-size: 18px;
-			line-height: 20px;
-			letter-spacing: 1px;
-			margin-bottom: 15px;
-			margin-top: 15px;
-			color: #5963b2;
-			padding: 0 10px 0 15px;
-			box-sizing: border-box;
-		}
-		&-address{
-			font-family: PingFangSC-Regular;
-			font-size: 14px;
-			line-height: 18px;
-			color: #333333;
-			letter-spacing: 0.99px;
-			margin-bottom: 15px;
-			padding: 0 10px 0 15px;
-			box-sizing: border-box;
-		}
-	}
 
 	.top-main-box .house-message .ad {
 		width: 100%;
@@ -1418,11 +1493,12 @@
 	}
 
 	.houseIntroduce-desc{
-		transition: all .4s linear;
-		/*max-height: 134px;*/
-		/*overflow: hidden;*/
-		/*text-overflow: ellipsis;*/
+		/*transition: all .4s linear;*/
+		max-height: 66px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		/*white-space: nowrap;*/
+		word-wrap: break-word;
 	}
 	.houseIntroduce-show{
 		max-height: 1000px;
@@ -1741,7 +1817,48 @@
 		margin-right: 6px;
 	}
 </style>
-<style>
+<style lang="scss">
+	.marker-title, .map-tools{
+		position: absolute;
+		width: 250px;
+		border-radius: 6px;
+		background: #fff;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	&-img{
+		 width: 100%;
+		 height: 200px;
+		 border-top-left-radius: 6px;
+		 border-top-right-radius: 6px;
+		 overflow: hidden;
+	img{
+		width: 100%;
+		height: 100%;
+	}
+	}
+	&-title{
+		 font-family: PingFangSC-Medium;
+		 font-size: 18px;
+		 line-height: 20px;
+		 letter-spacing: 1px;
+		 margin-bottom: 15px;
+		 margin-top: 15px;
+		 color: #5963b2;
+		 padding: 0 10px 0 15px;
+		 box-sizing: border-box;
+	 }
+	&-address{
+		 font-family: PingFangSC-Regular;
+		 font-size: 14px;
+		 line-height: 18px;
+		 color: #333333;
+		 letter-spacing: 0.99px;
+		 margin-bottom: 15px;
+		 padding: 0 10px 0 15px;
+		 box-sizing: border-box;
+	 }
+	}
 	.videohouse {
 		height: 100%;
 		margin-bottom: 0;
@@ -1784,7 +1901,7 @@
 
 	}
 	#map{
-		width: 100%;
+		/*width: 100vw;*/
 		height: 400px;
 	}
 

@@ -1,6 +1,6 @@
 <template>
 	<section id="homePage" v-loading.fullscreen.lock="savehelpticketsStatus">
-		<b-container fluid class="banner">
+		<b-container fluid class="banner" style="height: 548px;">
 			<el-carousel indicator-position="none" id="el-carousel" :loop="true" :interval="5000" arrow="always">
 
 				<el-carousel-item class="homepageBanneractivity">
@@ -149,21 +149,21 @@
 					</el-tabs>
 				</div>
 				<div class="homepageSearchContent">
-					<b-row>
-						<b-col md="6" sm="6" lg="5" style="padding-right: 0;">
-							<img :src="'https://www.inyihome.com/newStatic/'+searchActive+'-1.png'" alt="">
-						</b-col>
-						<b-col md="6" sm="6" lg="3">
+					<div class="homepageSearchContent-cont">
+						<div class="homepageSearchContent-cont-item" md="6" sm="6" lg="5" style="padding-right: 0;">
+							<img :src="yihomeGlobalVariable+'/upload/newStatic/'+searchActive+'-1.png'" alt="">
+						</div>
+						<div class="homepageSearchContent-cont-item-c" md="6" sm="6" lg="3">
 							<b-row style="height: 100%;">
 								<b-col md="12" sm="12" lg="12" style="margin-bottom: 10px;padding-left: 10px;">
-									<img :src="'https://www.inyihome.com/newStatic/'+searchActive+'-2.png'" alt="">
+									<img :src="yihomeGlobalVariable+'/upload/newStatic/'+searchActive+'-2.png'" alt="">
 								</b-col>
 								<b-col md="12" sm="12" lg="12" style="padding-left: 10px;">
-									<img :src="'https://www.inyihome.com/newStatic/'+searchActive+'-3.png'" alt="">
+									<img :src="yihomeGlobalVariable+'/upload/newStatic/'+searchActive+'-3.png'" alt="">
 								</b-col>
 							</b-row>
-						</b-col>
-						<b-col md="6" sm="6" lg="4" style="display: flex;flex-direction: column;justify-content: center;">
+						</div>
+						<div class="homepageSearchContent-cont-item-r" md="6" sm="6" lg="4" style="display: flex;flex-direction: column;justify-content: center;">
 							<h1 class="formtitle">海外生活有忆家</h1>
 							<el-form :model="appointmentForm" :rules="appointmentRules" ref="appointmentForm" label-position="top"  class="appointmentForm">
 								<el-form-item label="姓名" prop="name">
@@ -203,8 +203,8 @@
 									<el-button type="primary" @click="submitappointmentForm('appointmentForm')">立即预约看房</el-button>
 								</el-form-item>
 							</el-form>
-						</b-col>
-					</b-row>
+						</div>
+					</div>
 				</div>
 			</b-container>
 		</b-container>
@@ -213,21 +213,21 @@
 		<!-- 租房保障 -->
 		<b-container fluid class="promise">
 			<b-container>
-				<h1 class="title">亿家租房保障</h1>
+				<h1 class="title">忆家租房保障</h1>
 				<p class="info">一个故事，一段人生，一个成就每一次独特的海外留学租房体验</p>
-				<b-row>
-					<b-col md="4" sm="6" lg="3" class="promise-item">
+				<div class="promise-cont">
+					<div md="4" sm="6" lg="3" class="promise-item">
 						<div class="promise-item-img">
-							<img src="@/assets/images/home1.jpg" style="object-fit: cover;">
+							<img src="@/assets/images/home1.png" style="object-fit: cover;">
 						</div>
 						<div class="promise-item-content">
 							<h5>100%真实房源</h5>
 							<p>实地勘察安心入住</p>
 						</div>
-					</b-col>
+					</div>
 					<b-col md="4" sm="6" lg="3" class="promise-item">
 						<div class="promise-item-img">
-							<img src="@/assets/images/home2.jpg" style="object-fit: cover;">
+							<img src="@/assets/images/home2.png" style="object-fit: cover;">
 						</div>
 						<div class="promise-item-content">
 							<h5>100%专业顾问</h5>
@@ -236,7 +236,7 @@
 					</b-col>
 					<b-col md="4" sm="6" lg="3" class="promise-item">
 						<div class="promise-item-img">
-							<img src="@/assets/images/home3.jpg" style="object-fit: cover;">
+							<img src="@/assets/images/home3.png" style="object-fit: cover;">
 						</div>
 						<div class="promise-item-content">
 							<h5>1对1全程服务</h5>
@@ -245,14 +245,14 @@
 					</b-col>
 					<b-col md="4" sm="6" lg="3" class="promise-item">
 						<div class="promise-item-img">
-							<img src="@/assets/images/home4.jpg" style="object-fit: cover;">
+							<img src="@/assets/images/home4.png" style="object-fit: cover;">
 						</div>
 						<div class="promise-item-content">
 							<h5>全天候客服在线</h5>
 							<p>随时等候您的咨询</p>
 						</div>
 					</b-col>
-				</b-row>
+				</div>
 			</b-container>
 		</b-container>
 
@@ -291,7 +291,7 @@
 							<div class="imgWrap">
 								<div class="el-image">
 									<img v-if="!item.imgUrl" src="../assets/images/zhan1.jpeg" class="april-img" style="object-fit: cover;">
-									<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="april-img" style="object-fit: cover;">
+									<img v-else :src="yihomeGlobalVariable+filterImgUrl(item.imgUrl)| imgStrClac('l')" class="april-img" style="object-fit: cover;">
 								</div>
 							</div>
 							<div class="contentWrap">
@@ -373,32 +373,32 @@
 			return {
 				options:[
 					{
-						img:'https://www.inyihome.com/newStatic/flags/cn.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/cn.png`,
 						value: '+86',
 						label: '中国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/hk.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/hk.png`,
 						value: '+852',
 						label: '中国香港'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/mo.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/mo.png`,
 						value: '+853',
 						label: '中国澳门'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/tw.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/tw.png`,
 						value: '+886',
 						label: '中国台湾'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/gb.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/gb.png`,
 						value: '+44',
 						label: '英国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/au.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/au.png`,
 						value: '+61',
 						label: '澳大利亚'
 					}
@@ -452,10 +452,6 @@
 		// 	let request1Data1 = await app.$request.getStory({'page':'1','limit':'3',type: 3})
 		// 	let request2Data1 = await app.$request.getStory({'page':'1','limit':'4',type: 2})
 		// 	let discountData1 = await app.$request.homeHothouse()
-
-
-
-
 		// 	let resStoryData = request1Data1.data;
 		// 	let resStudentData = request2Data1.data
 		// 	let resdiscountData= discountData1.data;
@@ -491,6 +487,9 @@
 			}
 		},
 		methods: {
+			filterImgUrl(path) {
+				return path.replace('https://inyihome.com/yihome-admin', '');
+			},
 			handleClick(tab, event){
 				this.appointmentForm.roomtype = tab.label
 			},
@@ -506,7 +505,6 @@
 			},
 
 			submitappointmentForm(formName){
-
 				if(this.appointmentForm.name.trim()==""){
 					this.$Message.warning('请输入您的姓名');
 					return;
@@ -523,15 +521,15 @@
 				}
 
 				if(this.appointmentForm.phoneArea=='+86'||this.appointmentForm.phoneArea=='+852'||this.appointmentForm.phoneArea=='+853'||this.appointmentForm.phoneArea=='+856'){
-					let regPhone = /^[1][3-8]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/;
+					let regPhone = /^[1][3-9]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/;
 					// 中国大陆：开头1 3-8号段，后边跟9位数字
 					// 台湾：09开头后面跟8位数字
 					// 香港：9或6开头后面跟7位数字
 					// 澳门：66或68开头后面跟5位数字
 					if(!regPhone.test(this.appointmentForm.phone)){
 						this.$Message.warning('请输入正确的手机号');
+						return;
 					}
-					return;
 				}
 				if(this.appointmentForm.phoneArea=='+44'||this.appointmentForm.phoneArea=='+61'){
 					if(this.appointmentForm.phone.length<5){
@@ -547,9 +545,9 @@
 					roomtype:this.appointmentForm.roomtype,
 					name:this.appointmentForm.name,
 					email:this.appointmentForm.Email,
-					areacode:this.appointmentForm.phoneArea,
+					areaCode:this.appointmentForm.phoneArea,
 					phone:this.appointmentForm.phone ,
-					weixin:this.appointmentForm.WeChat ,
+					weChat:this.appointmentForm.WeChat ,
 				}).then(res=>{
 					this.savehelpticketsStatus = false;
 					this.$Modal.success({
@@ -1158,6 +1156,23 @@
 		text-align: center;
 		line-height: 24px;
 	}
+	.promise-cont,.homepageSearchContent-cont{
+		display: flex;
+	}
+	.promise-item{
+		flex: 1;
+	}
+	.homepageSearchContent-cont-item{
+		flex: 5;
+	}
+	.homepageSearchContent-cont-item-c{
+		flex: 3;
+		padding-left: 20px;
+	}
+	.homepageSearchContent-cont-item-r{
+		flex: 4;
+		padding-left: 20px;
+	}
 </style>
 <style>
 	.hothouseTab .ivu-tabs-bar{
@@ -1238,14 +1253,14 @@
 
 	}
 	#el-carousel{
-		height: 70vw !important;
+		height: 100% !important;
 		position: relative !important;
 	}
-	@media (min-width: 744px){
-		#el-carousel{
-			height: 546px !important;
-		}
-	}
+	/*@media (min-width: 744px){*/
+	/*	#el-carousel{*/
+	/*		height: 546px !important;*/
+	/*	}*/
+	/*}*/
 	#el-carousel .el-carousel__container {
 		height: 100% !important;
 	}

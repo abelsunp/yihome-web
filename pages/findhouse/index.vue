@@ -123,7 +123,7 @@
 				<b-row v-if="hasHouse" class="houseContent-item" v-for="(item,$index) in houseArray" :key="$index">
 					<b-col md="3" class="listitem" >
 						<div class="pic-box">
-							<div v-if="item.housestatus!='168'" class="saleouthouse"></div>
+							<div v-if="item.status !='2'" class="saleouthouse"></div>
 							<img class="april-img" :src="yihomeGlobalVariable+item.houseUrl| imgStrClac('x')" :alt="item.housename">
 							<i v-if="item.hasvideo=='1'" class="el-icon-video-play"></i>
 						</div>
@@ -179,8 +179,7 @@
 				  @size-change="handleSizeChange"
 				  @current-change="handleCurrentChange"
 				  :current-page="pageNum"
-				  :page-sizes="[12, 18,24,36]"
-				  :page-size="pageSize"
+				  :page-sizes="10"
 				  layout="total, sizes, prev, pager, next, jumper"
 				  :total="totalCount">
 				</el-pagination>
@@ -319,7 +318,7 @@
 				this.$request.getAllCity().then(res=>{
 					this.citylist = res.data[this.$route.query.countryId];
 					const Index = this.citylist.findIndex(ele => ele.id == this.$route.query.cityId);
-					this.cityvalue = this.citylist[Index].name;
+					this.cityvalue = this.citylist[Index].id;
 
 					// res.forEach((item,index)=>{
 					// 	if(this.$route.query.countryid == item.id){
@@ -369,12 +368,13 @@
 				this.order = 'updatetime desc';
 				this.cityid = val;
 				this.cityvalue = val;
+				console.log('this.cityvalue', val)
 				this.findcityschool(val);
 				this.findhouseList(this.countryid,val,this.schoolvalue,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'cityChange',this.pageNum,this.pageSize,this.search)
 				
 			},
 			schoolChange(val){
-				console.log(val)
+				console.log("schoolChange", val)
 				this.housetypeid = '';
 				this.apartmentid = '';
 				this.leaseid = '';
@@ -385,6 +385,8 @@
 				this.schoolvalue = val;
 				this.pageNum = 1;
 				this.pageSize = 12;
+
+				console.log('this.cityvalue', this.cityvalue)
 				this.findhouseList(this.countryid,this.cityvalue,val,this.housetypeid,this.apartmentid,this.leaseid,this.bathroomid,this.rent,this.order,'schoolChange',this.pageNum,this.pageSize,this.search)
 			},
 			housetypeChange(val){
@@ -429,14 +431,14 @@
 					}
 				).then(res=>{
 					houseloading.close()
-					if(res.data.list.length){
+					if(res.data.list.length && res.data.list.length>0){
 						this.hasHouse = true;
-						if(res.total>6){
+						if(res.data.total>10){
 							this.paginationStatus = true;
 						}else{
 							this.paginationStatus = false;
 						}
-						this.totalCount = res.total;
+						this.totalCount = res.data.total;
 						
 						this.houseArray = res.data.list;
 
@@ -598,6 +600,7 @@
 		border-bottom: 0;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
+		overflow: hidden;
 	}
 	.houseContent .listitem .pic-box a{
 		position: absolute;

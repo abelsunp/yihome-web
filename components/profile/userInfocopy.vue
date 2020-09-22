@@ -361,7 +361,7 @@
 			},
 			handleAvatarError(){
 				this.fullscreenLoading = false;
-				this.ruleForm.passportimg = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.passportimg = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.passportimg = '';
 			},
@@ -392,7 +392,7 @@
 			},
 			handleAvatarError2(){
 				this.fullscreenLoading = false;
-				this.ruleForm.cardimga = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.cardimga = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.cardimga = '';
 			},
@@ -431,7 +431,7 @@
 			},
 			handleAvatarError3(){
 				this.fullscreenLoading = false;
-				this.ruleForm.cardimgb = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.cardimgb = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.cardimgb = '';
 			},

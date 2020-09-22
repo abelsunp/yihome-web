@@ -555,7 +555,7 @@
 			},
 			handleAvatarError(){
 				this.fullscreenLoading = false;
-				this.ruleForm.passportimg = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.passportimg = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.passportimg = '';
 			},
@@ -587,7 +587,7 @@
 			},
 			handleAvatarError2(){
 				this.fullscreenLoading = false;
-				this.ruleForm.cardimga = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.cardimga = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.cardimga = '';
 			},
@@ -627,7 +627,7 @@
 			},
 			handleAvatarError3(){
 				this.fullscreenLoading = false;
-				this.ruleForm.cardimgb = 'https://www.inyihome.com/newStatic/icon_uploadError.png';
+				this.ruleForm.cardimgb = `${this.yihomeGlobalVariable}/upload/newStatic/icon_uploadError.png`;
 				this.$message.error('文件上传失败');
 				this.ruleForm.cardimgb = '';
 			},
@@ -762,20 +762,20 @@
 		border-top: 1px solid rgb(230, 230, 230);
 	}
 
-	@media only screen and (max-width: 768px) {
-		.applyWrapper .el-collapse-item__header {
-			font-size: 20px;
-		}
+	/*@media only screen and (max-width: 768px) {*/
+	/*	.applyWrapper .el-collapse-item__header {*/
+	/*		font-size: 20px;*/
+	/*	}*/
 
-		.el-message-box {
-			width: 90%;
-		}
-	}
+	/*	.el-message-box {*/
+	/*		width: 90%;*/
+	/*	}*/
+	/*}*/
 
-	@media only screen and (max-width: 376px) {
-		.applyWrapper .el-collapse-item__header {
-			font-size: 16px;
-		}
+	/*@media only screen and (max-width: 376px) {*/
+	/*	.applyWrapper .el-collapse-item__header {*/
+	/*		font-size: 16px;*/
+	/*	}*/
 
-	}
+	/*}*/
 </style>

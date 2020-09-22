@@ -126,32 +126,32 @@
 				fullscreenLoading:false,
 				options:[
 					{
-						img:'https://www.inyihome.com/newStatic/flags/cn.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/cn.png`,
 						value: '+86',
 						label: '中国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/hk.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/hk.png`,
 						value: '+852',
 						label: '中国香港'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/mo.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/mo.png`,
 						value: '+853',
 						label: '中国澳门'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/tw.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/tw.png`,
 						value: '+886',
 						label: '中国台湾'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/gb.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/gb.png`,
 						value: '+44',
 						label: '英国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/au.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/au.png`,
 						value: '+61',
 						label: '澳大利亚'
 					}
@@ -348,25 +348,25 @@
 	.phoneInput{
 		width: 73%;
 	}
-	@media (max-width: 640px){
-		.main-content .container{
-			padding: 0;
-		}
-		.activity-content{
-			padding: 20px;
-		}
-		.selectArea{
-			width: 25%;
-		}
-	}
-	@media (max-width: 450px){
-		.mydialogVisible{
-			width: 90%;
-		}
-		.main-content{
-			padding-top: 15px;
-		}
-	}
+	/*@media (max-width: 640px){*/
+	/*	.main-content .container{*/
+	/*		padding: 0;*/
+	/*	}*/
+	/*	.activity-content{*/
+	/*		padding: 20px;*/
+	/*	}*/
+	/*	.selectArea{*/
+	/*		width: 25%;*/
+	/*	}*/
+	/*}*/
+	/*@media (max-width: 450px){*/
+	/*	.mydialogVisible{*/
+	/*		width: 90%;*/
+	/*	}*/
+	/*	.main-content{*/
+	/*		padding-top: 15px;*/
+	/*	}*/
+	/*}*/
 </style>
 <style>
 	.el-textarea__inner:focus{

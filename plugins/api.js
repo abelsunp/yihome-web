@@ -83,7 +83,7 @@ const request = {
   // getStory:(postData) => fetch('/front/findnews',postData),
   getStory: (data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/news`,
+      url: `/admin/api/home/house/news`,
       data,
       method: 'post',
     };
@@ -93,7 +93,7 @@ const request = {
   // getStorydetails:(postData) => fetch('/front/findnewsdetail',postData),
   getStorydetails: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/newsDetail`,
+      url: `/admin/api/home/house/newsDetail`,
       params,
       method: 'get',
     };
@@ -116,7 +116,7 @@ const request = {
   // findHouseSearchAll:(postData) => fetch('/front/findHouseSearchAll',postData),
   findHouseSearchAll: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getQueryCondition`,
+      url: `/admin/api/home/house/getQueryCondition`,
       params,
       method: 'get',
     };
@@ -127,7 +127,7 @@ const request = {
   // findcityschool:(postData) => fetch('/front/findcityschool',postData),
   findcityschool: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getSchoolByCity`,
+      url: `/admin/api/home/house/getSchoolByCity`,
       params,
       method: 'get',
     };
@@ -136,7 +136,7 @@ const request = {
 
   getAllCity: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getAllCity`,
+      url: `/admin/api/home/house/getAllCity`,
       params,
       method: 'get',
     };
@@ -151,7 +151,7 @@ const request = {
 
   findhousedetail: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getApiHouseDetail`,
+      url: `/admin/api/home/house/getApiHouseDetail`,
       params,
       method: 'get',
     };
@@ -164,7 +164,7 @@ const request = {
   // sandcode:(postData) => fetch('/api/user/users/sendCodeMsg',postData), //findpass 忘记密码     register 注册   login 登录
   sandcode:(data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/sendCodeMsg?${qs.stringify(data)}`,
+      url: `/admin/api/user/users/sendCodeMsg?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -175,7 +175,7 @@ const request = {
   // register:(postData) => fetch('/api/user/users/register',postData),
   register: (data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/register`,
+      url: `/admin/api/user/users/register`,
       data,
       method: 'post',
     };
@@ -183,7 +183,7 @@ const request = {
   },
   updatePassword: (data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/updatePassword`,
+      url: `/admin/api/user/users/updatePassword`,
       data,
       method: 'post',
     };
@@ -191,7 +191,7 @@ const request = {
   },
   forgetPassword: (data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/forgetPassword`,
+      url: `/admin/api/user/users/forgetPassword`,
       data,
       method: 'post',
     };
@@ -200,7 +200,7 @@ const request = {
   //登录
   loginin: (data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/login`,
+      url: `/admin/api/user/users/login`,
       data,
       method: 'post',
     };
@@ -222,7 +222,7 @@ const request = {
   // getUserInfo:(postData) => fetch('/front/findpersonal',postData),
   getUserInfo:() => {
     let config = {
-      url: `/yihome-admin/api/user/users/getLinkUser`,
+      url: `/admin/api/user/users/getLinkUser`,
       method: 'post',
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
@@ -232,7 +232,7 @@ const request = {
   // saveuserInfo:(postData) => fetch('/user/saveuser',postData),
   saveuserInfo:(data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/linkAdd`,
+      url: `/admin/api/user/users/linkAdd`,
       data,
       method: 'post',
     };
@@ -245,7 +245,7 @@ const request = {
   // insertfavorite:(postData) => fetch('/front/insertfavorite',postData),//userid houseid
   insertfavorite:(data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/userApiCollect?${qs.stringify(data)}`,
+      url: `/admin/api/home/house/userApiCollect?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -258,7 +258,7 @@ const request = {
   // deletefavorite:(postData) => fetch('/front/deletefavorite',postData),//userid houseid
   deletefavorite:(data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/unUserApiCollect?${qs.stringify(data)}`,
+      url: `/admin/api/home/house/unUserApiCollect?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -267,7 +267,7 @@ const request = {
 
   getCollectList: () => {
     let config = {
-      url: `/yihome-admin/api/user/users/myApiCollect`,
+      url: `/admin/api/user/users/myApiCollect`,
       method: 'post',
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
@@ -277,7 +277,7 @@ const request = {
   // resetNetName:(postData) => fetch('/front/reset',postData),
   resetNetName: (data) => {
     let config = {
-      url: `/yihome-admin/api/user/users/updateNickname?${qs.stringify(data)}`,
+      url: `/admin/api/user/users/updateNickname?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -288,7 +288,7 @@ const request = {
   // houseapply:(postData) => fetch('/front/houseapply',postData),
   houseapply: (data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/userApiApply?${qs.stringify(data)}`,
+      url: `/admin/api/home/house/userApiApply?${qs.stringify(data)}`,
       data,
       method: 'post',
     };
@@ -305,14 +305,23 @@ const request = {
   findUserBillDtl:(postData) => fetch('/front/findUserBillDtl',postData),
   getOrderList: () => {
     let config = {
-      url: `/yihome-admin/api/user/users/myApiOrder`,
+      url: `/admin/api/user/users/myApiOrder`,
       method: 'post',
     };
     return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
   },
 
   //homepage 精品房型提交信息type=1    helptickets提交信息type=0
-  savehelptickets:(postData) => fetch('/front/savehelptickets',postData),
+  // savehelptickets:(postData) => fetch('/front/savehelptickets',postData),
+
+  savehelptickets: (data) => {
+    let config = {
+      url: `/admin/api/home/house/addIntentionUsers`,
+      data,
+      method: 'post',
+    };
+    return new Promise((resolve,reject)=>{ axiosService(config).then( (data) => { resolve(data.data) }).catch() })
+  },
 
 
   //homepage 免费通话
@@ -334,7 +343,7 @@ const request = {
   // homeHotcity:(postData) => fetch('/api/home/house/getHotCity',postData),
   homeHotcity: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getHotCity`,
+      url: `/admin/api/home/house/getHotCity`,
       params,
       method: 'get',
     };
@@ -342,7 +351,7 @@ const request = {
   },
   getDiscountsCity: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getDiscountsCity`,
+      url: `/admin/api/home/house/getDiscountsCity`,
       params,
       method: 'get',
     };
@@ -350,7 +359,7 @@ const request = {
   },
   searHouse: (data) => {
     let config = {
-      url: `/yihome-admin/api/home/house/searchHouse`,
+      url: `/admin/api/home/house/searchHouse`,
       data,
       method: 'post',
     };
@@ -358,7 +367,7 @@ const request = {
   },
   getApiRoomType: (params) => {
     let config = {
-      url: `/yihome-admin/api/home/house/getApiRoomType`,
+      url: `/admin/api/home/house/getApiRoomType`,
       params,
       method: 'get',
     };

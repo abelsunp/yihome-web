@@ -837,7 +837,7 @@
 						position: results[0].geometry.location,
 						map: vthis.map,
 						labelAnchor: new google.maps.Point(20, 0),
-						icon: "https://www.inyihome.com/newStatic/house.svg",
+						icon: `${this.yihomeGlobalVariable}/upload/newStatic/house.svg`,
 					});
 					vthis.directionsDisplay.setMap(vthis.map);
 					google.maps.event.addListener(marker, "click", function() {

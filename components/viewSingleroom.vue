@@ -4,7 +4,7 @@
 		<div class="swiper-container viewData-class"  ref="mySwipers">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide" v-for="(banner,$index) in imgUrl" :key="$index">
-					<img :src="yihomeGlobalVariable+banner.imgurl">
+					<img :src="(yihomeGlobalVariable+banner.imgurl) | imgStrClac('x')">
 				</div>
 			</div>
 			<!-- Add Arrows -->
@@ -25,14 +25,10 @@
 		<div class="swiper-container gallery-thumbs">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide" v-for="(item,$index) in imgUrl" :key="$index"  @click="toslide($index)">
-					<img :src="yihomeGlobalVariable+item.imgurl| imgStrClac('m')" alt="">
+					<img :src="yihomeGlobalVariable+item.imgurl | imgStrClac('s')" alt="">
 				</div>
 			</div>
 		</div>
-		
-		
-		
-
 	</section>
 </template>
 
@@ -55,6 +51,12 @@
 					},
 					
 				},
+			}
+		},
+		filters:{
+			imgStrClac:function(str,num){
+				let res = str.replace(/(.*)\./,'$1'+num+'.');   //$1 + 替换后的字符
+				return res;
 			}
 		},
 		mounted() {

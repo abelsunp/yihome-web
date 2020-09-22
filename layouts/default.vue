@@ -1,5 +1,5 @@
 <template>
-  <section style="min-width: 1300px">
+  <section>
 		<b-container fluid class="header" :id="headerStatus ? 'headerYihome':'otherYihome'">
 			<div class="header-top">
 				<div style="display: flex;align-items:center;justify-content: space-between;">
@@ -22,8 +22,8 @@
 									</div>
 								</el-menu-item>
 							</el-submenu>
-							<el-menu-item index="/stories">精彩故事</el-menu-item>
-<!--							<el-menu-item index="/abroad">留学动态</el-menu-item>-->
+<!--							<el-menu-item index="/stories">精彩故事</el-menu-item>-->
+							<el-menu-item index="/abroad">留学动态</el-menu-item>
 							<el-menu-item index="/about">关于YIHOME</el-menu-item>
 <!--							<el-submenu index="3444" popper-class="aboutItemMenu">-->
 <!--							    <template slot="title">关于YIHOME</template>-->
@@ -65,7 +65,7 @@
 			<nuxt />
 			<div class="freeCall" @click="freeCall">
 				<Icon type="md-call" />
-				<p>免费通话</p>
+				<p :abc="abc" :abcd="abcd" :ab="ab">免费通话</p>
 			</div>
 		</div>
 		<section v-if="footerStatus" >
@@ -126,6 +126,9 @@
 				headerStatus:true,
 				menuData:[],
 				footerStatus:true,
+				abc: '还没来',
+				abcd: '来了',
+				ab: '哈哈'
 			}
 		},
 		computed: {
@@ -133,26 +136,28 @@
 		},
 
 		created(){
+			console.log('process.browser====>======>',this.$route.query.houseid, this.$route)
+			console.log('process.browser====>',this.$route.query.houseid, this.$route)
+			this.ab = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
+			if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+				this.abc = this.$route.path
+				if(this.$route.path=='/housedetail/' || this.$route.path=='/housedetail'){
+					this.abcd = '进来了'
+					window.location.href='/house-detail?houseid='+this.$route.query.houseid+''
+				}
+			}
 			this.getPath();
 			this.findcityschool();
 			// this.checkLogin();
-			
-			if(process.browser){
-				if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-					
-					console.log(this.$route.query.houseid)
-					if(this.$route.name=='housedetail'){
-						window.location.href='/house-detail?houseid='+this.$route.query.houseid+''
-					}else if(this.$route.path !='/house-detail'){
-						window.location.href='/dist/index.html'
-					}
-				}
+
+			// if(process.browser){
+
 				// var domain = document.domain;
 				// if(domain.indexOf('m.inyihome') != -1) {
 				// 	window.location.href='/dist/index.html'
 				// }
 				
-			}
+			// }
 			
 			
 			
@@ -188,9 +193,10 @@
 				//////
 				
 				if(this.freeCallPhoneArea=='86'||this.freeCallPhoneArea=='852'||this.freeCallPhoneArea=='853'||this.freeCallPhoneArea=='886'){
-					let regPhone = /^[1][3-8]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/;
+					let regPhone = /^[1][3-9]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/;
 					if(!regPhone.test(this.freeCallPhone)){
 						this.$Message.warning('请输入正确的手机号');
+						return
 					}
 				}
 				if(this.freeCallPhoneArea=='44'||this.freeCallPhoneArea=='61'){
@@ -200,9 +206,16 @@
 					}
 				}
 				/////
-				this.$request.saveuserphone({phone:'+'+this.freeCallPhoneArea+' '+this.freeCallPhone}).then(res=>{
+				this.$request.savehelptickets(
+						{
+							// phone:'+'+this.freeCallPhoneArea+' '+this.freeCallPhone,
+							areaCode:this.freeCallPhoneArea,
+							phone:this.freeCallPhone,
+						}
+
+				).then(res=>{
 					this.freeCallStatus = false;
-					if(res.status){
+					if(res.code == 200){
 						this.$Modal.success({
 							title: "信息",
 							content: '感谢您的留电，稍后您将接到我们的电话'
@@ -306,7 +319,7 @@
 		top: 50%;
 		left: auto;
 		bottom: auto;
-		z-index: 99999;
+		z-index: 99;
 		border-radius: 4px;	
 		border-top-left-radius: 0px;
 		border-top-right-radius: 0px;

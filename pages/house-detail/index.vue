@@ -4,7 +4,7 @@
 <!--            <div class="goback" @click="goback">-->
 <!--                <img src="../../assets/images/public/backwhite.svg" alt="">-->
 <!--            </div>-->
-            <div class="swiperimg">
+            <div class="swiperimg" @click="bannarshow">
                 <van-swipe style="height: 100%" ref="vanswipe">
 <!--                    <van-swipe-item  v-if="panorashow" :style="{ 'background-image': 'url(' + linkurl+typebannerimg + ')','background-repeat':'no-repeat','background-size':'cover' }">-->
 <!--                        <a :href="'https://www.inyihome.com/forword/view3d?'+housedata.houseno">-->
@@ -146,11 +146,11 @@
                     />
                 </div>
                 <div class="roomtag">
-                    <span class="tag" :class="{tagact:'1'==sortlistindex}"  @click="sortclick(1,'全部')">全部</span>
-                    <span v-for="(roomtag, $ii) in roomlist" :key="roomtag.id" v-if="$ii < 5" :class="{tagact:roomtag.id==sortlistindex}" @click="sortclick(roomtag.id,roomtag.name)" class="tag">{{roomtag.name}}</span>
+                    <span class="tag" :class="{tagact:checkRoomId==''}" @click="chooseHouseType('')">全部</span>
+                    <span v-for="(roomtag, $ii) in roomSelectlist" :key="roomtag.labelDetalId" :class="{tagact:roomtag.labelDetalId==checkRoomId}" @click="chooseHouseType(roomtag.labelDetalId)" class="tag">{{roomtag.labelDetalName}}</span>
                 </div>
                 <div class="roomlist">
-                    <div class="roomitem" v-for="(item,$$index) in houseRoome" :key="$$index">
+                    <div class="roomitem" v-for="(item,$$index) in houseRoome" :key="$$index" v-if="item.roomId == checkRoomId || !checkRoomId">
                         <template v-if="item.room.status != 1 && item.room.status != 5">
                             <div class="itemhead">
                                 <span>{{item.room.name}}</span>
@@ -159,12 +159,12 @@
                             <div class="itemcontent">
                                 <div class="contentleft">
                                     <div class="roombasic">
-                                        <span>面积：{{item.room.minArea || 0}}㎡ ~ {{item.room.maxArea || 0}}㎡</span>
+                                        <span v-if="item.room.minArea">面积：{{item.room.minArea || 0}}㎡ <span v-if="item.room.maxArea">~ {{item.room.maxArea}}㎡</span></span>
                                     </div>
                                     <div class="roombasic">
                                         <span>卫浴类型：{{item.weiyu[0].labelDetalId | fliterWeiyu }}</span>
                                     </div>
-                                    <div class="roombasic">
+                                    <div class="roombasic" @click="showImg(item.urls)">
 <!--                                        @click="roompreview(room.roomimg)"-->
 <!--                                        v-if="index < 4"-->
                                         <img
@@ -201,10 +201,15 @@
                     <p class="noticemore" v-if="isnoticemore" @click="noticemore($event)">查看更多</p>
                 </div>
             </div>
+
+            <div id="maps"></div>
         </div>
     </div>
 </template>
 <script>
+    function p(e) {
+        e.preventDefault()
+    }
 
     import { Swipe, SwipeItem, ImagePreview, Popup } from "vant";
     // import { minheight, getStore, setStore } from "../../assets/js/uilts";
@@ -222,7 +227,8 @@
         components: {
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
-            [ImagePreview.name]: ImagePreview,
+            [ImagePreview.Component.name]: ImagePreview.Component,
+            // [ImagePreview.name]: ImagePreview,
             [Popup.name]: Popup,
             // homeStay,
             // homeFlats,
@@ -282,7 +288,9 @@
                  * 房源信息
                  */
                 houseInfo: {},
-                roomlist: [],
+                roomObject: {},
+                roomSelectlist: [],
+                checkRoomId: '',
                 houseRoome: {},
                 houseInfoTuigai: '', //退改政策
                 houseInfoXuzhi: '', //租房须知
@@ -320,15 +328,100 @@
                     localStorage.removeItem('backurl');
                 }
             }
-
-
         },
 
         methods: {
             mapshow(id) {
                 // this.$router.push({ path: "/mapdetail", query: { houseid: id } });
             },
+            dropMap(address) {
+                var vthis = this;
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({
+                    address: address
+                }, function(
+                    results,
+                    status
+                ) {
+                    console.log('address', address, results)
+                    vthis.directionsDisplay = new google.maps.DirectionsRenderer();
+                    //自定义缩放，默认中心点
+                    var myOptions = {
+                        zoom: 17,
+                        disableDefaultUI: true,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        center: results[0].geometry.location
+                        // center: {lat: -31.563910, lng: 147.154312}
+                    };
+                    vthis.map = new google.maps.Map(
+                        document.getElementById("maps"),
+                        myOptions
+                    );
+                    var marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: vthis.map,
+                        labelAnchor: new google.maps.Point(20, 0),
+                        icon: "https://www.inyihome.com/newStatic/house.svg",
+                    });
+                    vthis.directionsDisplay.setMap(vthis.map);
 
+
+                    // google.maps.event.addListener(vthis.map, "click", function() {
+                    //     vthis.mapToolsFlag = false;
+                    //     // vthis.map.setZoom(19);
+                    //     // vthis.map.setCenter(marker.getPosition());
+                    // });
+                    // google.maps.event.addListener(marker, "mouseover", function() {
+                    //     vthis.mapToolsFlag = true;
+                    //     // vthis.map.setZoom(19);
+                    //     vthis.map.setCenter(marker.getPosition());
+                    // });
+                    // google.maps.event.addListener(marker, "mouseout", function() {
+                    //     // vthis.map.setZoom(17);
+                    //     // vthis.map.setCenter(marker.getPosition());
+                    // });
+                });
+
+            },
+
+            bannarshow() {
+                document.body.addEventListener('touchmove', p, {passive: false})
+                ImagePreview({
+                    images: this.imagepreviewbanner,
+                    onClose() {
+                        document.body.removeEventListener('touchmove',p, {passive: false})
+                    }
+                });
+            },
+            showImg(url){
+                let urls = [];
+                for(let item of url){
+                    urls.push(this.yihomeGlobalVariable+item.imgurl)
+                }
+                document.body.addEventListener('touchmove', p, {passive: false})
+                ImagePreview({
+                    images: urls,
+                    onClose() {
+                        document.body.removeEventListener('touchmove',p, {passive: false})
+                    }
+                });
+            },
+            viewmore() {
+                let offsetHeight = this.$refs.housedec.offsetHeight / 37.5;
+
+                if (offsetHeight > "2.54667") {
+                    this.$refs.housedec.style.height = "2.54667rem";
+                    this.isrecapmore = true;
+                } else {
+                    this.isrecapmore = false;
+                }
+                // if (noticeHeight > "3.46667") {
+                //     this.$refs.housenotice.style.height = "3.46667rem";
+                //     this.isnoticemore = true;
+                // } else {
+                //     this.isnoticemore = false;
+                // }
+            },
             sortclick(id,text){
                 this.sortlistindex=id
                 this.sortlisttext=text
@@ -363,8 +456,13 @@
 
             getApiRoomType(){
                 this.$request.getApiRoomType().then(res => {
-                    this.roomlist = res.data
+                    for(let item of res.data){
+                        this.roomObject[item.id] = item
+                    }
                 })
+            },
+            chooseHouseType(currentid) {
+                this.checkRoomId = currentid
             },
             getCurrentHouseDetails(number) {
                 const houseloading = this.$loading({
@@ -395,9 +493,19 @@
                             this.housedetails = res.data;
                             this.houseInfo = res.data.house;
                             this.houseRoome = res.data.rooms;
+                            let _roomSelectlist = [], _roomObj = {};
                             for(let item of this.houseRoome){
                                 item.weiyu = item.lables.filter(ele => ele.labelTypeId === 16);
+                                const roomList = item.lables.filter(ele => ele.labelTypeId === 17);
+                                item.roomId = roomList[0].labelDetalId;
+
+                                _roomSelectlist.push(roomList[0])
                             }
+
+                            this.roomSelectlist = _roomSelectlist.reduce((cur,next) => {
+                                _roomObj[next.labelDetalId] ? "" : _roomObj[next.labelDetalId] = true && cur.push(next);
+                                return cur;
+                            },[])
 
                             const checkAll = res.data.lables;
                             checkAll.forEach(el=>{
@@ -446,19 +554,24 @@
                             res.data.urls.forEach(el=>{
                                 if(el.type==1){
                                     this.userCheckUrl.push(el)
+                                    this.imagepreviewbanner.push(this.yihomeGlobalVariable + el.imgurl);
                                 }
                                 if(el.type==2){
                                     this.userCheckUrl2.push(el)
                                 }
                             });
+                            console.log("imagepreviewbanner===>", this.imagepreviewbanner)
 
-
-                            this.myaddress = res.address;
-                            //this.dropMap(res.address);
+                            this.myaddress = res.data.house.address;
+                            this.dropMap(this.myaddress);
                             //周边房源
                             // this.getAroundHouse(res.cityid);
 
-                            this.addressData = res.addresses;
+                            this.$nextTick(() => {
+                                this.viewmore()
+                            })
+
+
                             if(res.school){
                                 // 地址数组里面的字段名称和学校里面的字段名称不同  组件select使用的是地址数组里面的字段  需要把学校里面的字段变成和地址里面的字段相同
 
@@ -585,6 +698,10 @@
 </script>
 <style lang="scss" scoped>
     /*import 'vant/lib/index.css';*/
+    #maps{
+        width: 100vw;
+        height: 200px;
+    }
     .countWrapper{
         background: #FFDD5C;
         border-radius: 3px;
@@ -664,7 +781,7 @@
         width: 100vw;
         height: 100vh;
         background: #fff;
-        z-index: 9;
+        z-index: 100;
         overflow-y: auto;
         .housebannarimg {
             height: 245px;

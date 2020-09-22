@@ -36,7 +36,7 @@
 		},
 		filters:{
 			toLowerCase(val){
-				return 'https://www.inyihome.com/newStatic/flags/'+val.toLowerCase()+'.png'
+				return `${this.yihomeGlobalVariable}/upload/newStatic/flags/`+val.toLowerCase()+'.png'
 			}
 		},
 		created(){

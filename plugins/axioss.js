@@ -1,6 +1,12 @@
 import axios from 'axios'
 
-let axiosIns = axios.create({});
+let axiosIns = axios.create({
+  // axios中请求配置有baseURL选项，表示请求URL公共部分
+  // baseURL: 'https://www.inyihome.com/',
+  baseURL: '/',
+  // // 超时
+  // timeout: 1000000,
+});
 axios.defaults.headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -38,6 +44,7 @@ let timeout = {
 
 ajaxMethod.forEach((method)=> {
   api[method] = (uri,data,config) => {
+    // uri = 'http://47.100.186.108:6898'+ uri
     return new Promise(function (resolve, reject) {
 
       axiosIns[method](uri,data,config).then((response)=> {

@@ -9,7 +9,7 @@
 			
 			<div class="swiper-wrapper">
 				<div class="swiper-slide"  v-for="(item,$index) in imgUrl" :key="$index" >
-					<img id="test" :src="yihomeGlobalVariable+item.imgurl" alt="">
+					<img id="test" :src="(yihomeGlobalVariable+item.imgurl) | imgStrClac('x')" alt="">
 					<!-- :style="{'background-image':'url('+yihomeGlobalVariable+item.imgurl+')'}" -->
 				</div>
 			</div>
@@ -20,7 +20,7 @@
 		<div class="swiper-container gallery-thumbs">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide" v-for="(item,$index) in imgUrl" :key="$index">
-					<img :src="yihomeGlobalVariable+item.imgurl" alt="">
+					<img :src="(yihomeGlobalVariable+item.imgurl) | imgStrClac('s')" alt="">
 				</div>
 			</div>
 		</div>

@@ -187,34 +187,34 @@
 		letter-spacing: 0.7px;
 		text-align: center;
 	}
-	@media (max-width: 1200px){
-		.container{
-			max-width: 1000px;
-		}
-	}
-	@media (max-width: 768px){
-		.container{
-			max-width: 870px;
-		}
-		.wrapper_left{
-			transition: all 0.5s;
-			display: none;
-		}
-		.wrapper_right{
-			justify-content: center;
-			align-items: center;
-		}
-		.title,.slogan{
-			transition: all .5s;
-			width: auto;
-		}
-	}
-	@media (max-width: 576px){
+	/*@media (max-width: 1200px){*/
+	/*	.container{*/
+	/*		max-width: 1000px;*/
+	/*	}*/
+	/*}*/
+	/*@media (max-width: 768px){*/
+	/*	.container{*/
+	/*		max-width: 870px;*/
+	/*	}*/
+	/*	.wrapper_left{*/
+	/*		transition: all 0.5s;*/
+	/*		display: none;*/
+	/*	}*/
+	/*	.wrapper_right{*/
+	/*		justify-content: center;*/
+	/*		align-items: center;*/
+	/*	}*/
+	/*	.title,.slogan{*/
+	/*		transition: all .5s;*/
+	/*		width: auto;*/
+	/*	}*/
+	/*}*/
+	/*@media (max-width: 576px){*/
 
-		.container {
-			max-width: 540px;
-		}
+	/*	.container {*/
+	/*		max-width: 540px;*/
+	/*	}*/
 
-	}
+	/*}*/
 </style>
 

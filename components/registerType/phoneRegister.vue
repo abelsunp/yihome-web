@@ -32,10 +32,10 @@
 							</el-col>
 						</el-form-item>
 						<el-form-item  prop="code">
-							<div style="width: 66%;display: inline-block;">
+							<div style="width: 72%;display: inline-block;">
 								<el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-mobile-phone"></el-input>
 							</div>
-							<el-button v-if="!sendMsgDisabled" style="width: 148px;" @click.prevent="sendCode()">获取验证码</el-button>
+							<el-button v-if="!sendMsgDisabled" @click.prevent="sendCode()">获取验证码</el-button>
 							<el-button v-if="sendMsgDisabled" disabled style="width: 148px;">{{time+'s 后重新发送'}}</el-button>
 
 							<!-- <div class="send_code"  v-if="sendMsgDisabled" >{{time+'s'}}</div>
@@ -117,32 +117,32 @@
 				sendMsgDisabled:false,
 				phoneData:[
 					{
-						img:'https://www.inyihome.com/newStatic/flags/cn.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/cn.png`,
 						value: '+86',
 						label: '中国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/hk.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/hk.png`,
 						value: '+852',
 						label: '中国香港'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/mo.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/mo.png`,
 						value: '+853',
 						label: '中国澳门'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/tw.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/tw.png`,
 						value: '+886',
 						label: '中国台湾'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/gb.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/gb.png`,
 						value: '+44',
 						label: '英国'
 					},
 					{
-						img:'https://www.inyihome.com/newStatic/flags/au.png',
+						img:`${this.yihomeGlobalVariable}/upload/newStatic/flags/au.png`,
 						value: '+61',
 						label: '澳大利亚'
 					}

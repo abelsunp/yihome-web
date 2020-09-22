@@ -10,7 +10,7 @@
 						<div class="img">
 							<div  class="el-image">
 								<img v-if="!item.imgUrl" src="https://inyihome.com/img/zhan1.jpeg" class="april-img" style="object-fit: cover;">
-								<img v-else :src="yihomeGlobalVariable+item.imgUrl| imgStrClac('l')" class="el-image__inner april-img" style="object-fit: cover;">
+								<img v-else :src="yihomeGlobalVariable+filterImgUrl(item.imgUrl)| imgStrClac('l')" class="el-image__inner april-img" style="object-fit: cover;">
 							</div>
 						</div>
 						<div class="content">
@@ -87,6 +87,9 @@
 			this.getList();
 		},
 		methods:{
+			filterImgUrl(path) {
+				return path.replace('https://inyihome.com/yihome-admin', '');
+			},
 			getList(){
 				this.loadingStatus = true
 				this.$request.getStory({type: 2}).then(res=>{
